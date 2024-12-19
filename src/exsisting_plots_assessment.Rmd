@@ -1,0 +1,312 @@
+---
+title: "exsisting_plots_assessment"
+author: "Shive Lab (B. Baker)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(sf)
+library(terra)
+library(janitor)
+library(kableExtra)
+library(patchwork)
+library(RColorBrewer)
+
+options(scipen = 999)
+```
+
+```{r env-data}
+
+groves <- st_read(here("data/groves/all_groves_REexported.shp")) %>% 
+  clean_names() %>% 
+  mutate(grovearea_ha = as.numeric(st_area(groves)*0.0001)) %>% 
+  select(grove_name, grovearea_ha, land_ste_1)
+ 
+aspect <- rast(here("data/So_Sierra_10mDEM/So_Sierra_10mDEM_aspect.tif")) %>% 
+  project(crs(groves))
+
+slope <- rast(here("data/So_Sierra_10mDEM/So_Sierra_10mDEM_slopePercent.tif")) %>% 
+  project(crs(groves))
+
+elev <- rast(here("data/So_Sierra_10mDEM/So_Sierra_DEM_10m.tif")) %>% 
+  project(crs(groves))
+
+#stack rasters for easy handling
+env_stack <- c(aspect, slope, elev)
+
+#need to add fire perims+yrs
+
+fire <- st_read(here("data/cbi_all/cbi_all.shp")) %>% 
+  st_transform(crs(groves)) %>% 
+  vect()
+
+```
+
+```{r plot-data}
+ucb <- st_read(here("data/UCB_plots/fuelsplots_all_18Dec2024.shp")) %>% 
+  st_transform(crs(groves)) %>% 
+  clean_names() %>% 
+  filter(!grepl("USGS", plot_id)) %>% 
+  group_by(plot_id) %>% 
+  slice_tail() %>% 
+  ungroup() %>% 
+  mutate(
+    project = "UCB fuels project monitoring",
+    protocol = "UCB F&F protocol"
+  ) %>% 
+  select(plot_id, project, protocol)
+
+usgs <- st_read(here("data/USGS_Fuels_plot_summary_for_kristen/USGS_Fuels_plot_summary_for_kristen.shp")) %>% 
+  st_transform(crs(groves))%>% 
+  clean_names() %>% 
+  mutate(
+    plot_id = as.character(plot),
+    project = paste("USGS", project),
+    protocol = paste("USGS", protocol)
+  )%>% 
+  select(plot_id, project, protocol)
+
+park_fx <- st_read(here("data/BS_Fx_xtra/BS_Fx_xtra.shp")) %>% 
+  st_transform(crs(groves))%>% 
+  clean_names() %>%
+  rename(plot_id = name) %>% 
+  mutate(
+    project = "SEKI BS Fx",
+    protocol = "unk"
+  )%>% 
+  select(plot_id, project, protocol)
+
+park_fmh <- st_read(here("data/SEKI_FMH_working/SEKI_FMH_working.shp")) %>% 
+  st_transform(crs(groves))%>% 
+  clean_names()%>% 
+  rename(
+    plot_id = plotid,
+    project = proj_name
+  ) %>% 
+  mutate(
+     project = paste("USGS", project),
+    protocol = "SEKI FMH full"
+  )%>% 
+  select(plot_id, project, protocol)
+
+park_soundscape <- st_read(here("data/soundscape_plots/soundscape_plots.shp")) %>% 
+  st_transform(crs(groves))%>% 
+  clean_names()%>% 
+  rename(
+    plot_id = id,
+  ) %>% 
+  mutate(
+    project = "SEKI soundscape",
+    protocol = "SEKI soundscape"
+  )%>% 
+  select(plot_id, project, protocol)
+
+
+all_plots <- ucb %>% 
+  bind_rows(park_fmh) %>% 
+  bind_rows(park_fx) %>% 
+  bind_rows(park_soundscape) %>% 
+  bind_rows(usgs)
+
+```
+
+
+```{r grove_stats}
+
+#buffer groves by 75m
+groves_seki_buffered <- st_buffer(groves, dist = 75) %>% 
+  mutate(withbufferarea_ha = as.numeric(st_area(groves_buffered)*0.0001)) %>% 
+  filter(grepl("NPS SEKI", land_ste_1)) %>% 
+  select(-land_ste_1)
+
+#Note i do think there are a few groves that overlap when buffered, so some area might be duplicated
+#minimal but likely worth fixing long term
+
+groves_seki_summary <- groves_seki_buffered %>% 
+  st_drop_geometry() %>% 
+  mutate(groveacres = round(grovearea_ha*2.47, 2),
+         grove_wbuffer_acres = round(withbufferarea_ha*2.47, 2)) %>% 
+  select(grove_name, contains("acres")) %>% 
+  adorn_totals()
+
+write_csv(groves_seki_summary, here("outputs/groves_seki_summary.csv"))
+
+kable(groves_seki_summary,
+      digits = 2,
+      caption = "SEKI grove area summary")
+
+```
+
+```{r}
+
+all_plots_groves <- st_intersection(all_plots, groves_seki_buffered)
+
+groves_summary <- all_plots_groves %>% 
+  st_drop_geometry() %>% 
+  summarize(.by = c(grove_name, project), plot_count = n()) %>% 
+  pivot_wider(names_from = project, values_from = plot_count, values_fill = 0) %>% 
+  adorn_totals("col") %>% 
+  adorn_totals() %>% 
+  left_join(groves_seki_summary) %>% 
+  mutate(plots_peracre_buf = round(Total/grove_wbuffer_acres,2),
+         acre_view = grove_wbuffer_acres/10000)
+
+
+write_csv(groves_summary, here("outputs/groves_summary.csv"))
+
+groves_summary_longer <- groves_summary %>% 
+  select(-plots_peracre_buf, contains("acres")) %>% 
+  pivot_longer(`UCB fuels project monitoring`:Total) %>% 
+  filter(!name == "Total")
+
+ggplot(groves_summary_longer, aes(grove_name, value, fill = name))+
+  geom_col()+
+  labs(
+    y = "plot count",
+    title = "Plot count and type by grove"
+  )+
+  scale_fill_manual(
+    name = "Plot Type",
+    values = c("#687351","#9ba17f","#3d405b","#813405","#d45113", "#f9a03f", "#f8dda4" )) + 
+  coord_flip()+
+  theme_bw()+
+  theme(
+    plot.title.position = "plot",
+    axis.ticks.y=element_blank(),
+    axis.title.y = element_blank(),
+    )+
+  scale_y_continuous(expand = c(0, 0)) 
+
+
+ggsave(here("outputs/plotcount.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+
+kable(groves_summary,
+      digits = 2,
+      caption = "Plot breakdown by grove")
+
+
+density <- ggplot(groves_summary, aes(grove_name, plots_peracre_buf))+
+  geom_col(fill = "#687351")+
+  coord_flip()+
+  labs(
+    y = "plots per acre"
+  )+
+  theme_bw()+
+  theme(axis.title.y = element_blank())+
+  scale_y_continuous(expand = c(0, 0)) 
+  theme(axis.title.y = element_blank())
+   
+
+acres <- ggplot(groves_summary, aes(grove_name, grove_wbuffer_acres))+
+  geom_col(fill = "#9ba17f")+
+  coord_flip()+
+  labs(
+    y = "grove acres with buffer"
+  )+
+  theme_bw()+ 
+  theme(
+    axis.ticks.y=element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank() #remove axis labels
+  )+
+  scale_y_continuous(expand = c(0, 0)) 
+
+
+density+acres+plot_annotation("Average plot density per grove and grove acres", subtitle = "Acreage and density calulated with 75m buffer")
+
+
+ggsave(here("outputs/plotdensity_acres.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+```
+
+
+
+
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> c9ec9f1 (set up figures! next will need to fix ugly ones and do aspect calcs)
+```{r}
+
+all_plots_groves <- rowid_to_column(all_plots_groves)
+
+all_vect <- vect(all_plots_groves)
+
+env_plots <- terra::extract(env_stack, all_vect) %>% 
+  left_join(all_plots_groves, by = join_by(ID == rowid)) %>%
+  rename(elevation_m = So_Sierra_DEM_10m,
+         slope_perc = So_Sierra_10mDEM_slopePercent,
+         aspect = So_Sierra_10mDEM_aspect) 
+
+env_plot2s <- extract(fire, all_vect)
+
+env_plot2_fill <- env_plot2s %>% 
+  replace_na(list(
+    id = "none",
+    year = 0000,
+    burnsev = 0
+  )
+  )
+```
+
+```{r}
+summary_fire_amount <- env_plot2s %>% 
+  drop_na() %>% 
+  summarize(.by = id.y, fire_count = n()) %>% 
+  summarize(.by = fire_count, plot_count = n())
+
+kable(summary_fire_amount, caption = "Plot breakdown by number of fires")
+
+ggplot(env_plot2_fill, aes(burnsev))+
+  geom_histogram()+
+  labs(
+    title = "Burn Severity Distribution of Exsisting Plots"
+  )+
+  theme_bw()
+ggsave(here("outputs/burnsev.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+
+ggplot(env_plots, aes(x=elevation_m))+
+  geom_histogram()+
+  labs(
+    title = "Elevational Distribution of Exsisting Plots"
+  )+
+  theme_bw()
+ggsave(here("outputs/elev.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+
+ggplot(env_plots, aes(x=slope_perc))+
+  geom_histogram()+
+  labs(
+    title = "Slope Distribution of Exsisting Plots"
+  )+
+  theme_bw()
+ggsave(here("outputs/slope.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+
+ggplot(env_plots, aes(x=aspect))+
+  geom_histogram()+
+  labs(
+    title = "Aspect Distribution of Exsisting Plots"
+  )+
+  theme_bw()+
+  coord_polar()
+ggsave(here("outputs/aspect_polar.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+
+ggplot(env_plots, aes(x=aspect))+
+  geom_histogram()+
+  labs(
+    title = "Aspect Distribution of Exsisting Plots"
+  )+
+  theme_bw()
+ggsave(here("outputs/aspect.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+
+
+```
+
+ADD: Aspect represented in grove plots vs aspect present in grove
+
+
