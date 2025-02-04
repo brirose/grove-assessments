@@ -25,12 +25,12 @@ options(scipen = 999)
 
 ```{r env-data, include=F}
 
-groves <- st_read(here("data/spatial_data/groves/all_groves_REexported.shp")) 
+groves <- st_read(here("data/spatial_data/groves/FINAL_SEGI_AnalysisArea_wOwnerships_GroveNames.shp")) 
 
 groves <- groves %>% 
   clean_names() %>% 
   mutate(grovearea_ha = as.numeric(st_area(groves)*0.0001)) %>% 
-  select(grove_name, grovearea_ha, land_ste_1)
+  select(grove_name, grovearea_ha, unit_name)
  
 aspect <- rast(here("data/spatial_data/So_Sierra_10mDEM/So_Sierra_10mDEM_aspect.tif")) %>% 
   project(crs(groves))
@@ -64,14 +64,15 @@ ucb <- st_read(here("data/spatial_data/UCB_plots/fuelsplots_all_18Dec2024.shp"))
   ) %>% 
   select(plot_id, project, protocol)
 
-usgs <- st_read(here("data/spatial_data/USGS_Fuels_plot_summary_for_kristen/USGS_Fuels_plot_summary_for_kristen.shp")) %>% 
-  st_transform(crs(groves))%>% 
+usgs <- readxl::read_excel(here("data/SEGI_fuels_data_Shive_15Aug2024.xlsx"), sheet = "plotMetadata") %>% 
   clean_names() %>% 
   mutate(
-    plot_id = as.character(plot),
-    project = paste("USGS", project),
-    protocol = paste("USGS", protocol)
+    plot_id = as.character(plot_id),
+    project = paste("USGS", plot_type),
+    protocol = paste("USGS", plot_type)
   )%>% 
+st_as_sf(coords = c("lon", "lat"), crs = 4269) %>% 
+  st_transform(crs(groves))%>% 
   select(plot_id, project, protocol)
 
 park_fx <- st_read(here("data/spatial_data/BS_Fx_xtra/BS_Fx_xtra.shp")) %>% 
@@ -117,7 +118,7 @@ all_plots <- ucb %>%
   bind_rows(usgs) %>% 
   arrange(project)
 
-#st_write(all_plots, here("data/spatial_data/debug_all_plots.shp"))
+#st_write(all_plots, here("data/spatial_data/all_plots.shp"))
 
 ```
 
@@ -128,43 +129,39 @@ plot_colors <- tibble(project = unique(all_plots$project),
 
 ```
 # Overview {.tabset}
-Grove assessments are planned for each Sequoia grove within the boundary of Sequoia Kings Canyon NP. These assessments will allow for the prioritization of treatment efforts within the park to ensure the protection of this valued resource.
+Grove assessments are planned for each giant sequoia grove within the boundary of Sequoia Kings Canyon NP. These assessments will allow for the prioritization of treatment efforts within the park to ensure the protection of this valued resource. The assessments will be informed by data from SEKI's longstanding FMH program, bolstered by data from other projects collecting relevant data in the parks. These include projects done by SEKI's fire effects program, USGS, and the Shive Lab at UCB in partnership with SEKI. In addition to utilizing existing plots, additional data will be collected at plots added as needed throughout the groves.
 
-The assessments will be informed by data from SEKI's longstanding fuels monitoring program, bolstered by data from other projects concerned with fuels in the park. These include projects done by SEKI's fire effects program, USGS, and the Shive Lab at UCB in partnership with SEKI. In addition utilizing existing plots, additional data will be collected at plots added as needed throughout the groves.
+This overview outlines the existing plots in the park that can be used for grove assessment, but is missing the drought plots done by SEKI Fire Effects. It includes a section summarizing existing plots and plot density in all groves as well as plot characteristics across all groves ("All groves"), followed by a section showing summaries of plot characteristics for individual groves and ends with a set of questions that we will need input from the group on.
 
-This overview outlines the existing plots in the park that can be used for grove assessment.
+## All groves {.tabset}
 
-## All groves
+The tabs below outline the characteristics of the groves in the park and give an overview of the existing plots that are in the groves.
 
-### SEKI Grove Summary
 ```{r grove-stats}
 
 groves <- st_as_sf(groves)
 
-#buffer groves by 75m
-groves_seki_buffered <- st_buffer(groves, dist = 75) 
-  
 #calc area and select SEKI only
-groves_seki_buffered <- groves_seki_buffered %>% 
+groves_seki_buffered <- groves %>% 
   # calculate ha area of buffered groves
-  mutate(withbufferarea_ha = as.numeric(st_area(groves_seki_buffered)*0.0001)) %>% 
-  filter(grepl("NPS SEKI", land_ste_1)) %>% #seki only
-  select(-land_ste_1)
+  filter(grepl("Sequoia and Kings", unit_name) & !grepl("Tree", grove_name)) %>% #seki only, no stoics
+  select(-unit_name)
 
+
+#st_write(groves_seki_buffered, here("data/spatial_data/SEKI_groves_list.shp"))
 #Note i do think there are a few groves that overlap when buffered
 #some area might be duplicated
 #minimal but likely worth fixing long term
 
 groves_seki_summary <- groves_seki_buffered %>% 
   st_drop_geometry() %>% 
-  mutate(groveacres = round(grovearea_ha*2.47, 2),
-         grove_wbuffer_acres = round(withbufferarea_ha*2.47, 2)) 
+  mutate(groveacres = round(grovearea_ha*2.47, 2)) 
 
 median_grove <- median(groves_seki_summary$groveacres)
 mean_grove <- mean(groves_seki_summary$groveacres)
 
-median_grovewbuf <- median(groves_seki_summary$grove_wbuffer_acres)
-mean_grovewbuf <- mean(groves_seki_summary$grove_wbuffer_acres)
+# median_grovewbuf <- median(groves_seki_summary$grove_wbuffer_acres)
+# mean_grovewbuf <- mean(groves_seki_summary$grove_wbuffer_acres)
 
 groves_seki_summary_total <- groves_seki_summary %>% 
   select(grove_name, contains("acres")) %>% 
@@ -173,28 +170,19 @@ groves_seki_summary_total <- groves_seki_summary %>%
 #write_csv(groves_seki_summary, here("outputs/groves_seki_summary.csv"))
 ```
 
-There are `r nrow(groves_seki_buffered)` groves within the SEKI boundary ranging from `r round(min(groves_seki_summary$groveacres))` acres to `r round(max(groves_seki_summary$groveacres))` acres with a total of `r round(max(groves_seki_summary_total$groveacres))` acres. The smallest groves are defined by individual trees (Putnam-Francis Tree and Fenced Tree while the largest are thousands of acres (Redwood Mountain and Giant Forest). The median grove size is `r round(median_grove)` acres and the mean is `r round(median_grove)`.
+There are `r nrow(groves_seki_buffered)` groves within the SEKI boundary ranging from `r round(min(groves_seki_summary$groveacres),2)` acres to `r round(max(groves_seki_summary$groveacres))` acres with a total of `r round(max(groves_seki_summary_total$groveacres))` acres. The smallest groves are defined by individual trees (Putnam-Francis Tree and Fenced Tree while the largest are thousands of acres (Redwood Mountain and Giant Forest). The median grove size is `r round(median_grove)` acres and the mean is `r round(mean_grove)` acres.
 
 The above areas are estimated with the minimalist grove boundary layer. Since the grove assessments are intended to identify areas where treatment would be effective to reinforce grove resilience to wildfire, we buffered the layer by 75m to encompass area where fire behavior from outside the groves can impact the groves themselves and account for where the grove boundary is too small. 
 
-With the buffer, groves range from `r round(min(groves_seki_summary$grove_wbuffer_acres))` acres to  `r round(max(groves_seki_summary$grove_wbuffer_acres))` acres with a total of `r round(max(groves_seki_summary$grove_wbuffer_acres))` acres. The median grove size is `r round(median_grovewbuf)` acres and the mean is `r round(median_grovewbuf)`
-
-```{r grove-area-table}
-
-kable(groves_seki_summary_total,
-      digits = 2,
-      caption = "SEKI Grove Area Summary",
-      booktabs = T,
-      col.names = c("Grove", "Acres", "Acres with 75m buffer"))
-
-```
-
+With the buffer, groves range from `r round(min(groves_seki_summary$grove_wbuffer_acres))` acres to  `r round(max(groves_seki_summary$grove_wbuffer_acres))` acres with a total of `r round(max(groves_seki_summary$grove_wbuffer_acres))` acres. The median grove size is `r round(median_grovewbuf)` acres and the mean is `r round(mean_grovewbuf)` acres.
 
 ### Plot overview
 
 ```{r grove-plots}
 #only plots within groves
 all_plots_groves <- st_intersection(all_plots, groves_seki_buffered)
+
+#st_write(all_plots_groves, here("data/spatial_data/all_plots_groves.shp"))
 
 #make grove summary plot, nonspatial
 groves_summary <- all_plots_groves %>% 
@@ -206,8 +194,8 @@ groves_summary <- all_plots_groves %>%
   adorn_totals("col") %>% #calc total plots per grove
   adorn_totals() %>%  #calc total plots per type
   left_join(groves_seki_summary_total) %>% # add grove info
-  mutate(plots_peracre_buf = round(Total/grove_wbuffer_acres,2),
-         acres_perplot_buf = round(grove_wbuffer_acres/Total, 2))
+  mutate(plots_peracre_buf = round(Total/groveacres,2),
+         acres_perplot_buf = round(groveacres/Total, 2))
 ```
 
 Grove assessments will use plots from a variety of projects. There are `r max(groves_summary$Total)` plots from `r length(unique(all_plots_groves$project))` projects. There are `r length(unique(all_plots_groves$grove_name))` groves with plots. Redwood Mountain has the most plots by count. 
@@ -272,7 +260,7 @@ density <- ggplot(groves_summary, aes(grove_name, plots_peracre_buf))+
   theme(axis.title.y = element_blank())
 
 #total acerage of groves
-acres <- ggplot(groves_summary, aes(grove_name, grove_wbuffer_acres))+
+acres <- ggplot(groves_summary, aes(grove_name, groveacres))+
   geom_col(fill = "#9ba17f")+
   coord_flip()+
   labs(
@@ -294,12 +282,13 @@ ggsave(here("outputs/plotdensity_acres.jpg"), width = 7, height = 5, units = "in
 ```{r grv-plot-acres}
 
 summary_plotacres <- groves_summary %>% 
-  select(grove_name, plots_peracre_buf, acres_perplot_buf)
+  select(grove_name, plots_peracre_buf, acres_perplot_buf) %>% 
+  arrange(plots_peracre_buf)
 
 #table of plot breakdown
 kable(summary_plotacres,
       digits = 2,
-      caption = "Plot count versus acres",
+      caption = "Plot Count versus Acres",
       col.names = c("Grove", "Plots per acre", "Acres per plot"))
 
 ```
@@ -317,7 +306,7 @@ env_plots <- terra::extract(env_stack, all_vect) %>%
   left_join(all_plots_groves, by = join_by(ID == rowid)) %>%
   rename(elevation_m = So_Sierra_DEM_10m,
          slope_perc = So_Sierra_10mDEM_slopePercent,
-         aspect = So_Sierra_10mDEM_aspect) %>% 
+         aspect = So_Sierra_10mDEM_aspect) #%>% 
   left_join(plot_colors) #add color reference
 
 
@@ -332,7 +321,21 @@ fire_plot <- extract(fire, all_vect)%>%
 
 fire_plot_recent <- fire_plot %>% 
   group_by(ID) %>% 
-  slice_max(fire_yr)
+  slice_max(fire_yr) %>% 
+  mutate(
+    burnsev = case_when(
+      burnsev == 0 ~ "Unburned",
+      burnsev == 1 ~ "Undetected change",
+      burnsev == 2 ~ "Low",
+      burnsev == 3 ~ "Moderate",
+      burnsev == 4 ~ "High"
+    ),
+  burnsev = factor(burnsev,ordered = T, levels = c("Unburned", "Undetected change", "Low", "Moderate", "High") )
+  )
+
+burnsev_plot <- fire_plot_recent %>%
+  ungroup() %>% 
+  summarise(.by = burnsev, count = n())
 
 fire_plot_count <- fire_plot %>%
   filter(fire_yr != "0000") %>% 
@@ -342,7 +345,10 @@ fire_plot_count <- fire_plot %>%
 env_plots <- env_plots %>% 
   left_join(fire_plot_count) %>% 
   left_join(fire_plot_recent) %>% 
-  replace_na(list(fire_count = 0))
+  replace_na(list(fire_count = 0)) %>% 
+  rename(fire_id = id)
+
+#write_csv(env_plots, here("data/spatial_data/all_plots_groves_env.csv")) 
 
 ```
 
@@ -366,8 +372,8 @@ kable(summary_fire_amount,
       booktabs = T,
       col.names = c("Fire count", "Plot count"))
 
-ggplot(fire_plot_recent, aes(burnsev))+
-  geom_histogram(fill = "#813405")+
+ggplot(burnsev_plot, aes(burnsev, count))+
+  geom_col(fill = "#813405")+
   labs(
     title = "Distribution of Wildfire Burn Severity in Existing Plots",
     subtitle = "Most recent burn severity where reburned, 0 includes no fire",
@@ -375,9 +381,9 @@ ggplot(fire_plot_recent, aes(burnsev))+
     x = "Burn severity (CBI)"
   )+
   theme_bw()+
-  scale_y_continuous(expand = c(0, 0))+
-  scale_x_continuous(expand = c(0, 0)) 
-#ggsave(here("outputs/burnsev.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+  scale_y_continuous(expand = c(0, 0))#+
+  #scale_x_continuous(expand = c(0, 0)) 
+ggsave(here("outputs/burnsev.jpg"), width = 7, height = 5, units = "in", dpi = 600)
 ```
 
 ### Topographic characteristics
@@ -392,7 +398,7 @@ ggplot(env_plots, aes(x=elevation_m))+
   theme_bw()+
   scale_y_continuous(expand = c(0, 0))+
   scale_x_continuous(expand = c(0, 0)) 
-#ggsave(here("outputs/elev.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+ggsave(here("outputs/elev.jpg"), width = 7, height = 5, units = "in", dpi = 600)
 ```
 
 
@@ -407,7 +413,7 @@ ggplot(env_plots, aes(x=slope_perc))+
    scale_y_continuous(expand = c(0, 0))+
   scale_x_continuous(expand = c(0, 0))+
   theme_bw()
-#ggsave(here("outputs/slope.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+ggsave(here("outputs/slope.jpg"), width = 7, height = 5, units = "in", dpi = 600)
 ```
 
 ```{r}
@@ -437,12 +443,24 @@ aspect_graph <- ggplot(env_plots, aes(x=aspect))+
   scale_x_continuous(expand = c(0, 0)) 
 
 aspect_graph+aspect_polar+plot_annotation(title = "Overall Aspect Distribution of Plots")
-#ggsave(here("outputs/aspect_combined.jpg"), width = 7, height = 5, units = "in", dpi = 600)
+ggsave(here("outputs/aspect_combined.jpg"), width = 7, height = 5, units = "in", dpi = 600)
 
 ```
 
+### Grove area table
+```{r grove-area-table}
 
-## Individual groves
+kable(groves_seki_summary_total,
+      digits = 2,
+      caption = "SEKI Grove Area Summary",
+      booktabs = T,
+      col.names = c("Grove", "Acres", "Acres with 75m buffer"))
+
+```
+
+## Individual grove plot comparison
+
+The following are comparisons of grove strata and strata represented by plots in groves that have plots. 
 
 ```{r indiv-groves}
 
@@ -450,7 +468,8 @@ groves_seki_buffered_vect <- vect(groves_seki_buffered)
 
 groves_id <- rownames_to_column(groves_summary) %>% 
   mutate(ID = as.numeric(rowname)) %>% 
-  select(ID, grove_name)
+  select(ID, grove_name) %>% 
+  filter(grove_name != "Total")
 
 grove_stats <- extract(env_stack, groves_seki_buffered_vect) %>%  
   rename(elevation_m = So_Sierra_DEM_10m,
@@ -469,15 +488,20 @@ groves_fire <- intersect(fire, groves_seki_buffered_vect) %>%
          prop_grove = area_ha/withbufferarea_ha)
   
 
-groves <- groves_id$grove_name
+grove_list <- groves_id$grove_name
+
+
+write_csv(grove_stats, here("data/spatial_data/grove_extraction.csv"))
+
+write_csv(groves_fire, here("data/spatial_data/grove_fire_extraction.csv"))
 
 ```
 
 
 ```{r grove_summary}
-for (i in groves) {
+for (i in grove_list) {
 
-grove <- "Atwell"
+grove <- i
 
 indiv_plots <- filter(env_plots, grove_name == grove)
 
@@ -490,7 +514,17 @@ burnsev_totals <- indiv_fire %>%
 
 fire_totals <- burnsev_totals %>% 
   add_row(burnsev = 0, prop_grove = 1-sum(burnsev_totals$prop_grove)) %>% 
-  arrange(burnsev)
+  mutate(
+    burnsev = case_when(
+      burnsev == 0 ~ "Unburned",
+      burnsev == 1 ~ "Undetected change",
+      burnsev == 2 ~ "Low",
+      burnsev == 3 ~ "Moderate",
+      burnsev == 4 ~ "High",
+      T ~ "Unburned"
+    ),
+  burnsev = factor(burnsev,ordered = T, levels = c("Unburned", "Undetected change", "Low", "Moderate", "High") )
+  )
 
 plots_burnsev <- indiv_plots %>% 
   summarize(.by = burnsev, count = n()) %>% 
@@ -526,16 +560,15 @@ p_fire <- ggplot(plots_burnsev, aes(burnsev, count))+
   labs(y = "Plot count",
        x = "Burn severity (CBI)")+
   theme_bw()+
-  scale_y_continuous(expand = c(0, 0))+
-  scale_x_continuous(expand = c(0, 0)) 
+  scale_y_continuous(expand = c(0, 0))
 
 g_fire <- ggplot(fire_totals, aes(burnsev, prop_grove))+
   geom_col(fill = "#813405")+
   labs(y = "Proportion of grove",
        x = "Burn severity (CBI)")+
   theme_bw()+
-  scale_y_continuous(expand = c(0, 0))+
-  scale_x_continuous(expand = c(0, 0)) 
+  scale_y_continuous(expand = c(0, 0))
+
 
 p_slope <- ggplot(indiv_plots, aes(x=slope_perc))+
   geom_histogram(fill="#d45113", binwidth = 5)+
@@ -595,13 +628,13 @@ print(g_aspect + p_aspect + plot_annotation(title = paste("Aspect distribution i
 ```
 
 
-## Decisions
+## Sampling decisions for the workgroup
 
-1. What factors are important to represent/stratify? *Our initial thought is that aspect will be the most important variable and that it is worth considering topographic position*
+1. What factors are important to represent/stratify? *Our initial thought is that aspect and severity/disturbance history
+will be the most important variable and that it is worth considering topographic position*
 
 2. How do we want to determine sampling intensity and stratification within a grove? 
 
 3. How much we can utilize inference to characterize the fuels structure of a grove? That is to say: to describe the needs of a given grove, how much of the data needs to come from direct plot observations in that grove versus plot observations from plots with similar characteristics in other groves? What counts as similar and what kind of ground truthing would be most feasible and useful?
 
-3. How should we prioritize groves and the placement of plots therein?
 
