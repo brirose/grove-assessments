@@ -1,0 +1,17 @@
+aspect,burnsev,time_since,grove_prop,prop_plot
+NW to E,Unburned,more_than_five,0.05,0
+SE to W,Unburned,more_than_five,0.04,0.48
+NW to E,Low,more_than_five,0.07,0
+SE to W,Low,more_than_five,0.06,0.05
+NW to E,Moderate,more_than_five,0.04,0
+SE to W,Moderate,more_than_five,0.04,0.03
+NW to E,High,more_than_five,0.02,0
+SE to W,High,more_than_five,0.01,0
+NW to E,Unburned,five_or_less,0.04,0
+SE to W,Unburned,five_or_less,0.1,0.09
+NW to E,Low,five_or_less,0.1,0
+SE to W,Low,five_or_less,0.15,0.15
+NW to E,Moderate,five_or_less,0.04,0
+SE to W,Moderate,five_or_less,0.06,0.04
+NW to E,High,five_or_less,0.08,0
+SE to W,High,five_or_less,0.1,0.15

@@ -301,6 +301,11 @@ all_plots_groves <- rowid_to_column(all_plots_groves)
 #convert to terra object
 all_vect <- vect(all_plots_groves)
 
+all_sf <- all_plots_groves %>% 
+  st_as_sf()
+
+st_write(all_sf, here("data/spatial_data/all_plots_groves.shp"), append = F)
+
 # topography info per plot
 env_plots <- terra::extract(env_stack, all_vect) %>% 
   left_join(all_plots_groves, by = join_by(ID == rowid)) %>%
@@ -318,6 +323,8 @@ fire_plot <- extract(fire, all_vect)%>%
     burnsev = 0,
     asss_t = "none")) %>% 
   rename(ID = id.y)
+
+
 
 fire_plot_recent <- fire_plot %>% 
   group_by(ID) %>% 
@@ -341,6 +348,7 @@ fire_plot_count <- fire_plot %>%
   filter(fire_yr != "0000") %>% 
   summarise(.by = c(ID), fire_count = n())
 
+rx_plot <- extract(rx_seki, all_vect)
 
 env_plots <- env_plots %>% 
   left_join(fire_plot_count) %>% 

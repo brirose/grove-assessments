@@ -22,209 +22,263 @@ groves <- st_read(here("data/spatial_data/SEKI_groves/SEKI_groves_list.shp"))
 
 existing_plots <-read_csv(here("data/spatial_data/all_plots_groves_env.csv"))
 
-grove_stats <- read_csv(here("data/spatial_data/grove_extraction.csv"))
+aspect <- st_read(here("data/spatial_data/aspect_polys.shp")) %>% 
+  st_transform(crs(groves))
 
-grove_fire <- read_csv(here("data/spatial_data/grove_fire_extraction.csv"))
-
-```
-
-
-```{r env_stats}
-
-aspect <- rast(here("data/spatial_data/So_Sierra_10mDEM/So_Sierra_10mDEM_aspect.tif")) %>% 
+trt <- vect(here("data/spatial_data/trt/SEGI_Trtdata_05feb25.shp")) %>% 
   project(crs(groves))
-
-slope <- rast(here("data/spatial_data/So_Sierra_10mDEM/So_Sierra_10mDEM_slopePercent.tif")) %>% 
-  project(crs(groves))
-
-elev <- rast(here("data/spatial_data/So_Sierra_10mDEM/So_Sierra_DEM_10m.tif")) %>% 
-  project(crs(groves))
-
-#stack rasters for easy handling
-env_stack <- c(aspect, slope, elev)
 
 fire <- vect(here("data/spatial_data/cbi_all/cbi_all.shp")) %>% 
-  project(crs(groves)) 
+  project(crs(groves))
 
+plots_sf <- groves <- st_read(here("data/spatial_data/all_plots_groves.shp")) 
 ```
 
-```{r}
-grove_name <- groves %>%
-  rowid_to_column(var = "ID") %>% 
-  st_drop_geometry()
+
+
+```{r transform}
+groves_vect <- vect(groves)
+aspect_vect <- vect(aspect)
+
+rx_seki <- trt %>% 
+  st_as_sf() %>% 
+  filter(treatment == "Fire-related treatment") %>%  
+  vect() %>% 
+  intersect(groves_vect) %>% 
+  st_as_sf() %>% 
+  mutate(burnsev = 2,
+         id = paste(grov_nm, year, rowid, sep = "_"))%>% 
+  rename(fire_yr = year)%>% 
+  select(id, fire_yr, burnsev)
   
 
-grove_stats <- extract(env_stack, groves) %>%  
-  rename(elevation_m = So_Sierra_DEM_10m,
-         slope_perc = So_Sierra_10mDEM_slopePercent,
-         aspect = So_Sierra_10mDEM_aspect) %>% 
-  left_join(grove_name)
+aspect_groves <- intersect(aspect_vect, groves_vect) %>% 
+  st_as_sf()%>% 
+  mutate(aspect = case_when(
+    Id == 1 ~ "NW to E",
+    Id == 2 ~ "SE to W"
+  ))
 
-groves_vect <- vect(groves)
-
-burn <-  intersect(fire, groves_vect) %>% 
+burn <- intersect(fire, groves_vect) %>% 
   st_as_sf() %>%
-  mutate(fire_yr = as.numeric(fire_yr))
+  mutate(fire_yr = as.numeric(fire_yr)) %>% 
+  select(id, fire_yr, burnsev) %>% 
+  bind_rows(rx_seki)
 
-
+grove_area <- sum(groves$grovr_h)
 ```
-
-
-
 
 ```{r plots}
 
+
+plots_rx <- st_intersection(rx_seki, plots_sf)
+
+plots_rx_count <- plots_rx %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = plot_id, trt_ct = n())
+
+plots_rx_yr <- plots_rx %>% 
+  group_by(plot_id) %>% 
+  slice_max(fire_yr) %>% 
+  rename(trt_yr = fire_yr) %>% 
+  left_join(plots_rx_count) %>% 
+  mutate(sev = "Low") %>% 
+  select(plot_id, trt_yr, trt_ct, sev) %>% 
+  st_drop_geometry()
+
+
 totals_summary <- existing_plots %>% 
-  summarise(.by = c(grove_name), total = n()) 
+  summarise(.by = c(grove_name), total = n())
 
-aspect_summary <- existing_plots %>% 
-  mutate(strata = cut(aspect, breaks = c(0,seq(22.5,337.5,45),360),
-              labels =c("N","NE","E","SE","S","SW","W","NW","N"),
-              include.lowest = TRUE)) %>% 
-  summarise(.by = c(grove_name, strata), count = n()) %>% 
-  left_join(totals_summary) %>% 
-  mutate(count = round(count/total, 2)) %>% 
-  pivot_wider(names_from = strata, # make wider dataframe for viz
-              values_from = count, 
-              values_fill = 0)
+plot_total <-  sum(totals_summary$total)
 
-slope_summary <- existing_plots %>% 
-  mutate(strata = cut(slope_perc, breaks = c(0, 3, 8, 15, 30, 45, 65, 100),
-                      labels = c("Flat", "Undulating", "Moderately Sloping", "Hilly", "Moderately Steep", "Steep", "Very Steep"),
-                      include.lowest = TRUE),
-         strata = factor(strata,ordered = T, levels = c("Flat", "Undulating", "Moderately Sloping", "Hilly", "Moderately Steep", "Steep", "Very Steep"))) %>% 
-    summarise(.by = c(grove_name, strata), count = n()) %>% 
-  arrange(strata) %>% 
-  left_join(totals_summary) %>% 
-  mutate(count = round(count/total, 2)) %>% 
-  pivot_wider(names_from = strata, # make wider dataframe for viz
-              values_from = count, 
-              values_fill = 0)
+plots_all <- existing_plots %>% 
+  left_join(plots_rx_yr) %>% 
+  replace_na(list(trt_yr = 0000, trt_ct = 0, sev = "Unburned")) %>% 
+  mutate(
+    fire_yr = as.numeric(fire_yr),
+    burnsev = case_when(fire_yr<trt_yr ~ sev, T ~ burnsev),
+    fire_yr = case_when(fire_yr<trt_yr ~ trt_yr, T ~ fire_yr),
+    fire_count = fire_count+trt_ct
+  )
 
-burn_summary <- existing_plots %>% 
-  rename(strata = burnsev) %>% 
-  summarise(.by = c(grove_name, strata), count = n()) %>% 
-  left_join(totals_summary) %>% 
-  mutate(count = round(count/total, 2)) %>% 
-  pivot_wider(names_from = strata, # make wider dataframe for viz
-              values_from = count, 
-              values_fill = 0)
+plots_classified <- plots_all %>% 
+   mutate(
+     burnsev = case_when(burnsev == "Undetected change" ~ "Unburned",
+                         T ~ burnsev),
+     aspect = case_when(
+     aspect <= 90 | aspect > 315~ "NW to E",
+     T ~ "SE to W"),
+     time_since = case_when(
+       fire_yr == 0000 ~ "more_than_five",
+       fire_yr  >= 2020 ~ "five_or_less",
+       T ~ "more_than_five"
+     ),
+     count = case_when(fire_count >= 2 ~ "multiple",
+                      T ~ "one or none"))
 
-#need burn count
-
-burn_count <- existing_plots %>% 
-  rename(strata = fire_count) %>% 
-  summarise(.by = c(grove_name, strata), count = n()) %>% 
-  left_join(totals_summary) %>% 
-  mutate(count = round(count/total, 2),
-         strata = paste("fires_", strata, sep = "")) %>% 
-  pivot_wider(names_from = strata, # make wider dataframe for viz
-              values_from = count, 
-              values_fill = 0)
-
-
-plots_summary <- aspect_summary %>% 
-  left_join(slope_summary) %>% 
-  left_join(burn_summary) %>% 
-  left_join(burn_count)
-
-
-plot_rep <- grove_name %>% 
-  left_join(totals_summary, by = join_by(grov_nm == grove_name)) %>% 
-  mutate(area_rep_ha = round(grovr_h/total, 1),
-         grove_ha = round(grovr_h, 1),
-         plot_ct = total) %>% 
-  mutate_all(~replace(., is.na(.), 0)) %>% 
-  select(grov_nm, grove_ha, plot_ct, area_rep_ha)
+plot_sets <- plots_classified %>% 
+  summarize(.by = c(aspect, burnsev, time_since, count), count_plot = n()) %>% 
+  mutate(prop_plot = round(count_plot/plot_total, 2))
 
 ```
 
-```{r groves}
+```{r grove_setup}
 
 
-totals_summary <- grove_stats %>% 
-  summarise(.by = c(grov_nm), total = n()) 
 
-aspect_summary <- grove_stats %>% 
+burn_count <- burn %>% 
+  summarize(.by = c(id, fire_yr, burnsev), geometry = st_combine(geometry)) %>%  
+  arrange(-fire_yr) %>% 
+  st_make_valid()
+
+burn_id <- burn_count %>% 
+  st_drop_geometry() %>% 
+  rowid_to_column("rid")
+
+fire_count <- st_intersection(burn_count) %>% 
+  st_collection_extract(type = c("POLYGON"), warn = FALSE)
+
+
+burn_classed <- fire_count %>%
+  mutate(time_since = case_when(
+       fire_yr == 0000 ~ "more_than_five",
+       fire_yr  >= 2020 ~ "five_or_less",
+       T ~ "more_than_five"
+     ),
+    burnsev = case_when(
+      burnsev == 0 ~ "Unburned",
+      burnsev == 1 ~ "Unburned",
+      burnsev == 2 ~ "Low",
+      burnsev == 3 ~ "Moderate",
+      burnsev == 4 ~ "High",
+      T ~ "Unburned"
+     ),
+    count = case_when(n.overlaps >= 2 ~ "multiple",
+                      T ~ "one or none")) %>%
+  summarize(.by = c(time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
+  st_make_valid() 
+
+st_write(burn_classed, here("data/spatial_data/fire_hist_2.shp"), append = F)
+
+groves_set <- burn_classed %>% 
+  st_intersection(aspect_groves) %>% 
+  st_collection_extract(type = c("POLYGON"), warn = FALSE) %>% 
+  summarize(.by = c(aspect, time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
+  st_make_valid() %>% 
+  mutate(area_ha = as.numeric(st_area(.))*0.0001,
+         prop_area = round(area_ha/sum(area_ha), 2)) %>% 
+  st_drop_geometry()
+
+
+
+#aspect_poly <- st_read(here("data/spatial_data/aspect_polys.shp")) %>% 
+ # transform(st_crs(burn_classed))
+
+
+```
+
+
+
+```{r}
+
+comparison_sets <- groves_set %>% 
+  left_join(plot_sets) %>% 
+  replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
+  mutate(count = case_when(burnsev == "Unburned" ~ "none",
+                           count == "multiple" ~ count,
+                           T ~ "one"),
+         area_ha = round(area_ha, 2),
+         diff = prop_area - prop_plot)
+
+write_csv(comparison_sets, here("data/strata_set_comparison_10Feb25.csv"))
+
+```
+
+
+
+```{r}
+aspect_all <- grove_stats %>% 
   mutate(strata = cut(aspect, breaks = c(0,seq(22.5,337.5,45),360),
               labels =c("N","NE","E","SE","S","SW","W","NW","N"),
               include.lowest = TRUE)) %>% 
-  summarise(.by = c(grov_nm, strata), count = n()) %>% 
-  left_join(totals_summary) %>% 
-  mutate(count = round(count/total, 2)) %>% 
+  summarise(.by =  strata, count = n()) %>%
+  mutate(count = round(count/sum(count), 3)) %>% 
   pivot_wider(names_from = strata, # make wider dataframe for viz
               values_from = count, 
               values_fill = 0) %>% 
-  select(-total)
+  mutate(grove = "all")
 
-slope_summary <- grove_stats %>% 
+
+slope_all <- grove_stats %>% 
   mutate(strata = cut(slope_perc, breaks = c(0, 3, 8, 15, 30, 45, 65, 100),
                       labels = c("Flat", "Undulating", "Moderately Sloping", "Hilly", "Moderately Steep", "Steep", "Very Steep"),
                       include.lowest = TRUE),
          strata = factor(strata,ordered = T, levels = c("Flat", "Undulating", "Moderately Sloping", "Hilly", "Moderately Steep", "Steep", "Very Steep"))) %>% 
-  summarise(.by = c(grov_nm, strata), count = n()) %>% 
-  left_join(totals_summary) %>% 
-  mutate(count = round(count/total, 2)) %>% 
+  summarise(.by = strata, count = n()) %>% 
+  mutate(count = round(count/sum(count),3)) %>% 
   arrange(strata) %>% 
   pivot_wider(names_from = strata, # make wider dataframe for viz
               values_from = count, 
               values_fill = 0) %>% 
   rename("No_slope" = "NA") %>% 
-  select(-total)
+  mutate(grove = "all")
 
-
-burn_count <- st_intersection(burn) %>% 
-  select(grov_nm, grovr_h, n.overlaps) %>% 
-  st_collection_extract(type = c("POLYGON"), warn = FALSE) %>% #keep only polys
-#recombine multipolygons
-summarise(.by = c(grov_nm, grovr_h, n.overlaps), geometry = st_combine(geometry)) %>% 
+count_all <- burn_hist %>% 
+  summarise(.by = c(n.overlaps), geometry = st_combine(geometry)) %>% 
   mutate(area_ha = as.numeric(st_area(.))*0.0001,
-         prop_grove = round(area_ha/grovr_h, 2)) %>% 
+         prop = round(area_ha/grove_area, 3)) %>% 
   st_drop_geometry() %>% 
   mutate(strata = paste("fires_", n.overlaps, sep = "")) %>% 
-  select(grov_nm, strata, prop_grove) %>% 
-  filter(prop_grove>0) %>% 
+  select(-n.overlaps, -area_ha) %>% 
+  filter(prop>0) %>% 
   pivot_wider(names_from = strata, # make wider dataframe for viz
-              values_from = prop_grove, 
-              values_fill = 0)
+              values_from = prop, 
+              values_fill = 0) %>% 
+  mutate(grove = "all")
 
 
-burn_sev <- burn %>% 
-  group_by(grov_nm, id) %>% 
-  slice_max(fire_yr) %>% 
-  ungroup() %>% 
-  summarise(.by = c(grov_nm, grovr_h, burnsev), geometry = st_combine(geometry)) %>% 
+sev_all <- burn_hist %>% 
+  summarise(.by = c(burnsev), geometry = st_combine(geometry)) %>% 
   mutate(
     strata = case_when(
       burnsev == 0 ~ "Unburned",
-      burnsev == 1 ~ "Undetected change",
+      burnsev == 1 ~ "Undetected_change",
       burnsev == 2 ~ "Low",
       burnsev == 3 ~ "Moderate",
       burnsev == 4 ~ "High",
       T ~ "Unburned"
     ),
-  strata = factor(strata,ordered = T, levels = c("Unburned", "Undetected change", "Low", "Moderate", "High") ),
+  strata = factor(strata,ordered = T, levels = c("Unburned", "Undetected_change", "Low", "Moderate", "High") ),
     area_ha = as.numeric(st_area(.))*0.0001,
-         prop_grove = round(area_ha/grovr_h, 2)) %>% 
+         prop_grove = round(area_ha/grove_area, 2)) %>% 
   st_drop_geometry() %>% 
-  select(grov_nm, strata, prop_grove) %>% 
+  select(-burnsev, -area_ha) %>% 
   pivot_wider(names_from = strata, # make wider dataframe for viz
               values_from = prop_grove, 
-              values_fill = 0)
+              values_fill = 0) %>% 
+  mutate(grove = "all")
 
-
-
-groves_summary <- plot_rep %>% 
-  left_join(aspect_summary) %>% 
-  left_join(slope_summary) %>% 
-  left_join(burn_count) %>% 
-  left_join(burn_sev) %>% 
+groves_all <- aspect_all %>% 
+  left_join(slope_all) %>% 
+  left_join(count_all) %>% 
+  left_join(sev_all) %>% 
   mutate_all(~replace(., is.na(.), 0)) %>% 
-  rename(grove = grov_nm) %>% 
-  mutate(fires_0 = 1-(fires_1+fires_2+fires_3))
+  mutate(fires_0 = 1-(fires_1+fires_2+fires_3),
+         Unburned = round(1-(Undetected_change+Low+Moderate+High),2),
+         grove_ha = sum(groves_summary$grove_ha),
+         plot_ct = sum(groves_summary$plot_ct),
+         area_rep_ha = grove_ha/plot_ct
+         )
 
+
+groves_summary <- groves_summary %>% 
+  bind_rows(groves_all)
+
+write_csv(groves_summary, here("data/groves_all.csv"))
 
 ```
+
 
 
 ```{r diff}
@@ -242,9 +296,16 @@ groves_summary_longer <- groves_summary %>%
                names_to = "strata",
                values_to = "grove_prop") 
 
-priority_strata <- groves_summary_longer %>% 
+comparision_table <- groves_summary_longer %>% 
   left_join(plots_summary_longer) %>% 
-  mutate_all(~replace(., is.na(.), 0)) %>% 
+  mutate_all(~replace(., is.na(.), 0))
+
+all_comparision <- comparision_table %>% 
+  filter(grove == "all")
+
+write_csv(all_comparision, here("data/plot-groveComparison04feb25.csv"))
+
+priority_strata <- comparison_table %>% 
   mutate(difference = abs(grove_prop - plot_prop),
          priority = cut(difference, breaks = c(0,.1,.25,.5,.75,1),
               labels =c("0","1","2","3","4"),
@@ -286,6 +347,16 @@ ggplot(groves_priority, aes(priority))+
 groves_prioritized <- groves %>% 
   left_join(groves_priority, join_by(grov_nm == grove))
 
-st_write(groves_prioritized, here("data/spatial_data/priority_groves/priorities03Feb25.shp"))
+#st_write(groves_prioritized, here("data/spatial_data/priority_groves/priorities03Feb25.shp"))
 ```
+
+```{r}
+
+ggplot(groves_prioritized, aes(fill = priority)) + 
+  geom_sf()+
+  theme_minimal()+
+  scale_fill_viridis_c(option = "plasma")
+
+```
+
 
