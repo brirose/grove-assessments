@@ -184,6 +184,7 @@ all_plots_groves <- st_intersection(all_plots, groves_seki_buffered)
 
 #st_write(all_plots_groves, here("data/spatial_data/all_plots_groves.shp"))
 
+
 #make grove summary plot, nonspatial
 groves_summary <- all_plots_groves %>% 
   st_drop_geometry() %>% #remove polygon reference

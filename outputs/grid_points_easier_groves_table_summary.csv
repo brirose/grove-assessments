@@ -1,0 +1,71 @@
+"","strata_nm","grove_name","num.grid.plots","NEW.plots.needed","study_design","existing.plots"
+"1","NW_E-under5-High-many","Redwood Mountain",10,1,"grid",52
+"2","NW_E-under5-High-many","Suwanee",2,1,"grid",5
+"3","NW_E-under5-High-one","Dillonwood",2,2,"grid",NA
+"4","NW_E-under5-High-one","Redwood Mountain",5,2,"grid",52
+"5","NW_E-under5-Low-many","Atwell",2,1,"grid",47
+"6","NW_E-under5-Low-many","Eden Creek",17,1,"grid",5
+"7","NW_E-under5-Low-many","Garfield",15,1,"grid",5
+"8","NW_E-under5-Low-many","Giant Forest",9,1,"grid",34
+"9","NW_E-under5-Low-many","Muir",2,1,"grid",5
+"10","NW_E-under5-Low-many","Redwood Mountain",20,1,"grid",52
+"11","NW_E-under5-Low-many","Sequoia Creek",2,1,"grid",9
+"12","NW_E-under5-Low-many","Suwanee",1,1,"grid",5
+"13","NW_E-under5-Low-one","Big Springs",1,19,"grid",NA
+"14","NW_E-under5-Low-one","Cedar Flat",2,19,"grid",1
+"15","NW_E-under5-Low-one","Dillonwood",3,19,"grid",NA
+"16","NW_E-under5-Low-one","Eden Creek",5,19,"grid",5
+"17","NW_E-under5-Low-one","Garfield",28,19,"grid",5
+"18","NW_E-under5-Low-one","Giant Forest",11,19,"grid",34
+"19","NW_E-under5-Low-one","Granite Creek",1,19,"grid",NA
+"20","NW_E-under5-Low-one","Muir",8,19,"grid",5
+"21","NW_E-under5-Low-one","Oriole Lake",3,19,"grid",3
+"22","NW_E-under5-Low-one","Pine Ridge",5,19,"grid",1
+"23","NW_E-under5-Low-one","Skagway",2,19,"grid",2
+"24","NW_E-under5-Low-one","South Fork",32,19,"grid",3
+"25","NW_E-under5-Moderate-many","Eden Creek",1,1,"grid",5
+"26","NW_E-under5-Moderate-many","Redwood Mountain",10,1,"grid",52
+"27","NW_E-under5-Moderate-many","Suwanee",1,1,"grid",5
+"28","NW_E-under5-Unburned-none","Atwell",1,11,"grid",47
+"29","NW_E-under5-Unburned-none","Dillonwood",1,11,"grid",NA
+"30","NW_E-under5-Unburned-none","Eden Creek",21,11,"grid",5
+"31","NW_E-under5-Unburned-none","Garfield",27,11,"grid",5
+"32","NW_E-under5-Unburned-none","Giant Forest",11,11,"grid",34
+"33","NW_E-under5-Unburned-none","Muir",2,11,"grid",5
+"34","NW_E-under5-Unburned-none","Redwood Creek",1,11,"grid",1
+"35","NW_E-under5-Unburned-none","Redwood Meadow",1,11,"grid",22
+"36","NW_E-under5-Unburned-none","Redwood Mountain",14,11,"grid",52
+"37","SE_W-under5-Low-many","Redwood Mountain",1,24,"grid",52
+"38","SE_W-under5-Low-one","Cedar Flat",4,34,"grid",1
+"39","SE_W-under5-Low-one","Dillonwood",54,34,"grid",NA
+"40","SE_W-under5-Low-one","Eden Creek",1,34,"grid",5
+"41","SE_W-under5-Low-one","Garfield",27,34,"grid",5
+"42","SE_W-under5-Low-one","Giant Forest",17,34,"grid",34
+"43","SE_W-under5-Low-one","Little Redwood Meadow",1,34,"grid",NA
+"44","SE_W-under5-Low-one","Lost",3,34,"grid",12
+"45","SE_W-under5-Low-one","Muir",8,34,"grid",5
+"46","SE_W-under5-Low-one","New Oriole Lake",1,34,"grid",1
+"47","SE_W-under5-Low-one","Oriole Lake",21,34,"grid",3
+"48","SE_W-under5-Low-one","Redwood Meadow",12,34,"grid",22
+"49","SE_W-under5-Low-one","Redwood Mountain",4,34,"grid",52
+"50","SE_W-under5-Low-one","Skagway",2,34,"grid",2
+"51","SE_W-under5-Low-one","South Fork",7,34,"grid",3
+"52","SE_W-under5-Low-one","Squirrel Creek",2,34,"grid",NA
+"53","SE_W-under5-Moderate-one","Dillonwood",7,4,"grid",NA
+"54","SE_W-under5-Moderate-one","Garfield",1,4,"grid",5
+"55","SE_W-under5-Moderate-one","Muir",1,4,"grid",5
+"56","SE_W-under5-Moderate-one","Redwood Meadow",4,4,"grid",22
+"57","SE_W-under5-Moderate-one","South Fork",2,4,"grid",3
+"58","SE_W-under5-Unburned-none","Atwell",13,27,"grid",47
+"59","SE_W-under5-Unburned-none","Dillonwood",42,27,"grid",NA
+"60","SE_W-under5-Unburned-none","Eden Creek",2,27,"grid",5
+"61","SE_W-under5-Unburned-none","Garfield",24,27,"grid",5
+"62","SE_W-under5-Unburned-none","Giant Forest",8,27,"grid",34
+"63","SE_W-under5-Unburned-none","Little Redwood Meadow",4,27,"grid",NA
+"64","SE_W-under5-Unburned-none","Lost",4,27,"grid",12
+"65","SE_W-under5-Unburned-none","Muir",4,27,"grid",5
+"66","SE_W-under5-Unburned-none","Oriole Lake",2,27,"grid",3
+"67","SE_W-under5-Unburned-none","Redwood Creek",1,27,"grid",1
+"68","SE_W-under5-Unburned-none","Redwood Meadow",6,27,"grid",22
+"69","SE_W-under5-Unburned-none","Redwood Mountain",55,27,"grid",52
+"70","SE_W-under5-Unburned-none","Skagway",2,27,"grid",2

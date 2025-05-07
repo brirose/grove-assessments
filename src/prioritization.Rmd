@@ -37,20 +37,30 @@ no_fire <- read_sf(here("data/spatial_data/no_fire/no_fire.shp")) %>%
   st_transform(crs(groves))
 
 plots_sf <- st_read(here("data/spatial_data/all_plots_groves.shp")) 
+
+access <- read.csv(here("data/grove_access.csv"))
 ```
 
 
 
 ```{r transform}
-groves_vect <- vect(groves)
-aspect_vect <- vect(aspect)
+#ks: Bri's way worked for me the first time around, then totally unrelated stuff started freezing, so I deleted the whole enviro and started over, then this process of converting within the piped code didn't work anymore (??). So I did it outside of the piped code and seems to work for me now
+
+# groves_vect <- vect(groves)
+# aspect_vect <- vect(aspect)
+
+fire <- fire %>% 
+  st_as_sf()
+
+trt <- trt %>% 
+  st_as_sf()
 
 rx_seki <- trt %>% 
-  st_as_sf() %>% 
+  # st_as_sf() %>% 
   filter(treatment == "Fire-related treatment") %>%  
-  vect() %>% 
-  intersect(groves_vect) %>% 
-  st_as_sf() %>% 
+  # vect() %>% 
+  st_intersection(groves) %>% 
+  # st_as_sf() %>% 
   st_collection_extract(type = c("POLYGON"), warn = FALSE) %>% 
   mutate(burnsev = 2,
          id = paste(grov_nm, year, rowid, sep = "_"))%>% 
@@ -66,20 +76,26 @@ no_burn <- no_fire %>%
   select(id, fire_yr, burnsev)
   
 
-aspect_groves <- intersect(aspect_vect, groves_vect) %>% 
-  st_as_sf()%>% 
+# aspect_groves <- intersect(aspect_vect, groves_vect) %>% 
+#   st_as_sf()%>% 
+aspect_groves <- aspect %>%
+  st_intersection(groves) %>% 
+  #ks: changed names for aspect to make briefer strata names later
   mutate(aspect = case_when(
-    Id == 1 ~ "NW to E",
-    Id == 2 ~ "SE to W"
+    Id == 1 ~ "NW_E",
+    Id == 2 ~ "SE_W"
   ))
 
 
-burn <- intersect(fire, groves_vect) %>% 
-  st_as_sf()%>%
+# burn <- intersect(fire, groves_vect) %>% 
+#   st_as_sf()%>%
+burn <- fire %>%
+  st_intersection(groves) %>%
   mutate(fire_yr = as.numeric(fire_yr)) %>% 
   select(id, fire_yr, burnsev) %>% 
   bind_rows(rx_seki) %>% 
   bind_rows(no_burn)
+
 
 grove_area <- sum(groves$grovr_h)
 ```
@@ -128,20 +144,27 @@ plots_classified <- plots_all %>%
    mutate(
      burnsev = case_when(burnsev == "Undetected change" ~ "Unburned",
                          T ~ burnsev),
+    #ks: changed names for aspect and time_since to make briefer strata names later
      aspect = case_when(
-     aspect <= 90 | aspect > 315~ "NW to E",
-     T ~ "SE to W"),
+     aspect <= 90 | aspect > 315~ "NW_E",
+     T ~ "SE_W"),
      time_since = case_when(
-       fire_yr == 0000 ~ "more_than_five",
-       fire_yr  >= 2020 ~ "five_or_less",
-       T ~ "more_than_five"
+       fire_yr == 0000 ~ "over5",
+       fire_yr  >= 2020 ~ "under5",
+       T ~ "over5"
      ),
-     count = case_when(fire_count >= 2 ~ "multiple",
-                      T ~ "one or none"))
+     count = case_when(fire_count >= 2 ~ "many",
+                      T ~ "one"))
 
 plot_sets <- plots_classified %>% 
   summarize(.by = c(aspect, burnsev, time_since, count), count_plot = n()) %>% 
+  #ks: changed names for count_v2 to make briefer strata names later
+  mutate(count_v2 = case_when(burnsev == "Unburned" ~ "none", T ~ count)) %>%
+  mutate(strata_nm = paste(aspect,"-",time_since,"-",burnsev,"-",count_v2, sep = "")) %>%
+  group_by(aspect,burnsev,time_since,count_v2,strata_nm) %>%
+  summarise(count_plot = sum(count_plot)) %>%
   mutate(prop_plot = round(count_plot/plot_total, 2))
+
 
 ```
 
@@ -161,9 +184,9 @@ fire_count <- st_intersection(burn_count) %>%
 
 burn_classed <- fire_count %>%
   mutate(time_since = case_when(
-       fire_yr == 0000 ~ "more_than_five",
-       fire_yr  >= 2020 ~ "five_or_less",
-       T ~ "more_than_five"
+       fire_yr == 0000 ~ "over5",
+       fire_yr  >= 2020 ~ "under5",
+       T ~ "over5"
      ),
     burnsev = case_when(
       burnsev == 0 ~ "Unburned",
@@ -173,11 +196,11 @@ burn_classed <- fire_count %>%
       burnsev == 4 ~ "High",
       T ~ "Unburned"
      ),
-    count = case_when(n.overlaps >= 2 ~ "multiple",
-                      T ~ "one or none")) %>%
+    #ks: changed names for count to make briefer strata names later
+    count = case_when(n.overlaps >= 2 ~ "many",
+                      T ~ "one")) %>%
   summarize(.by = c(time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
   st_make_valid() 
-
 
 
 groves_set <- burn_classed %>% 
@@ -186,10 +209,30 @@ groves_set <- burn_classed %>%
   summarize(.by = c(aspect, time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
   st_make_valid() %>% 
   mutate(area_ha = as.numeric(st_area(.))*0.0001,
-         prop_area = round(area_ha/grove_area, 2))# %>% 
-  st_drop_geometry()
+         prop_area = round(area_ha/grove_area, 2)) #%>% 
+  # st_drop_geometry()
+  
+  
+#make polys and select for only slivers >5 acres
+groves_classified_poly = st_collection_extract(groves_set, "POLYGON") %>%
+  #lines were created, convert back to polygon
+  st_cast("POLYGON") %>%
+  mutate(area_ha = as.numeric(st_area(.))*0.0001) %>%
+  #filter out individual silvers <5 acres
+  filter(area_ha > 2.02343) %>%
+  #regroup by strata
+  mutate(count_v2 = case_when(burnsev == "Unburned" ~ "none", T ~ count)) %>%
+  group_by(aspect, time_since, burnsev, count_v2) %>%
+  summarise(area_ha = sum(area_ha)) %>%
+  #create unique strada ID
+  mutate(strata_nm = paste(aspect,"-",time_since,"-",burnsev,"-",count_v2, sep = ""), 
+         prop_area = round(area_ha/grove_area, 2))
+nrow(groves_classified_poly)  
 
-write_sf(groves_set, here("data/spatial_data/grove_strata_24march25.shp"))
+
+# write_sf(groves_classified_poly, here("data/spatial_data/outputs/groveset_wGroveNames_over5acres.shp"))
+#write_sf(groves_set, here("data/spatial_data/debug_groveset.shp"))
+
 
 #aspect_poly <- st_read(here("data/spatial_data/aspect_polys.shp")) %>% 
  # transform(st_crs(burn_classed))
@@ -199,47 +242,151 @@ write_sf(groves_set, here("data/spatial_data/grove_strata_24march25.shp"))
 
 ```{r}
 
-comparison_st <- groves_set %>% 
-  left_join(plot_sets) %>% 
-  replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
-mutate(
-         area_ha = round(area_ha, 2),
-         diff = prop_area - prop_plot) 
+# comparison_sets <- groves_set %>% 
+#   left_join(plot_sets) %>% 
+#   replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
+#   mutate(count = case_when(burnsev == "Unburned" ~ "none",
+#                            count == "multiple" ~ count,
+#                            T ~ "one"),
+#          area_ha = round(area_ha, 2),
+#          diff = prop_area - prop_plot,
+#          total.plots.needed = round(458*prop_area),
+#          useful.plots = case_when(count_plot>total.plots.needed ~ total.plots.needed,
+#                                   T ~ count_plot),
+#          NEW.plots.needed = total.plots.needed - useful.plots)
+# 
+# write_csv(comparison_sets, here("data/strata_set_comparison_20Feb25.csv"))
 
-comparison_sets <- comparison_st %>% 
+##get needed number of plots based on area of strata
+needed.strata.plots <- groves_classified_poly %>% 
+  left_join(plot_sets) %>% 
+  # replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
+  mutate( count = case_when(burnsev == "Unburned" ~ "none",
+                           count_v2 == "many" ~ count_v2,
+                           T ~ "one"),
+         area_ha = round(area_ha, 2),
+         diff = prop_area - prop_plot,
+         total.plots.needed = round(458*prop_area),
+         useful.plots = case_when(count_plot>total.plots.needed ~ total.plots.needed,
+                                  T ~ count_plot),
+         NEW.plots.needed = total.plots.needed - useful.plots) %>%
+  filter(NEW.plots.needed > 0)
+
+##Create new shapefile that removes "Very Difficult" access groves, and dissolve into one big shapefile
+access.min = access %>% select(grove,Ease.of.Access)
+
+groves_easier = groves %>% 
+  mutate(grove = grove_name) %>%
+  left_join(access.min) %>%
+  filter(Ease.of.Access != "Very Difficult") %>%
+  # st_buffer(0.5) %>% # make a buffer of half a meter around all parts (to avoid slivers)
+  st_union() %>% # unite to a geometry object
+  st_sf() %>% # make the geometry a data frame object
+  mutate(keep = T)
+
+#intersect the remaining strata with the "easier" groves
+needed.strata.plots_easier.1 = needed.strata.plots %>%
+  st_intersection(groves_easier) %>%
+  select(aspect:strata_nm) 
+
+#create a table to join the details on plots needed per strata back
+needed.strata.plots_table = needed.strata.plots %>%
   st_drop_geometry()
 
-#write_csv(comparison_sets, here("data/strata_set_comparison_19March25.csv"))
+#join the table to the reduced strata shapefile
+needed.strata.plots_easier = needed.strata.plots_easier.1 %>%
+  left_join(needed.strata.plots_table) %>%
+    st_cast("MULTIPOLYGON")
+needed.strata.plots_easier$area_ha = st_area(needed.strata.plots_easier)*0.0001
+
+needed.strata.plots_easier_table = needed.strata.plots_easier %>%
+  st_drop_geometry()
+write.csv(needed.strata.plots_easier_table, here("data/plot_needs_by_strata_2May2025_kls.csv"))
+
+##split by attributes to get individual shapefiles for the GRTS
+#select the column of the attribute table for the split
+unique <- unique(needed.strata.plots_easier$strata_nm)
+
+#create new polygons based on the unique column ID
+for (i in 1:length(unique)) {
+  tmp <- needed.strata.plots_easier[needed.strata.plots_easier$strata_nm == unique[i], ]
+  write_sf(tmp, here("data/spatial_data/ind_strata"), unique[i], driver="ESRI Shapefile",
+           overwrite_layer=TRUE)
+}
 
 ```
 
 
-#By Grove
+#Summarize plots by grove and rank
 
 ```{r}
-grove_plot_sets <- plots_classified %>% 
-  summarize(.by = c(grove_name, aspect, burnsev, time_since, count), count_plot = n()) %>% 
-  mutate(prop_plot = round(count_plot/plot_total, 2))
+# grove_plot_sets <- plots_classified %>% 
+#   summarize(.by = c(grove_name, aspect, burnsev, time_since, count), count_plot = n()) %>% 
+#   mutate(prop_plot = round(count_plot/plot_total, 2))
+# 
+# bygroves_set <- burn_classed %>% 
+#   st_intersection(aspect_groves) %>% 
+#   st_collection_extract(type = c("POLYGON"), warn = FALSE) %>% 
+#   summarize(.by = c(grov_nm, aspect, time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
+#   st_make_valid() %>% 
+#   mutate(area_ha = as.numeric(st_area(.))*0.0001,
+#          prop_area = round(area_ha/grove_area, 2)) %>% 
+#   st_drop_geometry()
+#   
+# grovecomparison_sets <- bygroves_set %>% 
+#   left_join(grove_plot_sets, join_by(grov_nm == grove_name, aspect, time_since, burnsev, count)) %>% 
+#   replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
+#   mutate(count = case_when(burnsev == "Unburned" & count == "one or none"~ "one or none",
+#                            count == "multiple" ~ count,
+#                            T ~ "one"),
+#          area_ha = round(area_ha, 2),
+#          diff = prop_area - prop_plot) 
+# 
+# write_csv(grovecomparison_sets, here("data/grove_strata_set_comparison_19March25.csv"))
 
-bygroves_set <- burn_classed %>% 
-  st_intersection(aspect_groves) %>% 
-  st_collection_extract(type = c("POLYGON"), warn = FALSE) %>% 
-  summarize(.by = c(grov_nm, aspect, time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
-  st_make_valid() %>% 
-  mutate(area_ha = as.numeric(st_area(.))*0.0001,
-         prop_area = round(area_ha/grove_area, 2)) %>% 
-  st_drop_geometry()
+##this table made in "existing_plots_assessment.Rmd"
+groves_seki_summary = read.csv(here("outputs/groves_seki_summary.csv"))
+plots_sf$grove_name = plots_sf$grov_nm
+
+#make grove summary plot, nonspatial
+groves_summary <- plots_sf %>% 
+  st_drop_geometry() %>% #remove polygon reference
+  summarize(.by = c(grove_name, project), plot_count = n()) %>% #count per type
+  pivot_wider(names_from = project, # make wider dataframe for viz
+              values_from = plot_count, 
+              values_fill = 0) %>% 
+  adorn_totals("col") %>% #calc total plots per grove
+  # adorn_totals() %>%  #calc total plots per type
+  left_join(groves_seki_summary) %>% # add grove info
+  mutate(plots_peracre_buf = round(Total/groveacres,2),
+         acres_perplot_buf = round(groveacres/Total, 0),
+         groveacres = round(groveacres,0),
+         total.existing.plots = Total) %>%
+  select(-c(2:7))
+# View(groves_summary)
+
+hist(groves_summary$total.existing.plots)
+hist(groves_summary$acres_perplot_buf, breaks = 100)
+
+##rough ranking based on total plots and plot density
+groves_summary_rank = groves_summary %>%
+  mutate(total.plots.rank = 
+           case_when(total.existing.plots <10 ~ "very few plots",
+                    total.existing.plots >=10 & 
+                      total.existing.plots <30 ~ "moderate plots",
+                    total.existing.plots >=30 ~ "lotsa plots",
+                        .default = "oopsie"),
+         plot.density.rank = 
+           case_when(acres_perplot_buf <10 ~ "high density",
+                    acres_perplot_buf >=10 & 
+                      acres_perplot_buf <50 ~ "moderate density",
+                    acres_perplot_buf >=50 ~ "low density",
+                      .default = "oopsie"),
+         combo.rank = paste(total.plots.rank,"-",plot.density.rank))
   
-grovecomparison_sets <- bygroves_set %>% 
-  left_join(grove_plot_sets, join_by(grov_nm == grove_name, aspect, time_since, burnsev, count)) %>% 
-  replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
-  mutate(count = case_when(burnsev == "Unburned" & count == "one or none"~ "one or none",
-                           count == "multiple" ~ count,
-                           T ~ "one"),
-         area_ha = round(area_ha, 2),
-         diff = prop_area - prop_plot) 
+# View(groves_summary_rank)  
+write.csv(here("outputs/groves_summary_rank.csv"))
 
-write_csv(grovecomparison_sets, here("data/grove_strata_set_comparison_19March25.csv"))
 
 
 ```
