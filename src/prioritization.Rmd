@@ -86,6 +86,13 @@ grove_area <- sum(groves$grovr_h)
 
 ```{r plots}
 
+plot_types <- existing_plots %>% 
+  summarize(.by = c(grove_name, project), count = n()) %>% 
+  pivot_wider(names_from = project, values_from = count) %>% 
+  adorn_totals()
+
+write_csv(plot_types, here("data/plotTypes.csv"))
+
 plots_rx <- st_intersection(rx_seki, plots_sf)
 
 plots_rx_count <- plots_rx %>% 
@@ -182,7 +189,7 @@ groves_set <- burn_classed %>%
          prop_area = round(area_ha/grove_area, 2))# %>% 
   st_drop_geometry()
 
-#write_sf(groves_set, here("data/spatial_data/debug_groveset.shp"))
+write_sf(groves_set, here("data/spatial_data/grove_strata_24march25.shp"))
 
 #aspect_poly <- st_read(here("data/spatial_data/aspect_polys.shp")) %>% 
  # transform(st_crs(burn_classed))
@@ -192,16 +199,17 @@ groves_set <- burn_classed %>%
 
 ```{r}
 
-comparison_sets <- groves_set %>% 
+comparison_st <- groves_set %>% 
   left_join(plot_sets) %>% 
   replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
-  mutate(count = case_when(burnsev == "Unburned" ~ "none",
-                           count == "multiple" ~ count,
-                           T ~ "one"),
+mutate(
          area_ha = round(area_ha, 2),
-         diff = prop_area - prop_plot)
+         diff = prop_area - prop_plot) 
 
-write_csv(comparison_sets, here("data/strata_set_comparison_20Feb25.csv"))
+comparison_sets <- comparison_st %>% 
+  st_drop_geometry()
+
+#write_csv(comparison_sets, here("data/strata_set_comparison_19March25.csv"))
 
 ```
 
@@ -209,11 +217,122 @@ write_csv(comparison_sets, here("data/strata_set_comparison_20Feb25.csv"))
 #By Grove
 
 ```{r}
+grove_plot_sets <- plots_classified %>% 
+  summarize(.by = c(grove_name, aspect, burnsev, time_since, count), count_plot = n()) %>% 
+  mutate(prop_plot = round(count_plot/plot_total, 2))
+
+bygroves_set <- burn_classed %>% 
+  st_intersection(aspect_groves) %>% 
+  st_collection_extract(type = c("POLYGON"), warn = FALSE) %>% 
+  summarize(.by = c(grov_nm, aspect, time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
+  st_make_valid() %>% 
+  mutate(area_ha = as.numeric(st_area(.))*0.0001,
+         prop_area = round(area_ha/grove_area, 2)) %>% 
+  st_drop_geometry()
+  
+grovecomparison_sets <- bygroves_set %>% 
+  left_join(grove_plot_sets, join_by(grov_nm == grove_name, aspect, time_since, burnsev, count)) %>% 
+  replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
+  mutate(count = case_when(burnsev == "Unburned" & count == "one or none"~ "one or none",
+                           count == "multiple" ~ count,
+                           T ~ "one"),
+         area_ha = round(area_ha, 2),
+         diff = prop_area - prop_plot) 
+
+write_csv(grovecomparison_sets, here("data/grove_strata_set_comparison_19March25.csv"))
+
 
 ```
 
 
 
+# Plots Needed
 
+```{r}
+#grove info
+grove_plots <- grove_plot_sets %>% 
+  summarise(.by = grove_name, plots = sum(count_plot))
+
+grove_access <- readxl::read_excel(here("data/grove_prioritization.xlsx"), "grove_access") %>%   clean_names() %>% 
+  select(grove, grove_ha, ease_of_access) %>% 
+  mutate(grove_acres = grove_ha*2.471) %>% 
+  rename(grove_name = grove) %>% 
+  left_join(grove_plots) %>% 
+  replace_na(list(plots = 0)) %>% 
+  mutate(total_per = plots/grove_acres)
+
+
+```
+
+
+```{r}
+plots_needed <- readxl::read_excel(here("data/grove_prioritization.xlsx"), "plot_needs") %>% 
+  clean_names() %>% 
+  rowid_to_column()
+
+visit_groves_setup <- grovecomparison_sets %>% 
+  rename(
+    set_area_ha = area_ha,
+    set_prop_area = prop_area,
+    set_prop_plot = prop_plot,
+    set_count = count_plot,
+    set_diff = diff) %>% 
+  mutate(set_area_acres = set_area_ha*2.471) %>% 
+  left_join(grove_access, join_by(grov_nm == grove_name)) %>% 
+  mutate(grove_plots = plots) %>% 
+  left_join(plots_needed, join_by(aspect, time_since, burnsev, count)) %>% 
+  select(rowid, aspect, time_since, burnsev, count, grov_nm, set_area_acres, set_diff,
+         ease_of_access, grove_acres, grove_plots, total_per, prop_area, count_plots_needed) 
+
+#this filters out 3 of the very uncommon strata 
+visit_groves <- visit_groves_setup%>% 
+  filter(set_area_acres >= 50, 
+         count_plots_needed > 0, 
+         ease_of_access != "Very Difficult"
+         ) %>% 
+  arrange(aspect, time_since, burnsev, count)
+
+
+#check how many strata
+visit_groves_have <- visit_groves %>% 
+  summarise(.by= c(aspect, time_since, burnsev, count))
+
+#isolate the 3 that are missing
+need_plots_missing<- plots_needed %>% 
+  filter(count_plots_needed > 0) %>% 
+  arrange(area_ha) %>% 
+  head(3)
+
+add_groves <- visit_groves_setup %>% 
+  filter(rowid %in% unique(need_plots_missing$rowid)) %>% 
+  filter(set_area_acres>=3, ease_of_access != "Very Difficult") 
+
+#combine
+visit_groves <- visit_groves %>% 
+  rbind(add_groves)
+
+write_csv(visit_groves, here("data/filtered_grove_options.csv"))
+
+```
+
+
+
+```{r}
+
+summary_visit_grove <- visit_groves %>% 
+  summarise(.by = grov_nm, new_strata = n(), strata_list = list(rowid)) %>% 
+  left_join(grove_access, join_by(grov_nm == grove_name)) %>% 
+  mutate(strata_list = paste(strata_list))
+write_csv(summary_visit_grove, here("data/grove_options.csv"))
+
+summary_visit_strata <- visit_groves %>% 
+  summarise(.by = rowid, groves = n(), grove_list = list(grov_nm)) %>% 
+  left_join(plots_needed) %>% 
+  mutate(grove_list = paste(grove_list))
+write_csv(summary_visit_strata, here("data/strata_options.csv"))
+
+
+
+```
 
 
