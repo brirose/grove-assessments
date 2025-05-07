@@ -1,0 +1,79 @@
+rowid,aspect,time_since,burnsev,count,grov_nm,set_area_acres,set_diff,ease_of_access,grove_acres,grove_plots,total_per,prop_area,count_plots_needed
+1,NW to E,five_or_less,High,multiple,Redwood Mountain,137.31347,0,Easy,3143.3590999999997,55,0.01749720545769015,0.011,1
+2,NW to E,five_or_less,High,one,Redwood Mountain,63.77651,-0.01,Easy,3143.3590999999997,55,0.01749720545769015,0.01,1
+3,NW to E,five_or_less,Low,multiple,Garfield,174.50202000000002,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.057,9
+3,NW to E,five_or_less,Low,multiple,Eden Creek,216.75612,0,Difficult,816.9126000000001,5,0.0061206058028729134,0.057,9
+3,NW to E,five_or_less,Low,multiple,Giant Forest,128.09664,0.01,Easy,2940.9842000000003,36,0.012240800205591039,0.057,9
+3,NW to E,five_or_less,Low,multiple,Redwood Mountain,223.03246000000001,-0.01,Easy,3143.3590999999997,55,0.01749720545769015,0.057,9
+4,NW to E,five_or_less,Low,one,Garfield,349.27585,0.02,Moderate,1847.5667,5,0.0027062622421155347,0.071,25
+4,NW to E,five_or_less,Low,one,South Fork,292.46756,0.01,Moderate,505.3195,3,0.005936837980723087,0.071,25
+4,NW to E,five_or_less,Low,one,Eden Creek,75.1184,0,Difficult,816.9126000000001,5,0.0061206058028729134,0.071,25
+4,NW to E,five_or_less,Low,one,Giant Forest,143.88633,0,Easy,2940.9842000000003,36,0.012240800205591039,0.071,25
+4,NW to E,five_or_less,Low,one,Pine Ridge,68.66909,0,Difficult,158.144,1,0.006323350870093079,0.071,25
+4,NW to E,five_or_less,Low,one,Muir,71.48603,0,Easy,396.5955,5,0.012607303915450377,0.071,25
+5,NW to E,five_or_less,Moderate,multiple,Redwood Mountain,135.63319,0,Easy,3143.3590999999997,55,0.01749720545769015,0.02,5
+8,NW to E,five_or_less,Unburned,multiple,Garfield,104.96808,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.034,10
+8,NW to E,five_or_less,Unburned,multiple,Eden Creek,216.73140999999998,0,Difficult,816.9126000000001,5,0.0061206058028729134,0.034,10
+8,NW to E,five_or_less,Unburned,multiple,Giant Forest,57.72256,0,Easy,2940.9842000000003,36,0.012240800205591039,0.034,10
+8,NW to E,five_or_less,Unburned,multiple,Redwood Mountain,158.31697,0.01,Easy,3143.3590999999997,55,0.01749720545769015,0.034,10
+7,NW to E,five_or_less,Unburned,one or none,Garfield,199.08847,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.023,9
+7,NW to E,five_or_less,Unburned,one or none,Giant Forest,68.57025,0,Easy,2940.9842000000003,36,0.012240800205591039,0.023,9
+12,NW to E,more_than_five,Low,one,East Fork,164.09911,0,Moderate,1152.9686000000002,31,0.02688711557279183,0.017,2
+12,NW to E,more_than_five,Low,one,Redwood Meadow,68.52083,0,Moderate,469.49,22,0.046859358026795035,0.017,2
+15,NW to E,more_than_five,Unburned,one or none,East Fork,331.16342000000003,0,Moderate,1152.9686000000002,31,0.02688711557279183,0.036,2
+15,NW to E,more_than_five,Unburned,one or none,Giant Forest,50.482530000000004,0,Easy,2940.9842000000003,36,0.012240800205591039,0.036,2
+18,SE to W,five_or_less,High,one,Dillonwood,133.73051999999998,0.01,Difficult,1490.7542999999998,0,0,0.053,2
+18,SE to W,five_or_less,High,one,Garfield,94.31807,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.053,2
+18,SE to W,five_or_less,High,one,Redwood Mountain,364.27482,-0.039999999999999994,Easy,3143.3590999999997,55,0.01749720545769015,0.053,2
+19,SE to W,five_or_less,Low,multiple,Garfield,135.75674,0,Moderate,1847.5667,5,0.0027062622421155347,0.113,30
+19,SE to W,five_or_less,Low,multiple,Eden Creek,100.61912,0.01,Difficult,816.9126000000001,5,0.0061206058028729134,0.113,30
+19,SE to W,five_or_less,Low,multiple,Giant Forest,651.20734,0.03,Easy,2940.9842000000003,36,0.012240800205591039,0.113,30
+19,SE to W,five_or_less,Low,multiple,Redwood Creek,56.53648,0,Moderate,154.68460000000002,1,0.006464767662714969,0.113,30
+19,SE to W,five_or_less,Low,multiple,Atwell,267.93053000000003,0,Easy,1594.7834,47,0.02947108679460797,0.113,30
+19,SE to W,five_or_less,Low,multiple,Redwood Mountain,654.0737,0.03,Easy,3143.3590999999997,55,0.01749720545769015,0.113,30
+20,SE to W,five_or_less,Low,one,Dillonwood,590.59371,0.03,Difficult,1490.7542999999998,0,0,0.105,36
+20,SE to W,five_or_less,Low,one,Garfield,288.56338,0.02,Moderate,1847.5667,5,0.0027062622421155347,0.105,36
+20,SE to W,five_or_less,Low,one,South Fork,74.27826,0,Moderate,505.3195,3,0.005936837980723087,0.105,36
+20,SE to W,five_or_less,Low,one,Giant Forest,148.0129,0,Easy,2940.9842000000003,36,0.012240800205591039,0.105,36
+20,SE to W,five_or_less,Low,one,Oriole Lake,188.16665000000003,0,Moderate,320.4887,3,0.009360704449174027,0.105,36
+20,SE to W,five_or_less,Low,one,Muir,112.50463,0.01,Easy,396.5955,5,0.012607303915450377,0.105,36
+20,SE to W,five_or_less,Low,one,Redwood Mountain,72.05436,0,Easy,3143.3590999999997,55,0.01749720545769015,0.105,36
+21,SE to W,five_or_less,Moderate,multiple,Atwell,78.52838,-0.01,Easy,1594.7834,47,0.02947108679460797,0.033,10
+21,SE to W,five_or_less,Moderate,multiple,Redwood Mountain,334.30159,0.01,Easy,3143.3590999999997,55,0.01749720545769015,0.033,10
+22,SE to W,five_or_less,Moderate,one,Dillonwood,168.27509999999998,0.01,Difficult,1490.7542999999998,0,0,0.035,15
+22,SE to W,five_or_less,Moderate,one,Garfield,91.69881000000001,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.035,15
+24,SE to W,five_or_less,Unburned,multiple,Garfield,151.99121,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.064,19
+24,SE to W,five_or_less,Unburned,multiple,Eden Creek,59.64994,0,Difficult,816.9126000000001,5,0.0061206058028729134,0.064,19
+24,SE to W,five_or_less,Unburned,multiple,Giant Forest,122.0674,0.01,Easy,2940.9842000000003,36,0.012240800205591039,0.064,19
+24,SE to W,five_or_less,Unburned,multiple,Atwell,180.60539000000003,-0.01,Easy,1594.7834,47,0.02947108679460797,0.064,19
+24,SE to W,five_or_less,Unburned,multiple,Redwood Mountain,535.36686,0.019999999999999997,Easy,3143.3590999999997,55,0.01749720545769015,0.064,19
+23,SE to W,five_or_less,Unburned,one or none,Dillonwood,484.8102,0.03,Difficult,1490.7542999999998,0,0,0.054,16
+23,SE to W,five_or_less,Unburned,one or none,Garfield,165.23577000000003,0.01,Moderate,1847.5667,5,0.0027062622421155347,0.054,16
+23,SE to W,five_or_less,Unburned,one or none,Giant Forest,71.659,0,Easy,2940.9842000000003,36,0.012240800205591039,0.054,16
+27,SE to W,more_than_five,Low,multiple,East Fork,145.12183,-0.01,Moderate,1152.9686000000002,31,0.02688711557279183,0.08,1
+27,SE to W,more_than_five,Low,multiple,Giant Forest,457.75275,-0.010000000000000002,Easy,2940.9842000000003,36,0.012240800205591039,0.08,1
+27,SE to W,more_than_five,Low,multiple,Atwell,682.44078,-0.030000000000000006,Easy,1594.7834,47,0.02947108679460797,0.08,1
+27,SE to W,more_than_five,Low,multiple,General Grant,84.53291,-0.04,Easy,248.58259999999999,46,0.18504915468741578,0.08,1
+31,SE to W,more_than_five,Unburned,one or none,East Fork,162.71535,0,Moderate,1152.9686000000002,31,0.02688711557279183,0.074,1
+31,SE to W,more_than_five,Unburned,one or none,Giant Forest,429.23741,0.01,Easy,2940.9842000000003,36,0.012240800205591039,0.074,1
+31,SE to W,more_than_five,Unburned,one or none,Little Redwood Meadow,63.28231,0,Difficult,64.7402,0,0,0.074,1
+31,SE to W,more_than_five,Unburned,one or none,Redwood Meadow,330.71864,-0.039999999999999994,Moderate,469.49,22,0.046859358026795035,0.074,1
+31,SE to W,more_than_five,Unburned,one or none,Big Stump,158.61349,-0.049999999999999996,Easy,227.332,22,0.0967747611422941,0.074,1
+2,NW to E,five_or_less,High,one,Dillonwood,22.01661,0,Difficult,1490.7542999999998,0,0,0.01,1
+2,NW to E,five_or_less,High,one,Garfield,4.64548,0,Moderate,1847.5667,5,0.0027062622421155347,0.01,1
+2,NW to E,five_or_less,High,one,South Fork,5.26323,0,Moderate,505.3195,3,0.005936837980723087,0.01,1
+2,NW to E,five_or_less,High,one,New Oriole Lake,4.942,0,Moderate,62.02210000000001,1,0.016123285087089923,0.01,1
+2,NW to E,five_or_less,High,one,Giant Forest,13.689340000000001,0,Easy,2940.9842000000003,36,0.012240800205591039,0.01,1
+2,NW to E,five_or_less,High,one,Oriole Lake,5.13968,0,Moderate,320.4887,3,0.009360704449174027,0.01,1
+2,NW to E,five_or_less,High,one,Redwood Mountain,63.77651,-0.01,Easy,3143.3590999999997,55,0.01749720545769015,0.01,1
+10,NW to E,more_than_five,High,one,General Grant,3.2617200000000004,0,Easy,248.58259999999999,46,0.18504915468741578,0,1
+13,NW to E,more_than_five,Moderate,multiple,General Grant,6.1775,0,Easy,248.58259999999999,46,0.18504915468741578,0,1
+2,NW to E,five_or_less,High,one,Dillonwood,22.01661,0,Difficult,1490.7542999999998,0,0,0.01,1
+2,NW to E,five_or_less,High,one,Garfield,4.64548,0,Moderate,1847.5667,5,0.0027062622421155347,0.01,1
+2,NW to E,five_or_less,High,one,South Fork,5.26323,0,Moderate,505.3195,3,0.005936837980723087,0.01,1
+2,NW to E,five_or_less,High,one,New Oriole Lake,4.942,0,Moderate,62.02210000000001,1,0.016123285087089923,0.01,1
+2,NW to E,five_or_less,High,one,Giant Forest,13.689340000000001,0,Easy,2940.9842000000003,36,0.012240800205591039,0.01,1
+2,NW to E,five_or_less,High,one,Oriole Lake,5.13968,0,Moderate,320.4887,3,0.009360704449174027,0.01,1
+2,NW to E,five_or_less,High,one,Redwood Mountain,63.77651,-0.01,Easy,3143.3590999999997,55,0.01749720545769015,0.01,1
+10,NW to E,more_than_five,High,one,General Grant,3.2617200000000004,0,Easy,248.58259999999999,46,0.18504915468741578,0,1
+13,NW to E,more_than_five,Moderate,multiple,General Grant,6.1775,0,Easy,248.58259999999999,46,0.18504915468741578,0,1

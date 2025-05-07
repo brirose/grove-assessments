@@ -1,0 +1,468 @@
+grov_nm,aspect,time_since,burnsev,count,area_ha,prop_area,count_plot,prop_plot,diff
+Dillonwood,NW to E,five_or_less,Unburned,one or none,10.91,0,0,0,0
+Dillonwood,NW to E,five_or_less,Low,one,19.17,0,0,0,0
+Dillonwood,NW to E,five_or_less,Moderate,one,6.84,0,0,0,0
+Dillonwood,NW to E,five_or_less,High,one,8.91,0,0,0,0
+Dillonwood,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Dillonwood,NW to E,five_or_less,Moderate,multiple,0,0,0,0,0
+Garfield,NW to E,five_or_less,Unburned,one or none,80.57,0.01,1,0,0.01
+Garfield,NW to E,five_or_less,Low,one,141.35,0.02,0,0,0.02
+Garfield,NW to E,five_or_less,Moderate,one,14.47,0,0,0,0
+Garfield,NW to E,five_or_less,High,one,1.88,0,0,0,0
+Garfield,NW to E,five_or_less,Low,multiple,70.62,0.01,1,0,0.01
+Garfield,NW to E,five_or_less,Unburned,multiple,42.48,0.01,1,0,0.01
+Garfield,NW to E,five_or_less,Moderate,multiple,3.44,0,0,0,0
+Garfield,NW to E,five_or_less,High,multiple,0.45,0,0,0,0
+Garfield,NW to E,more_than_five,Low,one,1.3,0,0,0,0
+Garfield,NW to E,more_than_five,Unburned,one or none,0.82,0,0,0,0
+Garfield,NW to E,more_than_five,Low,multiple,0,0,0,0,0
+South Fork,NW to E,five_or_less,Unburned,one or none,9.94,0,0,0,0
+South Fork,NW to E,five_or_less,Low,one,118.36,0.02,2,0.01,0.01
+South Fork,NW to E,five_or_less,Moderate,one,17.68,0,1,0,0
+South Fork,NW to E,five_or_less,High,one,2.13,0,0,0,0
+South Fork,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+South Fork,NW to E,five_or_less,Unburned,multiple,0,0,0,0,0
+South Fork,NW to E,five_or_less,Moderate,multiple,0,0,0,0,0
+Cedar Flat,NW to E,five_or_less,Unburned,one or none,1.66,0,0,0,0
+Cedar Flat,NW to E,five_or_less,Low,one,4.94,0,0,0,0
+Cedar Flat,NW to E,five_or_less,Moderate,one,0.6,0,0,0,0
+Cedar Flat,NW to E,five_or_less,High,one,0.07,0,0,0,0
+Cedar Flat,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Board Camp,NW to E,five_or_less,Low,one,0,0,0,0,0
+Board Camp,NW to E,five_or_less,Moderate,one,0.19,0,0,0,0
+Board Camp,NW to E,five_or_less,High,one,0.8,0,0,0,0
+Board Camp,NW to E,five_or_less,Moderate,multiple,0,0,0,0,0
+Homers Nose,NW to E,five_or_less,Low,one,0.21,0,0,0,0
+Homers Nose,NW to E,five_or_less,Moderate,one,0.48,0,0,0,0
+Homers Nose,NW to E,five_or_less,High,one,0.62,0,0,0,0
+Eden Creek,NW to E,five_or_less,Unburned,one or none,9.15,0,0,0,0
+Eden Creek,NW to E,five_or_less,Low,one,30.4,0,1,0,0
+Eden Creek,NW to E,five_or_less,Moderate,one,5.95,0,0,0,0
+Eden Creek,NW to E,five_or_less,High,one,0.18,0,0,0,0
+Eden Creek,NW to E,five_or_less,Low,multiple,87.72,0.01,2,0.01,0
+Eden Creek,NW to E,five_or_less,Unburned,multiple,87.71,0.01,2,0.01,0
+Eden Creek,NW to E,five_or_less,Moderate,multiple,17.25,0,0,0,0
+Eden Creek,NW to E,five_or_less,High,multiple,0.21,0,0,0,0
+Eden Creek,NW to E,more_than_five,Unburned,one or none,0,0,0,0,0
+Cahoon,NW to E,more_than_five,Unburned,one or none,9.2,0,0,0,0
+Horse Creek,NW to E,more_than_five,Unburned,one or none,50.61,0.01,1,0,0.01
+East Fork,NW to E,five_or_less,Unburned,one or none,0.09,0,0,0,0
+East Fork,NW to E,five_or_less,Low,one,0.01,0,0,0,0
+East Fork,NW to E,five_or_less,Low,multiple,0.75,0,0,0,0
+East Fork,NW to E,five_or_less,Unburned,multiple,0.32,0,0,0,0
+East Fork,NW to E,five_or_less,Moderate,multiple,0.34,0,0,0,0
+East Fork,NW to E,five_or_less,High,multiple,0.03,0,0,0,0
+East Fork,NW to E,more_than_five,Low,one,66.41,0.01,3,0.01,0
+East Fork,NW to E,more_than_five,Unburned,one or none,134.02,0.02,6,0.02,0
+East Fork,NW to E,more_than_five,Moderate,one,0.76,0,0,0,0
+East Fork,NW to E,more_than_five,Low,multiple,77.21,0.01,8,0.03,-0.02
+East Fork,NW to E,more_than_five,Unburned,multiple,0,0,0,0,0
+Dennison,NW to E,five_or_less,Unburned,one or none,0.47,0,0,0,0
+Dennison,NW to E,five_or_less,Low,one,5.98,0,0,0,0
+Dennison,NW to E,five_or_less,Moderate,one,0.13,0,0,0,0
+Devil's Canyon,NW to E,five_or_less,Unburned,one or none,1.61,0,0,0,0
+Devil's Canyon,NW to E,five_or_less,Low,one,13.96,0,0,0,0
+Devil's Canyon,NW to E,five_or_less,Moderate,one,0.29,0,0,0,0
+Devil's Canyon,NW to E,five_or_less,High,one,0.07,0,0,0,0
+Forgotten,NW to E,five_or_less,Unburned,one or none,0.01,0,0,0,0
+Forgotten,NW to E,five_or_less,Low,one,1.6,0,0,0,0
+Forgotten,NW to E,five_or_less,Moderate,one,1.89,0,0,0,0
+Forgotten,NW to E,five_or_less,High,one,0.24,0,0,0,0
+Forgotten,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Clough Cave,NW to E,five_or_less,Unburned,one or none,1.04,0,0,0,0
+Clough Cave,NW to E,five_or_less,Low,one,1.13,0,0,0,0
+Clough Cave,NW to E,five_or_less,Moderate,one,0.42,0,0,0,0
+Clough Cave,NW to E,five_or_less,High,one,0.27,0,0,0,0
+Clough Cave,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Clough Cave,NW to E,five_or_less,Unburned,multiple,0,0,0,0,0
+Clough Cave,NW to E,five_or_less,Moderate,multiple,0,0,0,0,0
+Clough Cave,NW to E,more_than_five,Unburned,one or none,0.45,0,0,0,0
+Surprise,NW to E,five_or_less,Unburned,one or none,0.04,0,0,0,0
+Surprise,NW to E,five_or_less,Low,one,3.13,0,0,0,0
+Surprise,NW to E,five_or_less,Moderate,one,3.05,0,0,0,0
+Surprise,NW to E,five_or_less,High,one,0.16,0,0,0,0
+Coffeepot Canyon,NW to E,five_or_less,Moderate,one,0.32,0,0,0,0
+Coffeepot Canyon,NW to E,five_or_less,High,one,0.04,0,0,0,0
+New Oriole Lake,NW to E,five_or_less,Low,one,1.59,0,0,0,0
+New Oriole Lake,NW to E,five_or_less,Moderate,one,3.11,0,0,0,0
+New Oriole Lake,NW to E,five_or_less,High,one,2,0,0,0,0
+New Oriole Lake,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+New Oriole Lake,NW to E,five_or_less,Moderate,multiple,0.43,0,0,0,0
+New Oriole Lake,NW to E,five_or_less,High,multiple,1.84,0,0,0,0
+New Oriole Lake,NW to E,more_than_five,Unburned,one or none,0,0,0,0,0
+Squirrel Creek,NW to E,five_or_less,Unburned,one or none,0.05,0,0,0,0
+Squirrel Creek,NW to E,five_or_less,Low,one,1.62,0,0,0,0
+Squirrel Creek,NW to E,five_or_less,Moderate,one,2.29,0,0,0,0
+Squirrel Creek,NW to E,five_or_less,High,one,0.89,0,0,0,0
+Squirrel Creek,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Giant Forest,NW to E,five_or_less,Unburned,one or none,27.75,0,1,0,0
+Giant Forest,NW to E,five_or_less,Low,one,58.23,0.01,2,0.01,0
+Giant Forest,NW to E,five_or_less,Moderate,one,10.17,0,0,0,0
+Giant Forest,NW to E,five_or_less,High,one,5.54,0,0,0,0
+Giant Forest,NW to E,five_or_less,Low,multiple,51.84,0.01,1,0,0.01
+Giant Forest,NW to E,five_or_less,Unburned,multiple,23.36,0,1,0,0
+Giant Forest,NW to E,five_or_less,Moderate,multiple,0.68,0,0,0,0
+Giant Forest,NW to E,five_or_less,High,multiple,0.41,0,0,0,0
+Giant Forest,NW to E,more_than_five,Low,one,19.93,0,1,0,0
+Giant Forest,NW to E,more_than_five,Unburned,one or none,20.43,0,1,0,0
+Giant Forest,NW to E,more_than_five,Moderate,one,0.13,0,0,0,0
+Giant Forest,NW to E,more_than_five,Low,multiple,84.48,0.01,4,0.01,0
+Giant Forest,NW to E,more_than_five,Unburned,multiple,0.19,0,0,0,0
+Suwanee,NW to E,five_or_less,Low,one,0.09,0,0,0,0
+Suwanee,NW to E,five_or_less,Moderate,one,0.19,0,0,0,0
+Suwanee,NW to E,five_or_less,High,one,0.74,0,0,0,0
+Suwanee,NW to E,five_or_less,Low,multiple,5.6,0,2,0.01,-0.01
+Suwanee,NW to E,five_or_less,Moderate,multiple,9.64,0,0,0,0
+Suwanee,NW to E,five_or_less,High,multiple,6.4,0,1,0,0
+Redwood Creek,NW to E,five_or_less,Unburned,one or none,0.04,0,0,0,0
+Redwood Creek,NW to E,five_or_less,Low,one,0.15,0,0,0,0
+Redwood Creek,NW to E,five_or_less,Low,multiple,8.84,0,0,0,0
+Redwood Creek,NW to E,five_or_less,Unburned,multiple,5.26,0,0,0,0
+Redwood Creek,NW to E,five_or_less,Moderate,multiple,0.76,0,0,0,0
+Redwood Creek,NW to E,five_or_less,High,multiple,0.06,0,0,0,0
+Redwood Creek,NW to E,more_than_five,Low,one,0,0,0,0,0
+Redwood Creek,NW to E,more_than_five,Unburned,one or none,2.94,0,0,0,0
+Redwood Creek,NW to E,more_than_five,Low,multiple,0,0,0,0,0
+Atwell,NW to E,five_or_less,Unburned,one or none,0.04,0,0,0,0
+Atwell,NW to E,five_or_less,Low,one,0.25,0,0,0,0
+Atwell,NW to E,five_or_less,Moderate,one,0.28,0,0,0,0
+Atwell,NW to E,five_or_less,High,one,0.22,0,0,0,0
+Atwell,NW to E,five_or_less,Low,multiple,14.94,0,4,0.01,-0.01
+Atwell,NW to E,five_or_less,Unburned,multiple,7.37,0,0,0,0
+Atwell,NW to E,five_or_less,Moderate,multiple,6.13,0,1,0,0
+Atwell,NW to E,five_or_less,High,multiple,1.83,0,0,0,0
+Atwell,NW to E,more_than_five,Low,one,2.63,0,0,0,0
+Atwell,NW to E,more_than_five,Unburned,one or none,1.08,0,0,0,0
+Atwell,NW to E,more_than_five,Low,multiple,9.81,0,1,0,0
+Oriole Lake,NW to E,five_or_less,Unburned,one or none,4.27,0,0,0,0
+Oriole Lake,NW to E,five_or_less,Low,one,17.95,0,0,0,0
+Oriole Lake,NW to E,five_or_less,Moderate,one,3.14,0,0,0,0
+Oriole Lake,NW to E,five_or_less,High,one,2.08,0,0,0,0
+Oriole Lake,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Douglass,NW to E,five_or_less,Unburned,one or none,0.32,0,0,0,0
+Douglass,NW to E,five_or_less,Low,one,0.97,0,0,0,0
+Douglass,NW to E,five_or_less,Moderate,one,0.09,0,0,0,0
+Castle Creek,NW to E,five_or_less,Unburned,one or none,0,0,0,0,0
+Castle Creek,NW to E,five_or_less,Low,one,10.93,0,0,0,0
+Castle Creek,NW to E,five_or_less,Moderate,one,9.69,0,0,0,0
+Castle Creek,NW to E,five_or_less,High,one,14.54,0,0,0,0
+Castle Creek,NW to E,five_or_less,Low,multiple,64.4,0.01,1,0,0.01
+Castle Creek,NW to E,five_or_less,Unburned,multiple,5.07,0,0,0,0
+Castle Creek,NW to E,five_or_less,Moderate,multiple,48.05,0.01,1,0,0.01
+Castle Creek,NW to E,five_or_less,High,multiple,12.99,0,0,0,0
+Castle Creek,NW to E,more_than_five,Low,one,0,0,0,0,0
+Castle Creek,NW to E,more_than_five,Moderate,one,0,0,0,0,0
+Castle Creek,NW to E,more_than_five,Unburned,multiple,0,0,0,0,0
+Little Redwood Meadow,NW to E,more_than_five,Unburned,one or none,0.63,0,0,0,0
+Redwood Meadow,NW to E,five_or_less,Low,multiple,0.04,0,0,0,0
+Redwood Meadow,NW to E,five_or_less,Unburned,multiple,0.85,0,0,0,0
+Redwood Meadow,NW to E,more_than_five,Low,one,27.73,0,0,0,0
+Redwood Meadow,NW to E,more_than_five,Unburned,one or none,16.62,0,3,0.01,-0.01
+Redwood Meadow,NW to E,more_than_five,Moderate,one,4.13,0,0,0,0
+Redwood Meadow,NW to E,more_than_five,Low,multiple,0,0,0,0,0
+Redwood Meadow,NW to E,more_than_five,Unburned,multiple,0,0,0,0,0
+Granite Creek,NW to E,more_than_five,Low,one,0.14,0,0,0,0
+Granite Creek,NW to E,more_than_five,Unburned,one or none,3.49,0,0,0,0
+Granite Creek,NW to E,more_than_five,Low,multiple,0,0,0,0,0
+Skagway,NW to E,five_or_less,Unburned,one or none,2.97,0,0,0,0
+Skagway,NW to E,five_or_less,Low,one,10.16,0,1,0,0
+Skagway,NW to E,five_or_less,Moderate,one,0.49,0,0,0,0
+Skagway,NW to E,five_or_less,Low,multiple,2.02,0,0,0,0
+Skagway,NW to E,five_or_less,Unburned,multiple,1.41,0,0,0,0
+Skagway,NW to E,five_or_less,Moderate,multiple,0.22,0,0,0,0
+Skagway,NW to E,five_or_less,High,multiple,0.18,0,0,0,0
+Skagway,NW to E,more_than_five,Low,one,0,0,0,0,0
+Skagway,NW to E,more_than_five,Unburned,one or none,0,0,0,0,0
+Skagway,NW to E,more_than_five,Moderate,one,0,0,0,0,0
+Skagway,NW to E,more_than_five,Low,multiple,0,0,0,0,0
+Pine Ridge,NW to E,five_or_less,Unburned,one or none,2.63,0,0,0,0
+Pine Ridge,NW to E,five_or_less,Low,one,27.79,0,1,0,0
+Pine Ridge,NW to E,five_or_less,Moderate,one,5.06,0,0,0,0
+Pine Ridge,NW to E,five_or_less,High,one,1.06,0,0,0,0
+Pine Ridge,NW to E,five_or_less,Moderate,multiple,0,0,0,0,0
+Muir,NW to E,five_or_less,Unburned,one or none,10.71,0,0,0,0
+Muir,NW to E,five_or_less,Low,one,28.93,0,1,0,0
+Muir,NW to E,five_or_less,Moderate,one,4.16,0,0,0,0
+Muir,NW to E,five_or_less,High,one,0.22,0,0,0,0
+Muir,NW to E,five_or_less,Low,multiple,3.96,0,0,0,0
+Muir,NW to E,five_or_less,Unburned,multiple,1.92,0,0,0,0
+Muir,NW to E,five_or_less,Moderate,multiple,0,0,0,0,0
+Lost,NW to E,five_or_less,Unburned,one or none,0.43,0,0,0,0
+Lost,NW to E,five_or_less,Low,one,0.03,0,0,0,0
+Lost,NW to E,five_or_less,Unburned,multiple,0,0,0,0,0
+Lost,NW to E,more_than_five,Unburned,one or none,0.29,0,0,0,0
+Big Springs,NW to E,five_or_less,Unburned,one or none,0.17,0,0,0,0
+Big Springs,NW to E,five_or_less,Low,one,4.02,0,0,0,0
+Big Springs,NW to E,five_or_less,Moderate,one,2.14,0,0,0,0
+Big Springs,NW to E,five_or_less,High,one,0.24,0,0,0,0
+Big Springs,NW to E,five_or_less,Low,multiple,0.01,0,0,0,0
+Redwood Mountain,NW to E,five_or_less,Unburned,one or none,1.34,0,0,0,0
+Redwood Mountain,NW to E,five_or_less,Low,one,4.11,0,0,0,0
+Redwood Mountain,NW to E,five_or_less,Moderate,one,2.28,0,0,0,0
+Redwood Mountain,NW to E,five_or_less,High,one,25.81,0,3,0.01,-0.01
+Redwood Mountain,NW to E,five_or_less,Low,multiple,90.26,0.01,5,0.02,-0.01
+Redwood Mountain,NW to E,five_or_less,Unburned,multiple,64.07,0.01,1,0,0.01
+Redwood Mountain,NW to E,five_or_less,Moderate,multiple,54.89,0.01,2,0.01,0
+Redwood Mountain,NW to E,five_or_less,High,multiple,55.57,0.01,3,0.01,0
+Redwood Mountain,NW to E,more_than_five,Low,one,0,0,0,0,0
+Redwood Mountain,NW to E,more_than_five,Low,multiple,0,0,0,0,0
+Redwood Mountain,NW to E,more_than_five,Unburned,multiple,0,0,0,0,0
+Big Stump,NW to E,five_or_less,Low,one,0.18,0,0,0,0
+Big Stump,NW to E,five_or_less,Low,multiple,0,0,0,0,0
+Big Stump,NW to E,more_than_five,Low,one,0.02,0,0,0,0
+Big Stump,NW to E,more_than_five,Unburned,one or none,9.24,0,2,0.01,-0.01
+Big Stump,NW to E,more_than_five,Low,multiple,3.52,0,0,0,0
+Sequoia Creek,NW to E,five_or_less,Low,one,0.31,0,0,0,0
+Sequoia Creek,NW to E,five_or_less,Low,multiple,3.97,0,1,0,0
+Sequoia Creek,NW to E,more_than_five,Low,one,2.03,0,0,0,0
+Sequoia Creek,NW to E,more_than_five,Unburned,one or none,0.68,0,0,0,0
+Sequoia Creek,NW to E,more_than_five,Low,multiple,6.05,0,5,0.02,-0.02
+General Grant,NW to E,five_or_less,Low,one,0.06,0,0,0,0
+General Grant,NW to E,five_or_less,Low,multiple,0.09,0,0,0,0
+General Grant,NW to E,more_than_five,Low,one,2.83,0,2,0.01,-0.01
+General Grant,NW to E,more_than_five,Unburned,one or none,4.17,0,1,0,0
+General Grant,NW to E,more_than_five,Moderate,one,2.63,0,1,0,0
+General Grant,NW to E,more_than_five,High,one,1.32,0,0,0,0
+General Grant,NW to E,more_than_five,Low,multiple,10.36,0,6,0.02,-0.02
+General Grant,NW to E,more_than_five,Unburned,multiple,2.23,0,2,0.01,-0.01
+General Grant,NW to E,more_than_five,Moderate,multiple,2.5,0,0,0,0
+General Grant,NW to E,more_than_five,High,multiple,0.08,0,0,0,0
+Dillonwood,SE to W,five_or_less,Unburned,one or none,196.2,0.03,0,0,0.03
+Dillonwood,SE to W,five_or_less,Low,one,239.01,0.03,0,0,0.03
+Dillonwood,SE to W,five_or_less,Moderate,one,68.1,0.01,0,0,0.01
+Dillonwood,SE to W,five_or_less,High,one,54.12,0.01,0,0,0.01
+Dillonwood,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Dillonwood,SE to W,five_or_less,Unburned,multiple,0,0,0,0,0
+Dillonwood,SE to W,five_or_less,Moderate,multiple,0,0,0,0,0
+Garfield,SE to W,five_or_less,Unburned,one or none,66.87,0.01,0,0,0.01
+Garfield,SE to W,five_or_less,Low,one,116.78,0.02,0,0,0.02
+Garfield,SE to W,five_or_less,Moderate,one,37.11,0.01,0,0,0.01
+Garfield,SE to W,five_or_less,High,one,38.17,0.01,0,0,0.01
+Garfield,SE to W,five_or_less,Low,multiple,54.94,0.01,2,0.01,0
+Garfield,SE to W,five_or_less,Unburned,multiple,61.51,0.01,0,0,0.01
+Garfield,SE to W,five_or_less,Moderate,multiple,5.76,0,0,0,0
+Garfield,SE to W,five_or_less,High,multiple,4.62,0,0,0,0
+Garfield,SE to W,more_than_five,Low,one,2.34,0,0,0,0
+Garfield,SE to W,more_than_five,Unburned,one or none,2.19,0,0,0,0
+Garfield,SE to W,more_than_five,Low,multiple,0,0,0,0,0
+South Fork,SE to W,five_or_less,Unburned,one or none,7.08,0,0,0,0
+South Fork,SE to W,five_or_less,Low,one,30.06,0,0,0,0
+South Fork,SE to W,five_or_less,Moderate,one,13.62,0,0,0,0
+South Fork,SE to W,five_or_less,High,one,5.56,0,0,0,0
+South Fork,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+South Fork,SE to W,five_or_less,Moderate,multiple,0,0,0,0,0
+Cedar Flat,SE to W,five_or_less,Unburned,one or none,6.04,0,0,0,0
+Cedar Flat,SE to W,five_or_less,Low,one,13.6,0,1,0,0
+Cedar Flat,SE to W,five_or_less,Moderate,one,3.5,0,0,0,0
+Cedar Flat,SE to W,five_or_less,High,one,1.62,0,0,0,0
+Cedar Flat,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Board Camp,SE to W,five_or_less,Unburned,one or none,0.14,0,0,0,0
+Board Camp,SE to W,five_or_less,Low,one,3.89,0,0,0,0
+Board Camp,SE to W,five_or_less,Moderate,one,6.26,0,0,0,0
+Board Camp,SE to W,five_or_less,High,one,35.82,0.01,2,0.01,0
+Board Camp,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Board Camp,SE to W,five_or_less,Moderate,multiple,0,0,0,0,0
+Homers Nose,SE to W,five_or_less,Unburned,one or none,1.63,0,0,0,0
+Homers Nose,SE to W,five_or_less,Low,one,27.24,0,0,0,0
+Homers Nose,SE to W,five_or_less,Moderate,one,23.69,0,0,0,0
+Homers Nose,SE to W,five_or_less,High,one,57.97,0.01,2,0.01,0
+Homers Nose,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Homers Nose,SE to W,five_or_less,Moderate,multiple,0,0,0,0,0
+Eden Creek,SE to W,five_or_less,Unburned,one or none,3.64,0,0,0,0
+Eden Creek,SE to W,five_or_less,Low,one,11.34,0,0,0,0
+Eden Creek,SE to W,five_or_less,Moderate,one,0.39,0,0,0,0
+Eden Creek,SE to W,five_or_less,Low,multiple,40.72,0.01,0,0,0.01
+Eden Creek,SE to W,five_or_less,Unburned,multiple,24.14,0,0,0,0
+Eden Creek,SE to W,five_or_less,Moderate,multiple,11.53,0,0,0,0
+Eden Creek,SE to W,five_or_less,High,multiple,0.29,0,0,0,0
+Eden Creek,SE to W,more_than_five,High,one,0,0,0,0,0
+Cahoon,SE to W,more_than_five,Unburned,one or none,15,0,0,0,0
+Horse Creek,SE to W,more_than_five,Unburned,one or none,9.58,0,0,0,0
+East Fork,SE to W,five_or_less,Unburned,one or none,0.64,0,0,0,0
+East Fork,SE to W,five_or_less,Low,one,0.12,0,0,0,0
+East Fork,SE to W,five_or_less,Low,multiple,4.41,0,0,0,0
+East Fork,SE to W,five_or_less,Unburned,multiple,3.21,0,0,0,0
+East Fork,SE to W,five_or_less,Moderate,multiple,1.62,0,0,0,0
+East Fork,SE to W,five_or_less,High,multiple,0.54,0,0,0,0
+East Fork,SE to W,more_than_five,Low,one,45.17,0.01,4,0.01,0
+East Fork,SE to W,more_than_five,Unburned,one or none,65.85,0.01,3,0.01,0
+East Fork,SE to W,more_than_five,Moderate,one,6.19,0,1,0,0
+East Fork,SE to W,more_than_five,High,one,0.18,0,1,0,0
+East Fork,SE to W,more_than_five,Low,multiple,58.73,0.01,5,0.02,-0.01
+East Fork,SE to W,more_than_five,Unburned,multiple,0,0,0,0,0
+Dennison,SE to W,five_or_less,Unburned,one or none,0.81,0,0,0,0
+Dennison,SE to W,five_or_less,Low,one,5.15,0,0,0,0
+Dennison,SE to W,five_or_less,Moderate,one,0.15,0,0,0,0
+Devil's Canyon,SE to W,five_or_less,Unburned,one or none,0.02,0,0,0,0
+Devil's Canyon,SE to W,five_or_less,Low,one,1.47,0,0,0,0
+Devil's Canyon,SE to W,five_or_less,Moderate,one,0.23,0,0,0,0
+Devil's Canyon,SE to W,five_or_less,High,one,0.03,0,0,0,0
+Forgotten,SE to W,five_or_less,Unburned,one or none,0.19,0,0,0,0
+Forgotten,SE to W,five_or_less,Low,one,1.07,0,0,0,0
+Forgotten,SE to W,five_or_less,Moderate,one,0.69,0,0,0,0
+Forgotten,SE to W,five_or_less,High,one,0.27,0,0,0,0
+Clough Cave,SE to W,five_or_less,Unburned,one or none,0.24,0,0,0,0
+Clough Cave,SE to W,five_or_less,Low,one,0.11,0,0,0,0
+Clough Cave,SE to W,five_or_less,Unburned,multiple,0.04,0,0,0,0
+Clough Cave,SE to W,more_than_five,Unburned,one or none,0.92,0,0,0,0
+Surprise,SE to W,five_or_less,Unburned,one or none,0.23,0,0,0,0
+Surprise,SE to W,five_or_less,Low,one,13.32,0,0,0,0
+Surprise,SE to W,five_or_less,Moderate,one,19.17,0,0,0,0
+Surprise,SE to W,five_or_less,High,one,2.51,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,Unburned,one or none,0.03,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,Low,one,3.49,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,Moderate,one,2.4,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,High,one,0.07,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,Low,multiple,3.33,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,Unburned,multiple,0.26,0,0,0,0
+Coffeepot Canyon,SE to W,five_or_less,Moderate,multiple,0.29,0,0,0,0
+Coffeepot Canyon,SE to W,more_than_five,Unburned,one or none,0,0,0,0,0
+New Oriole Lake,SE to W,five_or_less,Low,one,3.68,0,1,0,0
+New Oriole Lake,SE to W,five_or_less,Moderate,one,5.99,0,0,0,0
+New Oriole Lake,SE to W,five_or_less,High,one,5.97,0,0,0,0
+New Oriole Lake,SE to W,five_or_less,Low,multiple,0.01,0,0,0,0
+New Oriole Lake,SE to W,five_or_less,Moderate,multiple,0.23,0,0,0,0
+New Oriole Lake,SE to W,five_or_less,High,multiple,0.25,0,0,0,0
+Squirrel Creek,SE to W,five_or_less,Unburned,one or none,1.46,0,0,0,0
+Squirrel Creek,SE to W,five_or_less,Low,one,8.89,0,0,0,0
+Squirrel Creek,SE to W,five_or_less,Moderate,one,5.41,0,0,0,0
+Squirrel Creek,SE to W,five_or_less,High,one,1.72,0,0,0,0
+Squirrel Creek,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Giant Forest,SE to W,five_or_less,Unburned,one or none,29,0,0,0,0
+Giant Forest,SE to W,five_or_less,Low,one,59.9,0.01,2,0.01,0
+Giant Forest,SE to W,five_or_less,Moderate,one,14.12,0,0,0,0
+Giant Forest,SE to W,five_or_less,High,one,12.02,0,1,0,0
+Giant Forest,SE to W,five_or_less,Low,multiple,263.54,0.04,4,0.01,0.03
+Giant Forest,SE to W,five_or_less,Unburned,multiple,49.4,0.01,0,0,0.01
+Giant Forest,SE to W,five_or_less,Moderate,multiple,8.42,0,0,0,0
+Giant Forest,SE to W,five_or_less,High,multiple,1.84,0,0,0,0
+Giant Forest,SE to W,more_than_five,Low,one,87.43,0.01,4,0.01,0
+Giant Forest,SE to W,more_than_five,Unburned,one or none,173.71,0.02,3,0.01,0.01
+Giant Forest,SE to W,more_than_five,Moderate,one,0.03,0,0,0,0
+Giant Forest,SE to W,more_than_five,Low,multiple,185.25,0.03,11,0.04,-0.01
+Giant Forest,SE to W,more_than_five,Unburned,multiple,0.65,0,0,0,0
+Giant Forest,SE to W,more_than_five,Moderate,multiple,1.77,0,0,0,0
+Suwanee,SE to W,five_or_less,Low,one,0.21,0,0,0,0
+Suwanee,SE to W,five_or_less,Moderate,one,1.04,0,0,0,0
+Suwanee,SE to W,five_or_less,High,one,0.9,0,0,0,0
+Suwanee,SE to W,five_or_less,Low,multiple,3.61,0,1,0,0
+Suwanee,SE to W,five_or_less,Moderate,multiple,14.6,0,0,0,0
+Suwanee,SE to W,five_or_less,High,multiple,18.2,0,1,0,0
+Suwanee,SE to W,more_than_five,Low,one,0,0,0,0,0
+Redwood Creek,SE to W,five_or_less,Unburned,one or none,0.3,0,0,0,0
+Redwood Creek,SE to W,five_or_less,Low,one,0.27,0,0,0,0
+Redwood Creek,SE to W,five_or_less,Low,multiple,22.88,0,0,0,0
+Redwood Creek,SE to W,five_or_less,Unburned,multiple,6.83,0,0,0,0
+Redwood Creek,SE to W,five_or_less,Moderate,multiple,4.6,0,0,0,0
+Redwood Creek,SE to W,five_or_less,High,multiple,6.63,0,1,0,0
+Redwood Creek,SE to W,more_than_five,Low,one,2.23,0,0,0,0
+Redwood Creek,SE to W,more_than_five,Unburned,one or none,0.83,0,0,0,0
+Redwood Creek,SE to W,more_than_five,Low,multiple,0,0,0,0,0
+Atwell,SE to W,five_or_less,Unburned,one or none,0.26,0,0,0,0
+Atwell,SE to W,five_or_less,Low,one,0.73,0,0,0,0
+Atwell,SE to W,five_or_less,Moderate,one,0.83,0,0,0,0
+Atwell,SE to W,five_or_less,High,one,0.45,0,0,0,0
+Atwell,SE to W,five_or_less,Low,multiple,108.43,0.02,6,0.02,0
+Atwell,SE to W,five_or_less,Unburned,multiple,73.09,0.01,6,0.02,-0.01
+Atwell,SE to W,five_or_less,Moderate,multiple,31.78,0,2,0.01,-0.01
+Atwell,SE to W,five_or_less,High,multiple,15.68,0,0,0,0
+Atwell,SE to W,more_than_five,Low,one,73.16,0.01,5,0.02,-0.01
+Atwell,SE to W,more_than_five,Unburned,one or none,20.17,0,0,0,0
+Atwell,SE to W,more_than_five,Low,multiple,276.18,0.04,22,0.07,-0.03
+Oriole Lake,SE to W,five_or_less,Unburned,one or none,17.35,0,0,0,0
+Oriole Lake,SE to W,five_or_less,Low,one,76.15,0.01,3,0.01,0
+Oriole Lake,SE to W,five_or_less,Moderate,one,7.91,0,0,0,0
+Oriole Lake,SE to W,five_or_less,High,one,0.87,0,0,0,0
+Oriole Lake,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Douglass,SE to W,five_or_less,Unburned,one or none,0.54,0,0,0,0
+Douglass,SE to W,five_or_less,Low,one,2.38,0,0,0,0
+Douglass,SE to W,five_or_less,Moderate,one,0.21,0,0,0,0
+Castle Creek,SE to W,five_or_less,Low,one,0.07,0,0,0,0
+Castle Creek,SE to W,five_or_less,Moderate,one,0.09,0,0,0,0
+Castle Creek,SE to W,five_or_less,High,one,0.42,0,0,0,0
+Castle Creek,SE to W,five_or_less,Low,multiple,13.46,0,0,0,0
+Castle Creek,SE to W,five_or_less,Unburned,multiple,1.83,0,0,0,0
+Castle Creek,SE to W,five_or_less,Moderate,multiple,18.24,0,0,0,0
+Castle Creek,SE to W,five_or_less,High,multiple,11.46,0,0,0,0
+Castle Creek,SE to W,more_than_five,Low,one,0,0,0,0,0
+Castle Creek,SE to W,more_than_five,High,one,0,0,0,0,0
+Little Redwood Meadow,SE to W,more_than_five,Unburned,one or none,25.61,0,0,0,0
+Redwood Meadow,SE to W,more_than_five,Low,one,6.23,0,0,0,0
+Redwood Meadow,SE to W,more_than_five,Unburned,one or none,133.84,0.02,19,0.06,-0.04
+Redwood Meadow,SE to W,more_than_five,Moderate,one,0.58,0,0,0,0
+Redwood Meadow,SE to W,more_than_five,Low,multiple,0,0,0,0,0
+Redwood Meadow,SE to W,more_than_five,Unburned,multiple,0,0,0,0,0
+Granite Creek,SE to W,more_than_five,Low,one,1.03,0,0,0,0
+Granite Creek,SE to W,more_than_five,Unburned,one or none,0.18,0,0,0,0
+Granite Creek,SE to W,more_than_five,Low,multiple,0,0,0,0,0
+Skagway,SE to W,five_or_less,Unburned,one or none,6.57,0,0,0,0
+Skagway,SE to W,five_or_less,Low,one,17.51,0,0,0,0
+Skagway,SE to W,five_or_less,Moderate,one,2.6,0,0,0,0
+Skagway,SE to W,five_or_less,High,one,0.41,0,0,0,0
+Skagway,SE to W,five_or_less,Low,multiple,6.66,0,1,0,0
+Skagway,SE to W,five_or_less,Unburned,multiple,4.65,0,0,0,0
+Skagway,SE to W,five_or_less,Moderate,multiple,0.78,0,0,0,0
+Skagway,SE to W,five_or_less,High,multiple,3.19,0,0,0,0
+Skagway,SE to W,more_than_five,Low,one,0,0,0,0,0
+Skagway,SE to W,more_than_five,High,one,0,0,0,0,0
+Skagway,SE to W,more_than_five,Low,multiple,0,0,0,0,0
+Skagway,SE to W,more_than_five,High,multiple,0,0,0,0,0
+Pine Ridge,SE to W,five_or_less,Unburned,one or none,3.67,0,0,0,0
+Pine Ridge,SE to W,five_or_less,Low,one,18.07,0,0,0,0
+Pine Ridge,SE to W,five_or_less,Moderate,one,3.79,0,0,0,0
+Pine Ridge,SE to W,five_or_less,High,one,1.58,0,0,0,0
+Pine Ridge,SE to W,five_or_less,Low,multiple,0.09,0,0,0,0
+Pine Ridge,SE to W,five_or_less,Moderate,multiple,0.17,0,0,0,0
+Pine Ridge,SE to W,five_or_less,High,multiple,0.06,0,0,0,0
+Muir,SE to W,five_or_less,Unburned,one or none,15.02,0,1,0,0
+Muir,SE to W,five_or_less,Low,one,45.53,0.01,0,0,0.01
+Muir,SE to W,five_or_less,Moderate,one,17.29,0,1,0,0
+Muir,SE to W,five_or_less,High,one,11.22,0,0,0,0
+Muir,SE to W,five_or_less,Low,multiple,11.71,0,1,0,0
+Muir,SE to W,five_or_less,Unburned,multiple,9.85,0,1,0,0
+Muir,SE to W,five_or_less,Moderate,multiple,0,0,0,0,0
+Lost,SE to W,five_or_less,Unburned,one or none,10.2,0,8,0.03,-0.03
+Lost,SE to W,five_or_less,Low,one,11.79,0,1,0,0
+Lost,SE to W,five_or_less,Moderate,one,0.7,0,0,0,0
+Lost,SE to W,five_or_less,High,one,0.01,0,0,0,0
+Lost,SE to W,five_or_less,Low,multiple,0.5,0,0,0,0
+Lost,SE to W,five_or_less,Unburned,multiple,2.23,0,1,0,0
+Lost,SE to W,more_than_five,Unburned,one or none,4.68,0,2,0.01,-0.01
+Lost,SE to W,more_than_five,Unburned,multiple,0,0,0,0,0
+Big Springs,SE to W,five_or_less,Unburned,one or none,1.04,0,0,0,0
+Big Springs,SE to W,five_or_less,Low,one,2.6,0,0,0,0
+Big Springs,SE to W,five_or_less,Moderate,one,0.89,0,0,0,0
+Big Springs,SE to W,five_or_less,High,one,0.1,0,0,0,0
+Big Springs,SE to W,five_or_less,Low,multiple,0.68,0,0,0,0
+Big Springs,SE to W,five_or_less,Moderate,multiple,0.19,0,0,0,0
+Redwood Mountain,SE to W,five_or_less,Unburned,one or none,17.1,0,0,0,0
+Redwood Mountain,SE to W,five_or_less,Low,one,29.16,0,0,0,0
+Redwood Mountain,SE to W,five_or_less,Moderate,one,10.97,0,0,0,0
+Redwood Mountain,SE to W,five_or_less,High,one,147.42,0.02,17,0.06,-0.04
+Redwood Mountain,SE to W,five_or_less,Low,multiple,264.7,0.04,4,0.01,0.03
+Redwood Mountain,SE to W,five_or_less,Unburned,multiple,216.66,0.03,2,0.01,0.019999999999999997
+Redwood Mountain,SE to W,five_or_less,Moderate,multiple,135.29,0.02,3,0.01,0.01
+Redwood Mountain,SE to W,five_or_less,High,multiple,152.49,0.02,15,0.05,-0.03
+Redwood Mountain,SE to W,more_than_five,Low,one,0,0,0,0,0
+Redwood Mountain,SE to W,more_than_five,Low,multiple,0,0,0,0,0
+Redwood Mountain,SE to W,more_than_five,Unburned,multiple,0,0,0,0,0
+Big Stump,SE to W,five_or_less,Low,one,2.7,0,1,0,0
+Big Stump,SE to W,five_or_less,Low,multiple,0,0,0,0,0
+Big Stump,SE to W,more_than_five,Low,one,2.96,0,1,0,0
+Big Stump,SE to W,more_than_five,Unburned,one or none,64.19,0.01,18,0.06,-0.05
+Big Stump,SE to W,more_than_five,Low,multiple,9.16,0,0,0,0
+Sequoia Creek,SE to W,five_or_less,Low,one,0.07,0,0,0,0
+Sequoia Creek,SE to W,five_or_less,Low,multiple,3.78,0,3,0.01,-0.01
+Sequoia Creek,SE to W,more_than_five,Low,one,3.32,0,0,0,0
+Sequoia Creek,SE to W,more_than_five,Unburned,one or none,0.49,0,0,0,0
+Sequoia Creek,SE to W,more_than_five,Low,multiple,3.99,0,0,0,0
+General Grant,SE to W,five_or_less,Low,one,2.86,0,3,0.01,-0.01
+General Grant,SE to W,five_or_less,Low,multiple,1.4,0,0,0,0
+General Grant,SE to W,more_than_five,Low,one,8,0,6,0.02,-0.02
+General Grant,SE to W,more_than_five,Unburned,one or none,6.16,0,0,0,0
+General Grant,SE to W,more_than_five,Moderate,one,4.86,0,5,0.02,-0.02
+General Grant,SE to W,more_than_five,High,one,2.51,0,0,0,0
+General Grant,SE to W,more_than_five,Low,multiple,34.21,0,13,0.04,-0.04
+General Grant,SE to W,more_than_five,Unburned,multiple,3.14,0,1,0,0
+General Grant,SE to W,more_than_five,Moderate,multiple,10.72,0,6,0.02,-0.02
+General Grant,SE to W,more_than_five,High,multiple,0.52,0,0,0,0
