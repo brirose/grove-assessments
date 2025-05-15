@@ -1,25 +1,25 @@
-"","grove_name","Total","groveacres","grove_wbuffer_acres","plots_peracre_buf","acres_perplot_buf","total.existing.plots","total.plots.rank","plot.density.rank","combo.rank"
-"1","Atwell",47,915,1563.14,0.05,19,47,"lotsa plots","moderate density","lotsa plots - moderate density"
-"2","Big Stump",22,283,539.44,0.08,13,22,"moderate plots","moderate density","moderate plots - moderate density"
-"3","Board Camp",2,48,116.36,0.04,24,2,"very few plots","moderate density","very few plots - moderate density"
-"4","Castle Creek",2,219,520.15,0.01,109,2,"very few plots","low density","very few plots - low density"
-"5","Cedar Flat",1,15,79.13,0.07,15,1,"very few plots","moderate density","very few plots - moderate density"
-"6","East Fork",25,742,1152.2,0.03,30,25,"moderate plots","moderate density","moderate plots - moderate density"
-"7","Eden Creek",5,435,802.84,0.01,87,5,"very few plots","low density","very few plots - low density"
-"8","Garfield",5,1232,1883.09,0,246,5,"very few plots","low density","very few plots - low density"
-"9","General Grant",35,167,362.1,0.21,5,35,"lotsa plots","high density","lotsa plots - high density"
-"10","Giant Forest",34,2106,2849.78,0.02,62,34,"lotsa plots","low density","lotsa plots - low density"
-"11","Homers Nose",2,119,276.26,0.02,59,2,"very few plots","low density","very few plots - low density"
-"12","Horse Creek",1,50,148.68,0.02,50,1,"very few plots","low density","very few plots - low density"
-"13","Lost",12,35,76.25,0.34,3,12,"moderate plots","high density","moderate plots - high density"
-"14","Muir",5,245,396.47,0.02,49,5,"very few plots","moderate density","very few plots - moderate density"
-"15","New Oriole Lake",1,15,62.04,0.07,15,1,"very few plots","moderate density","very few plots - moderate density"
-"16","Oriole Lake",3,147,320.42,0.02,49,3,"very few plots","moderate density","very few plots - moderate density"
-"17","Pine Ridge",1,44,158.02,0.02,44,1,"very few plots","moderate density","very few plots - moderate density"
-"18","Redwood Creek",1,48,154.69,0.02,48,1,"very few plots","moderate density","very few plots - moderate density"
-"19","Redwood Meadow",22,179,449.57,0.12,8,22,"moderate plots","high density","moderate plots - high density"
-"20","Redwood Mountain",52,2615,3908.67,0.02,50,52,"lotsa plots","low density","lotsa plots - low density"
-"21","Sequoia Creek",9,16,60.96,0.57,2,9,"very few plots","high density","very few plots - high density"
-"22","Skagway",2,61,147.72,0.03,30,2,"very few plots","moderate density","very few plots - moderate density"
-"23","South Fork",3,241,502.48,0.01,80,3,"very few plots","low density","very few plots - low density"
-"24","Suwanee",5,69,151.25,0.07,14,5,"very few plots","moderate density","very few plots - moderate density"
+,grove_name,access,Total,groveacres,grove_wbuffer_acres,plots_peracre_buf,acres_perplot_buf,total.existing.plots,total.plots.rank,plot.density.rank,combo.rank,visit_4sure
+1,Atwell,road,47,915,1563.14,0.05,19,47,lotsa plots,moderate density,lotsa plots - moderate density,Y
+2,Big Stump,road,22,283,539.44,0.08,13,22,moderate plots,moderate density,moderate plots - moderate density,Y
+3,Board Camp,xcountry,2,48,116.36,0.04,24,2,very few plots,moderate density,very few plots - moderate density,
+4,Castle Creek,xcountry,2,219,520.15,0.01,109,2,very few plots,low density,very few plots - low density,
+5,Cedar Flat,trail,1,15,79.13,0.07,15,1,very few plots,moderate density,very few plots - moderate density,
+6,East Fork,road,25,742,1152.2,0.03,30,25,moderate plots,moderate density,moderate plots - moderate density,Y
+7,Eden Creek,xcountry,5,435,802.84,0.01,87,5,very few plots,low density,very few plots - low density,
+8,Garfield,trail,5,1232,1883.09,0,246,5,very few plots,low density,very few plots - low density,
+9,General Grant,road,35,167,362.1,0.21,5,35,lotsa plots,high density,lotsa plots - high density,Y
+10,Giant Forest,road,34,2106,2849.78,0.02,62,34,lotsa plots,low density,lotsa plots - low density,Y
+11,Homers Nose,xcountry,2,119,276.26,0.02,59,2,very few plots,low density,very few plots - low density,
+12,Horse Creek,xcountry,1,50,148.68,0.02,50,1,very few plots,low density,very few plots - low density,
+13,Lost,road,12,35,76.25,0.34,3,12,moderate plots,high density,moderate plots - high density,Y
+14,Muir,trail,5,245,396.47,0.02,49,5,very few plots,moderate density,very few plots - moderate density,
+15,New Oriole Lake,xcountry,1,15,62.04,0.07,15,1,very few plots,moderate density,very few plots - moderate density,
+16,Oriole Lake,xcountry,3,147,320.42,0.02,49,3,very few plots,moderate density,very few plots - moderate density,
+17,Pine Ridge,xcountry,1,44,158.02,0.02,44,1,very few plots,moderate density,very few plots - moderate density,
+18,Redwood Creek,road,1,48,154.69,0.02,48,1,very few plots,moderate density,very few plots - moderate density,Y
+19,Redwood Meadow,trail,22,179,449.57,0.12,8,22,moderate plots,high density,moderate plots - high density,
+20,Redwood Mountain,road,52,2615,3908.67,0.02,50,52,lotsa plots,low density,lotsa plots - low density,Y
+21,Sequoia Creek,road,9,16,60.96,0.57,2,9,very few plots,high density,very few plots - high density,Y
+22,Skagway,xcountry,2,61,147.72,0.03,30,2,very few plots,moderate density,very few plots - moderate density,
+23,South Fork,xcountry,3,241,502.48,0.01,80,3,very few plots,low density,very few plots - low density,
+24,Suwanee,xcountry,5,69,151.25,0.07,14,5,very few plots,moderate density,very few plots - moderate density,

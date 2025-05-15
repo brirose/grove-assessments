@@ -374,7 +374,10 @@ groves_summary_rank = groves_summary %>%
 # View(groves_summary_rank)  
 write.csv(groves_summary_rank,here("outputs/groves_summary_rank.csv"))
 
+visit_groves_any <- visit_groves_setup %>% 
+  filter(count_plots_needed>0)
 
+write.csv(visit_groves_any,here("outputs/groves_all_havearea.csv"))
 
 ```
 
