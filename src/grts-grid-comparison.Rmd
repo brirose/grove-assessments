@@ -1,0 +1,178 @@
+---
+title: "GRTS GRID comparison"
+author: "Shive Lab (B. Baker)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(here)
+library(janitor)
+
+```
+
+
+```{r data}
+
+grts <- read_csv(here("outputs/grts_points_easier_groves_table_summary.csv")) %>% 
+  clean_names()
+grid_summary <- read_csv(here("outputs/grid_points_easier_groves_table_summary.csv")) %>% 
+  clean_names()
+
+grove_poly <- read_sf(here("data/spatial_data/groves/all_groves_REexported.shp")) %>% 
+  clean_names() %>% 
+  filter(str_detect(land_ste_1, "SEKI"))
+
+use_crs <- st_crs(grove_poly) #set global crs
+
+buff_grove_poly <- read_sf(here("data/spatial_data/groves/FINAL_SEGI_AnalysisArea_wOwnerships_GroveNames.shp")) %>% 
+  clean_names() %>% 
+  st_transform(use_crs)
+
+grts_sf <- read_sf(here("data/spatial_data/grts_grid_strata_spatial_data_9May2025/grts_points_easier_groves_4May2025.shp")) %>% 
+  clean_names() %>% 
+  st_transform(use_crs)#consistent crs
+
+grid_sf <- read_sf(here("data/spatial_data/grts_grid_strata_spatial_data_9May2025/grid200m_in_needed_strata_easier.shp")) %>% 
+  clean_names()%>% 
+  st_transform(use_crs)#consisten crs
+
+grove_ranks <- read_csv(here("outputs/groves_summary_rank.csv")) %>% 
+  clean_names()
+
+```
+
+```{r}
+#remake summary for grts plots
+grts_summary <-  grts %>%
+  st_drop_geometry() %>%
+  select(-c(replsite,stratum,wgt,ip,caty,grove,unit_name)) %>% 
+  group_by(strata_nm,grove_name,siteuse) %>%
+  summarise(num.grts.plots = length(strata_nm)) %>%
+  st_drop_geometry() %>%
+  mutate(grov_nm = grove_name, study_design = "grts") %>%
+  select(-grov_nm)
+
+```
+
+## to do
+
+1) query the number of BASE plots for grts that are within a buffer of the edge (because most of them seem to be not just clustered, but pushed out to the edge which i think is not representative)
+2) decide which groves have a high rank for being visited - ie they have few total plots as well as low plot density (see the rank .csv, but remember you can change how I did the ranking, it was just a first stab)
+2) for either approach, i think we assume that we will visit anything that is frontcountry, so make a list excluding those, start looking at where the high priority groves are and how they might be visited with others if they are close in proximity (and then what they offer for strata needs)
+
+##GRTS Base plots and distance from poly edge
+```{r}
+#set up df
+grts_base_sf <- grts_sf %>% 
+  filter(siteuse == "Base") %>% #only base plots
+  rowid_to_column()
+
+#determine in/out of grove boundary
+dist_from_poly <- st_distance(grts_base_sf, grove_poly) #distance from poly
+
+in_grove <- grts_base_sf %>% 
+  bind_cols(dist_from_poly) %>% # take distances
+  select(!site_id:es_f_ac) %>% # and only distances
+  st_drop_geometry() %>% # ignore sf info
+  pivot_longer(`...24`:`...62`) %>% # make longer df
+  group_by(rowid) %>% # group info for each point together
+  slice_min(value) %>% # select closest distance
+  mutate(distance_m = round(value), # round to nearest meter
+         in_grove = case_when(distance_m == 0 ~ "grove", # if ==0 is within grove
+                              T ~ "buffer")) %>% 
+  select(rowid, in_grove) # select only needed cols
+
+#Distance from true grove edge
+##make polyline
+grove_lines <- st_cast(grove_poly, to = "MULTILINESTRING")
+
+grts_base_distances <- grts_base_sf %>% 
+  st_distance(grove_lines) #gives distance to each polygon in m
+
+##find closest grove edge to each point
+grove_dist <- grts_base_sf %>% 
+  bind_cols(grts_base_distances) %>% # take distances
+  select(!site_id:es_f_ac) %>% # and only distances
+  st_drop_geometry() %>% # ignore sf info
+  pivot_longer(`...24`:`...62`) %>% # make longer df
+  group_by(rowid) %>% # group info for each point together
+  slice_min(value) %>% # select closest distance
+  mutate(dist_grv_m = round(value)) %>% # round to nearest meter
+  select(rowid, dist_grv_m) # select only needed cols
+
+# #Distance from buffered grove edge
+# # some kind of issue here
+# ##make polyline
+# buff_lines <- st_cast(buff_grove_poly, to = "MULTILINESTRING")
+# 
+# st_write(buff_lines, here("data/spatial_data/buff_lines_debug.shp"))
+# 
+# 
+# grts_base_distances <- grts_base_sf %>% 
+#   st_distance(buff_lines) #gives distance to each polygon in m
+# 
+# ##find closest grove edge to each point
+# buff_dist <- grts_base_sf %>% 
+#   bind_cols(grts_base_distances) %>% # take distances
+#   select(!site_id:es_f_ac) %>% # and only distances
+#   st_drop_geometry() %>% # ignore sf info
+#   pivot_longer(`...24`:`...62`) %>% # make longer df
+#   group_by(rowid) %>% # group info for each point together
+#   slice_min(value) %>% # select closest distance
+#   mutate(dis_buff_m = round(value)) %>% # round to nearest meter
+#   select(rowid, dis_buff_m) # select only needed cols
+
+grts_base_wDist_sf <- grts_base_sf %>% 
+  #left_join(buff_dist) %>% 
+  left_join(in_grove) %>% 
+  left_join(grove_dist) %>% #join back to rest of info about plots
+  mutate(
+    dist_cat = case_when(dist_grv_m<10 ~ "within 10m",
+                         dist_grv_m<30 ~ "within 30m",
+                         dist_grv_m<50 ~ "within 50m",
+                         T ~ "50m or further")
+  )
+
+#st_write(grts_base_wDist_sf, here("data/spatial_data/grts_base_wDist.shp"))
+
+
+```
+
+```{r}
+plots_total <- grts_base_wDist_sf %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = grove, total = n())
+
+#summarize distances
+base_overall_inGrove <- grts_base_wDist_sf %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = in_grove, count = n()) %>% 
+  mutate(prop = count/257)
+
+base_byGrove_inGrove <- grts_base_wDist_sf %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = c(grove, in_grove), count = n()) %>% 
+  left_join(plots_total) %>% 
+  mutate(prop = count/total) %>% 
+  select(-total)
+
+base_byGrove_dstBoundary <- grts_base_wDist_sf %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = c(grove, in_grove, dist_cat), count = n()) %>% 
+  left_join(plots_total) %>% 
+  mutate(prop = count/total) %>% 
+  select(-total) %>% 
+  arrange(grove, in_grove)
+
+base_overall_dstBoundary <- grts_base_wDist_sf %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = c(in_grove, dist_cat), count = n()) %>% 
+  mutate(prop = count/257)
+
+```
+
