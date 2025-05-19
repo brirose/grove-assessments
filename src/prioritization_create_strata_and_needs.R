@@ -1,11 +1,11 @@
 ---
-title: "Plot Prioritization"
+  title: "Plot Prioritization"
 author: "Shive Lab (B. Baker)"
 date: "`r Sys.Date()`"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
+  
+  ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -74,7 +74,7 @@ no_burn <- no_fire %>%
     id = "unburned"
   )%>% 
   select(id, fire_yr, burnsev)
-  
+
 
 # aspect_groves <- intersect(aspect_vect, groves_vect) %>% 
 #   st_as_sf()%>% 
@@ -134,19 +134,19 @@ plots_all <- existing_plots %>%
   )
 
 plots_classified <- plots_all %>% 
-   mutate(
-     burnsev = case_when(burnsev == "Undetected change" ~ "Unburned",
-                         T ~ burnsev),
+  mutate(
+    burnsev = case_when(burnsev == "Undetected change" ~ "Unburned",
+                        T ~ burnsev),
     #ks: changed names for aspect and time_since to make briefer strata names later
-     aspect = case_when(
-     aspect <= 90 | aspect > 315~ "NW_E",
-     T ~ "SE_W"),
-     time_since = case_when(
-       fire_yr == 0000 ~ "over5",
-       fire_yr  >= 2020 ~ "under5",
-       T ~ "over5"
-     ),
-     count = case_when(fire_count >= 2 ~ "many",
+    aspect = case_when(
+      aspect <= 90 | aspect > 315~ "NW_E",
+      T ~ "SE_W"),
+    time_since = case_when(
+      fire_yr == 0000 ~ "over5",
+      fire_yr  >= 2020 ~ "under5",
+      T ~ "over5"
+    ),
+    count = case_when(fire_count >= 2 ~ "many",
                       T ~ "one"),
     count_v2 = case_when(burnsev == "Unburned" ~ "none", T ~ count))
 # 
@@ -184,21 +184,21 @@ fire_count <- st_intersection(burn_count) %>%
 
 burn_classed <- fire_count %>%
   mutate(time_since = case_when(
-       fire_yr == 0000 ~ "over5",
-       fire_yr  >= 2020 ~ "under5",
-       T ~ "over5"
-     ),
-    burnsev = case_when(
-      burnsev == 0 ~ "Unburned",
-      burnsev == 1 ~ "Unburned",
-      burnsev == 2 ~ "Low",
-      burnsev == 3 ~ "Moderate",
-      burnsev == 4 ~ "High",
-      T ~ "Unburned"
-     ),
-    #ks: changed names for count to make briefer strata names later
-    count = case_when(n.overlaps >= 2 ~ "many",
-                      T ~ "one")) %>%
+    fire_yr == 0000 ~ "over5",
+    fire_yr  >= 2020 ~ "under5",
+    T ~ "over5"
+  ),
+  burnsev = case_when(
+    burnsev == 0 ~ "Unburned",
+    burnsev == 1 ~ "Unburned",
+    burnsev == 2 ~ "Low",
+    burnsev == 3 ~ "Moderate",
+    burnsev == 4 ~ "High",
+    T ~ "Unburned"
+  ),
+  #ks: changed names for count to make briefer strata names later
+  count = case_when(n.overlaps >= 2 ~ "many",
+                    T ~ "one")) %>%
   summarize(.by = c(time_since, burnsev, count), geometry = st_combine(geometry)) %>% 
   st_make_valid() 
 
@@ -214,10 +214,10 @@ groves_set <- burn_classed %>%
   mutate(area_ha = as.numeric(st_area(.))*0.0001) %>%
   filter(area_ha > 2.02343) %>%
   mutate(prop_area = round(area_ha/grove_area, 2)) %>%
-    mutate(strata_nm = 
+  mutate(strata_nm = 
            paste(aspect,"-", time_since, "-",burnsev, "-",count_v2, sep = "")) %>%
   group_by(strata_nm) 
-  # st_drop_geometry() >%>
+# st_drop_geometry() >%>
 View(groves_set)
 grove_area_of22strata = sum(groves_set$area_ha)
 sum(groves_set$prop_area)
@@ -228,7 +228,7 @@ groves_classified_poly_explode = st_collection_extract(groves_set, type = c("POL
 groves_classified_poly_explode$area_ha = as.numeric(st_area(groves_classified_poly_explode)*0.0001)
 
 groves_classified_poly = groves_classified_poly_explode %>%
-    # mutate(area_ha = (st_area(groves_classified_poly_explode))*0.0001) %>%
+  # mutate(area_ha = (st_area(groves_classified_poly_explode))*0.0001) %>%
   #filter out individual silvers <5 acres
   filter(area_ha > 2.02343) %>%
   #regroup by strata
@@ -246,7 +246,7 @@ sum(groves_classified_poly$prop_area)
 
 
 #aspect_poly <- st_read(here("data/spatial_data/aspect_polys.shp")) %>% 
- # transform(st_crs(burn_classed))
+# transform(st_crs(burn_classed))
 
 
 ```
@@ -273,68 +273,84 @@ sum(groves_classified_poly$prop_area)
 final.strata.that.need.new.plots <- groves_classified_poly %>% 
   mutate(
     # area_ha = round(area_ha, 2),
-         # diff.prop = prop_area - prop_plot,
-         total.plots.needed = ceiling(501*prop_area),
-         useful.plots = case_when(existing_plots>total.plots.needed ~ total.plots.needed,
-                                  T ~ existing_plots),
-         NEW.plots.needed = total.plots.needed - useful.plots) %>%
+    # diff.prop = prop_area - prop_plot,
+    total.plots.needed = ceiling(501*prop_area),
+    useful.plots = case_when(existing_plots>total.plots.needed ~ total.plots.needed,
+                             T ~ existing_plots),
+    NEW.plots.needed = total.plots.needed - useful.plots) %>%
   filter(NEW.plots.needed > 0)
+head(final.strata.that.need.new.plots)
+nrow(final.strata.that.need.new.plots)
 
 sum(final.strata.that.need.new.plots$useful.plots)
 sum(final.strata.that.need.new.plots$NEW.plots.needed)
 sum(final.strata.that.need.new.plots$total.plots.needed)
 sum(final.strata.that.need.new.plots$prop_area)
+# final.strata.that.need.new.plots$area_ha_test = as.numeric(st_area(final.strata.that.need.new.plots)*0.0001)
 # View(final.strata.that.need.new.plots)
 
 #Since some strata needed none, leaves 14 strata that need sampling
 write_sf(final.strata.that.need.new.plots, here("data/spatial_data/outputs/final.strata.that.need.new.plots.shp"))
 
 ##Create new shapefile that removes "Very Difficult" access groves, and dissolve into one big shapefile
-access.min = access %>% select(grove,Ease.of.Access)
-
+access.min = access %>% 
+  mutate(grov_nm = grove) %>%
+  select(grov_nm,Ease.of.Access)
 #get easier groves and dissolve to one multipolygon
 groves_easier = groves %>% 
-  mutate(grove = grove_name) %>%
+  # mutate(grove = grove_nm) %>%
   left_join(access.min) %>%
   filter(Ease.of.Access != "Very Difficult") %>%
   # st_buffer(0.5) %>% # make a buffer of half a meter around all parts (to avoid slivers)
   st_union() %>% # unite to a geometry object
   st_sf() %>% # make the geometry a data frame object
   mutate(keep = T) %>%
-   # st_collection_extract("POLYGON") %>%
-  st_cast("POLYGON")
+  # st_collection_extract("POLYGON") %>%
+  st_cast("MULTIPOLYGON")
 nrow(groves_easier)
+head(groves_easier)
 
 write_sf(groves_easier, here("data/spatial_data/outputs/groves_easier.shp"))
 
-#intersect the remaining strata with the "easier" groves
-final.strata.that.need.new.plots_exploded = st_collection_extract(final.strata.that.need.new.plots) %>%
-  st_cast("POLYGON")
-nrow(final.strata.that.need.new.plots_exploded)
-nrow(final.strata.that.need.new.plots)
+# #intersect the remaining strata with the "easier" groves
+# final.strata.that.need.new.plots_exploded = st_collection_extract(final.strata.that.need.new.plots) 
+# # %>%
+# #   st_cast("POLYGON")
+# nrow(final.strata.that.need.new.plots_exploded)
+# nrow(final.strata.that.need.new.plots)
+# 
+# final.strata.that.need.new.plots_exploded$area_ha_test = as.numeric(st_area(final.strata.that.need.new.plots_exploded)*0.0001)
 
-final.strata.that.need.new.plots_easier.1 = final.strata.that.need.new.plots_exploded %>%
+final.strata.that.need.new.plots_easier.1 = final.strata.that.need.new.plots %>%
   st_intersection(groves_easier) %>%
- st_cast("MULTIPOLYGON") %>%
- select(aspect:strata_nm) 
+  st_cast("MULTIPOLYGON") %>%
+  select(aspect:strata_nm) 
 # write_sf(final.strata.that.need.new.plots_easier.1, here("data/spatial_data/outputs/final.strata.that.need.new.plots_easier_diss_no_cast.shp"))
+final.strata.that.need.new.plots_easier.1$area_ha = as.numeric(st_area(final.strata.that.need.new.plots_easier.1)*0.0001)
+head(final.strata.that.need.new.plots_easier.1)
 
 #create a table to join the details on plots needed per strata back
+final.strata.that.need.new.plots_table = final.strata.that.need.new.plots %>%
+  st_drop_geometry() %>%
+  select(strata_nm, existing_plots, total.plots.needed, useful.plots, NEW.plots.needed)
+
 final.strata.that.need.new.plots_easier_table = final.strata.that.need.new.plots_easier.1 %>%
-  st_drop_geometry()
+  st_drop_geometry() %>%
+  left_join(final.strata.that.need.new.plots_table)
+head(final.strata.that.need.new.plots_easier_table)
+names(final.strata.that.need.new.plots_easier_table)
+View(final.strata.that.need.new.plots_easier_table)
 
 #join the table to the reduced strata shapefile
 final.strata.that.need.new.plots_easier = final.strata.that.need.new.plots_easier.1 %>%
   left_join(final.strata.that.need.new.plots_easier_table) %>%
-    st_cast("MULTIPOLYGON")
+  st_cast("MULTIPOLYGON")
 final.strata.that.need.new.plots_easier$area_ha = st_area(final.strata.that.need.new.plots_easier)*0.0001
 
 write_sf(final.strata.that.need.new.plots_easier, here("data/spatial_data/outputs/final.strata.that.need.new.plots_easier.shp"))
 
 #create table version
-final.strata.that.need.new.plots_easier_table = final.strata.that.need.new.plots_easier %>%
-  st_drop_geometry()
-write.csv(final.strata.that.need.new.plots_easier_table, here("data/plot_needs_by_strata_2May2025_kls.csv"))
+write.csv(final.strata.that.need.new.plots_easier_table, here("outputs/plot_needs_by_strata_2May2025_kls.csv"))
 
 ##split by attributes to get individual shapefiles for the GRTS
 #select the column of the attribute table for the split
@@ -383,18 +399,18 @@ hist(groves_summary$acres_perplot_buf, breaks = 100)
 groves_summary_rank = groves_summary %>%
   mutate(total.plots.rank = 
            case_when(total.existing.plots <10 ~ "very few plots",
-                    total.existing.plots >=10 & 
-                      total.existing.plots <30 ~ "moderate plots",
-                    total.existing.plots >=30 ~ "lotsa plots",
-                        .default = "oopsie"),
+                     total.existing.plots >=10 & 
+                       total.existing.plots <30 ~ "moderate plots",
+                     total.existing.plots >=30 ~ "lotsa plots",
+                     .default = "oopsie"),
          plot.density.rank = 
            case_when(acres_perplot_buf <10 ~ "high density",
-                    acres_perplot_buf >=10 & 
-                      acres_perplot_buf <50 ~ "moderate density",
-                    acres_perplot_buf >=50 ~ "low density",
-                      .default = "oopsie"),
+                     acres_perplot_buf >=10 & 
+                       acres_perplot_buf <50 ~ "moderate density",
+                     acres_perplot_buf >=50 ~ "low density",
+                     .default = "oopsie"),
          combo.rank = paste(total.plots.rank,"-",plot.density.rank))
-  
+
 # View(groves_summary_rank)  
 write.csv(groves_summary_rank,here("outputs/groves_summary_rank.csv"))
 

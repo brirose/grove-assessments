@@ -1,0 +1,15 @@
+"","aspect","time_since","burnsev","count_v2","prop_area","area_ha","strata_nm","existing_plots","total.plots.needed","useful.plots","NEW.plots.needed"
+"1","NW_E","under5","High","many",0.01,66.9978721412264,"NW_E-under5-High-many",4,6,4,2
+"2","NW_E","under5","High","one",0.01,52.4860324615274,"NW_E-under5-High-one",3,6,3,3
+"3","NW_E","under5","Low","many",0.06,0.00523653465406969,"NW_E-under5-Low-many",17,31,17,14
+"4","NW_E","under5","Low","one",0.07,0.48607161961165,"NW_E-under5-Low-one",8,36,8,28
+"5","NW_E","under5","Moderate","many",0.02,0.0861776828639646,"NW_E-under5-Moderate-many",4,11,4,7
+"6","NW_E","under5","Moderate","one",0.01,81.6603499307421,"NW_E-under5-Moderate-one",1,6,1,5
+"7","NW_E","under5","Unburned","none",0.06,406.318166250898,"NW_E-under5-Unburned-none",7,31,7,24
+"8","SE_W","over5","Low","many",0.11,2.9798926747415,"SE_W-over5-Low-many",47,56,47,9
+"9","SE_W","under5","High","one",0.05,0.00457158766115135,"SE_W-under5-High-one",22,26,22,4
+"10","SE_W","under5","Low","many",0.11,0.0115495614606305,"SE_W-under5-Low-many",22,56,22,34
+"11","SE_W","under5","Low","one",0.12,770.904042781716,"SE_W-under5-Low-one",12,61,12,49
+"12","SE_W","under5","Moderate","many",0.03,0.905329500636658,"SE_W-under5-Moderate-many",5,16,5,11
+"13","SE_W","under5","Moderate","one",0.04,0.00148113560969496,"SE_W-under5-Moderate-one",1,21,1,20
+"14","SE_W","under5","Unburned","none",0.13,889.54756692191,"SE_W-under5-Unburned-none",19,66,19,47
