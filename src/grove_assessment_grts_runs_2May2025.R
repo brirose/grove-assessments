@@ -12,7 +12,8 @@ plots_sf <- st_read(here("data/spatial_data/all_plots_groves.shp"))
 final.strata.shape = st_read(here("data/spatial_data/outputs/final.strata.that.need.new.plots_easier.shp"))
 
 #import strata set needs
-strata.needs1 = read.csv(here("data/plot_needs_by_strata_2May2025_kls.csv"))
+strata.needs1 = read.csv(here("outputs/plot_needs_by_strata_2May2025_kls.csv"))
+head(strata.needs1)
 
 strata.needs = strata.needs1 %>%
   select(strata_nm,NEW.plots.needed)

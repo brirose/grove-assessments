@@ -1,22 +1,14 @@
----
-  title: "Plot Prioritization"
-author: "Shive Lab (B. Baker)"
-date: "`r Sys.Date()`"
-output: html_document
----
-  
-  ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
+# ---
+#   title: "Plot Prioritization"
+# author: "Shive Lab (B. Baker)"
+# date: "`r Sys.Date()`"
+# output: html_document
+# ---
 library(tidyverse)
 library(here)
 library(sf)
 library(terra)
 library(janitor)
-
-```
-
-```{r data}
 
 groves <- vect(here("data/spatial_data/SEKI_groves/SEKI_groves_list.shp")) %>% 
   st_as_sf()
@@ -39,22 +31,15 @@ no_fire <- read_sf(here("data/spatial_data/no_fire/no_fire.shp")) %>%
 plots_sf <- st_read(here("data/spatial_data/all_plots_groves.shp")) 
 
 access <- read.csv(here("data/grove_access.csv"))
-```
 
-
-
-```{r transform}
-#ks: Bri's way worked for me the first time around, then totally unrelated stuff started freezing, so I deleted the whole enviro and started over, then this process of converting within the piped code didn't work anymore (??). So I did it outside of the piped code and seems to work for me now
-
-# groves_vect <- vect(groves)
-# aspect_vect <- vect(aspect)
-
+#get all spatial files of same type
 fire <- fire %>% 
   st_as_sf()
 
 trt <- trt %>% 
   st_as_sf()
 
+#pull fire related treatments to count as low sev fire
 rx_seki <- trt %>% 
   # st_as_sf() %>% 
   filter(treatment == "Fire-related treatment") %>%  
@@ -98,10 +83,8 @@ burn <- fire %>%
 
 
 grove_area <- sum(groves$grovr_h)
-```
 
-```{r plots}
-
+##get plot totals
 plots_rx <- st_intersection(rx_seki, plots_sf)
 
 plots_rx_count <- plots_rx %>% 
@@ -166,10 +149,7 @@ plot_sets <- plots_classified %>%
 #   mutate(prop_plot = round(count_plot/plot_total, 2))
 
 
-```
-
-```{r grove_setup}
-
+#get burn counts and sev
 burn_count <- burn %>% 
   summarize(.by = c(id, fire_yr, burnsev), geometry = st_combine(geometry)) %>% 
   st_make_valid() %>% 
@@ -245,30 +225,6 @@ sum(groves_classified_poly$prop_area)
 #write_sf(groves_set, here("data/spatial_data/debug_groveset.shp"))
 
 
-#aspect_poly <- st_read(here("data/spatial_data/aspect_polys.shp")) %>% 
-# transform(st_crs(burn_classed))
-
-
-```
-
-```{r}
-
-# comparison_sets <- groves_set %>% 
-#   left_join(plot_sets) %>% 
-#   replace_na(list(prop_plot = 0, count_plot = 0)) %>% 
-#   mutate(count = case_when(burnsev == "Unburned" ~ "none",
-#                            count == "multiple" ~ count,
-#                            T ~ "one"),
-#          area_ha = round(area_ha, 2),
-#          diff = prop_area - prop_plot,
-#          total.plots.needed = round(458*prop_area),
-#          useful.plots = case_when(count_plot>total.plots.needed ~ total.plots.needed,
-#                                   T ~ count_plot),
-#          NEW.plots.needed = total.plots.needed - useful.plots)
-# 
-# write_csv(comparison_sets, here("data/strata_set_comparison_20Feb25.csv"))
-
-
 ##get needed number of plots based on area of strata
 final.strata.that.need.new.plots <- groves_classified_poly %>% 
   mutate(
@@ -281,13 +237,6 @@ final.strata.that.need.new.plots <- groves_classified_poly %>%
   filter(NEW.plots.needed > 0)
 head(final.strata.that.need.new.plots)
 nrow(final.strata.that.need.new.plots)
-
-sum(final.strata.that.need.new.plots$useful.plots)
-sum(final.strata.that.need.new.plots$NEW.plots.needed)
-sum(final.strata.that.need.new.plots$total.plots.needed)
-sum(final.strata.that.need.new.plots$prop_area)
-# final.strata.that.need.new.plots$area_ha_test = as.numeric(st_area(final.strata.that.need.new.plots)*0.0001)
-# View(final.strata.that.need.new.plots)
 
 #Since some strata needed none, leaves 14 strata that need sampling
 write_sf(final.strata.that.need.new.plots, here("data/spatial_data/outputs/final.strata.that.need.new.plots.shp"))
@@ -312,14 +261,6 @@ head(groves_easier)
 
 write_sf(groves_easier, here("data/spatial_data/outputs/groves_easier.shp"))
 
-# #intersect the remaining strata with the "easier" groves
-# final.strata.that.need.new.plots_exploded = st_collection_extract(final.strata.that.need.new.plots) 
-# # %>%
-# #   st_cast("POLYGON")
-# nrow(final.strata.that.need.new.plots_exploded)
-# nrow(final.strata.that.need.new.plots)
-# 
-# final.strata.that.need.new.plots_exploded$area_ha_test = as.numeric(st_area(final.strata.that.need.new.plots_exploded)*0.0001)
 
 final.strata.that.need.new.plots_easier.1 = final.strata.that.need.new.plots %>%
   st_intersection(groves_easier) %>%
