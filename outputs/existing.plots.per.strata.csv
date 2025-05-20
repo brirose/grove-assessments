@@ -1,0 +1,86 @@
+"","grov_nm","aspect","time_since","burnsev","count_v2","strata_nm","plots.strata.grv"
+"1","Atwell","NW_E","over5","Low","many","NW_E-over5-Low-many",1
+"2","Atwell","NW_E","under5","Low","many","NW_E-under5-Low-many",3
+"3","Atwell","NW_E","under5","Moderate","many","NW_E-under5-Moderate-many",1
+"4","Atwell","SE_W","over5","Low","many","SE_W-over5-Low-many",27
+"5","Atwell","SE_W","under5","Low","many","SE_W-under5-Low-many",7
+"6","Atwell","SE_W","under5","Moderate","many","SE_W-under5-Moderate-many",2
+"7","Atwell","SE_W","under5","Unburned","none","SE_W-under5-Unburned-none",6
+"8","Big Stump","NW_E","over5","Unburned","none","NW_E-over5-Unburned-none",3
+"9","Big Stump","SE_W","over5","Low","many","SE_W-over5-Low-many",1
+"10","Big Stump","SE_W","over5","Unburned","none","SE_W-over5-Unburned-none",17
+"11","Big Stump","SE_W","under5","Low","many","SE_W-under5-Low-many",1
+"12","Board Camp","SE_W","under5","High","one","SE_W-under5-High-one",2
+"13","Castle Creek","NW_E","under5","Low","many","NW_E-under5-Low-many",1
+"14","Castle Creek","NW_E","under5","Moderate","many","NW_E-under5-Moderate-many",1
+"15","Cedar Flat","SE_W","under5","Low","one","SE_W-under5-Low-one",1
+"16","East Fork","NW_E","over5","Low","many","NW_E-over5-Low-many",4
+"17","East Fork","NW_E","over5","Low","one","NW_E-over5-Low-one",3
+"18","East Fork","NW_E","over5","Unburned","none","NW_E-over5-Unburned-none",5
+"19","East Fork","SE_W","over5","High","one","SE_W-over5-High-one",1
+"20","East Fork","SE_W","over5","Low","many","SE_W-over5-Low-many",3
+"21","East Fork","SE_W","over5","Low","one","SE_W-over5-Low-one",4
+"22","East Fork","SE_W","over5","Moderate","one","SE_W-over5-Moderate-one",1
+"23","East Fork","SE_W","over5","Unburned","none","SE_W-over5-Unburned-none",4
+"24","Eden Creek","NW_E","under5","Low","many","NW_E-under5-Low-many",2
+"25","Eden Creek","NW_E","under5","Low","one","NW_E-under5-Low-one",1
+"26","Eden Creek","NW_E","under5","Unburned","none","NW_E-under5-Unburned-none",2
+"27","Garfield","NW_E","under5","Low","many","NW_E-under5-Low-many",1
+"28","Garfield","NW_E","under5","Unburned","none","NW_E-under5-Unburned-none",2
+"29","Garfield","SE_W","under5","Low","many","SE_W-under5-Low-many",2
+"30","General Grant","NW_E","over5","Low","many","NW_E-over5-Low-many",6
+"31","General Grant","NW_E","over5","Moderate","many","NW_E-over5-Moderate-many",2
+"32","General Grant","NW_E","over5","Moderate","one","NW_E-over5-Moderate-one",2
+"33","General Grant","NW_E","over5","Unburned","none","NW_E-over5-Unburned-none",4
+"34","General Grant","SE_W","over5","Low","many","SE_W-over5-Low-many",13
+"35","General Grant","SE_W","over5","Moderate","many","SE_W-over5-Moderate-many",1
+"36","General Grant","SE_W","over5","Moderate","one","SE_W-over5-Moderate-one",4
+"37","General Grant","SE_W","under5","Low","many","SE_W-under5-Low-many",3
+"38","Giant Forest","NW_E","over5","Low","many","NW_E-over5-Low-many",5
+"39","Giant Forest","NW_E","over5","Unburned","none","NW_E-over5-Unburned-none",1
+"40","Giant Forest","NW_E","under5","Low","many","NW_E-under5-Low-many",1
+"41","Giant Forest","NW_E","under5","Low","one","NW_E-under5-Low-one",2
+"42","Giant Forest","NW_E","under5","Unburned","none","NW_E-under5-Unburned-none",2
+"43","Giant Forest","SE_W","over5","Low","many","SE_W-over5-Low-many",13
+"44","Giant Forest","SE_W","over5","Unburned","none","SE_W-over5-Unburned-none",3
+"45","Giant Forest","SE_W","under5","High","one","SE_W-under5-High-one",1
+"46","Giant Forest","SE_W","under5","Low","many","SE_W-under5-Low-many",4
+"47","Giant Forest","SE_W","under5","Low","one","SE_W-under5-Low-one",2
+"48","Homers Nose","SE_W","under5","High","one","SE_W-under5-High-one",2
+"49","Horse Creek","NW_E","over5","Unburned","none","NW_E-over5-Unburned-none",1
+"50","Lost","SE_W","over5","Unburned","none","SE_W-over5-Unburned-none",2
+"51","Lost","SE_W","under5","Low","one","SE_W-under5-Low-one",1
+"52","Lost","SE_W","under5","Unburned","none","SE_W-under5-Unburned-none",9
+"53","Muir","NW_E","under5","Low","one","NW_E-under5-Low-one",1
+"54","Muir","SE_W","under5","Low","many","SE_W-under5-Low-many",1
+"55","Muir","SE_W","under5","Moderate","one","SE_W-under5-Moderate-one",1
+"56","Muir","SE_W","under5","Unburned","none","SE_W-under5-Unburned-none",2
+"57","New Oriole Lake","SE_W","under5","Low","one","SE_W-under5-Low-one",1
+"58","Oriole Lake","SE_W","under5","Low","one","SE_W-under5-Low-one",3
+"59","Pine Ridge","NW_E","under5","Low","one","NW_E-under5-Low-one",1
+"60","Redwood Creek","SE_W","under5","High","many","SE_W-under5-High-many",1
+"61","Redwood Meadow","NW_E","under5","Low","one","NW_E-under5-Low-one",2
+"62","Redwood Meadow","NW_E","under5","Unburned","none","NW_E-under5-Unburned-none",1
+"63","Redwood Meadow","SE_W","under5","Low","one","SE_W-under5-Low-one",10
+"64","Redwood Meadow","SE_W","under5","Moderate","one","SE_W-under5-Moderate-one",2
+"65","Redwood Meadow","SE_W","under5","Unburned","none","SE_W-under5-Unburned-none",7
+"66","Redwood Mountain","NW_E","under5","High","many","NW_E-under5-High-many",4
+"67","Redwood Mountain","NW_E","under5","High","one","NW_E-under5-High-one",3
+"68","Redwood Mountain","NW_E","under5","Low","many","NW_E-under5-Low-many",4
+"69","Redwood Mountain","NW_E","under5","Moderate","many","NW_E-under5-Moderate-many",2
+"70","Redwood Mountain","NW_E","under5","Unburned","none","NW_E-under5-Unburned-none",1
+"71","Redwood Mountain","SE_W","under5","High","many","SE_W-under5-High-many",14
+"72","Redwood Mountain","SE_W","under5","High","one","SE_W-under5-High-one",17
+"73","Redwood Mountain","SE_W","under5","Low","many","SE_W-under5-Low-many",2
+"74","Redwood Mountain","SE_W","under5","Moderate","many","SE_W-under5-Moderate-many",3
+"75","Redwood Mountain","SE_W","under5","Unburned","none","SE_W-under5-Unburned-none",2
+"76","Sequoia Creek","NW_E","over5","Low","many","NW_E-over5-Low-many",5
+"77","Sequoia Creek","NW_E","under5","Low","many","NW_E-under5-Low-many",2
+"78","Sequoia Creek","SE_W","under5","Low","many","SE_W-under5-Low-many",2
+"79","Skagway","NW_E","under5","Low","one","NW_E-under5-Low-one",1
+"80","Skagway","SE_W","under5","Low","many","SE_W-under5-Low-many",1
+"81","South Fork","NW_E","under5","Low","one","NW_E-under5-Low-one",2
+"82","South Fork","NW_E","under5","Moderate","one","NW_E-under5-Moderate-one",1
+"83","Suwanee","NW_E","under5","High","many","NW_E-under5-High-many",1
+"84","Suwanee","NW_E","under5","Low","many","NW_E-under5-Low-many",3
+"85","Suwanee","SE_W","under5","High","many","SE_W-under5-High-many",1

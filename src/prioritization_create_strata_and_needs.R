@@ -199,14 +199,16 @@ groves_set <- burn_classed %>%
   group_by(strata_nm) 
 # st_drop_geometry() >%>
 View(groves_set)
-grove_area_of22strata = sum(groves_set$area_ha)
-sum(groves_set$prop_area)
-#convert multipolygons to polygons so i can exclude slivers,
+
+###Below convert multipolygons to polygons so i can exclude slivers,
 # this results 22 strata (3 more strata getting excluded), cuz tho they totalled >5 acres, 
 #they were comprised of slivers that individually were smaller
+
+#explode to get inidividual slivers
 groves_classified_poly_explode = st_collection_extract(groves_set, type = c("POLYGON"), warn = FALSE)
 groves_classified_poly_explode$area_ha = as.numeric(st_area(groves_classified_poly_explode)*0.0001)
 
+#remove slivers
 groves_classified_poly = groves_classified_poly_explode %>%
   # mutate(area_ha = (st_area(groves_classified_poly_explode))*0.0001) %>%
   #filter out individual silvers <5 acres
@@ -221,6 +223,13 @@ groves_classified_poly = groves_classified_poly_explode %>%
 View(groves_classified_poly)  
 sum(groves_classified_poly$prop_area)
 
+existing.plots.per.strata = st_intersection(plots_sf,groves_classified_poly) %>%
+  group_by(grov_nm,aspect,time_since,burnsev,
+            count_v2,strata_nm) %>%
+  summarise(plots.strata.grv = length(plot_id)) %>%
+  st_drop_geometry()
+head(existing.plots.per.strata)
+write.csv(existing.plots.per.strata, here("outputs/existing.plots.per.strata.csv"))
 # write_sf(groves_classified_poly, here("data/spatial_data/outputs/groveset_wGroveNames_over5acres.shp"))
 #write_sf(groves_set, here("data/spatial_data/debug_groveset.shp"))
 
