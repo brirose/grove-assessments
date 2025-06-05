@@ -41,8 +41,6 @@ plots_sf <- st_read(here("data/spatial_data/all_plots_groves.shp"))
 access <- read.csv(here("data/grove_access.csv"))
 ```
 
-
-
 ```{r transform}
 #ks: Bri's way worked for me the first time around, then totally unrelated stuff started freezing, so I deleted the whole enviro and started over, then this process of converting within the piped code didn't work anymore (??). So I did it outside of the piped code and seems to work for me now
 
@@ -382,7 +380,10 @@ write.csv(visit_groves_any,here("outputs/groves_all_havearea.csv"))
 ```
 
 
-
+## Needed for plot prioritization:
+-needed strata by grove with area of strata
+-grove and all needed strata in it
+-needed strata and all groves/count of groves found in
 
 
 
