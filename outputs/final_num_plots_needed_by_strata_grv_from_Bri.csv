@@ -1,0 +1,171 @@
+grov_nm,strata_nm,to_est
+Redwood Mountain,SE_W-under5-High-one,0
+Giant Forest,NW_E-under5-High-one,1
+Redwood Mountain,NW_E-under5-High-one,1
+Eden Creek,NW_E-under5-Low-many,1
+Redwood Creek,NW_E-under5-Low-many,1
+Suwanee,NW_E-under5-Low-many,1
+Muir,NW_E-under5-Low-one,1
+Granite Creek,NW_E-under5-Low-one,1
+Suwanee,NW_E-under5-Moderate-many,1
+Big Springs,NW_E-under5-Moderate-one,1
+Eden Creek,NW_E-under5-Moderate-one,1
+Giant Forest,NW_E-under5-Moderate-one,1
+New Oriole Lake,NW_E-under5-Moderate-one,1
+Muir,NW_E-under5-Unburned-none,1
+Oriole Lake,NW_E-under5-Unburned-none,1
+Redwood Mountain,NW_E-under5-Unburned-none,1
+Atwell,SE_W-over5-Low-many,1
+Big Stump,SE_W-over5-Low-many,1
+Skagway,SE_W-under5-Low-many,1
+Suwanee,SE_W-under5-Low-many,1
+Cedar Flat,SE_W-under5-Low-one,1
+Giant Forest,SE_W-under5-Low-one,1
+Pine Ridge,SE_W-under5-Low-one,1
+Redwood Meadow,SE_W-under5-Low-one,1
+Skagway,SE_W-under5-Low-one,1
+Giant Forest,SE_W-under5-Moderate-many,1
+Redwood Creek,SE_W-under5-Moderate-many,1
+Garfield,SE_W-under5-Moderate-many,1
+Muir,SE_W-under5-Moderate-one,1
+New Oriole Lake,SE_W-under5-Moderate-one,1
+Oriole Lake,SE_W-under5-Moderate-one,1
+Pine Ridge,SE_W-under5-Moderate-one,1
+Redwood Meadow,SE_W-under5-Moderate-one,1
+Squirrel Creek,SE_W-under5-Moderate-one,1
+Eden Creek,SE_W-under5-Unburned-none,1
+Redwood Meadow,SE_W-under5-Unburned-none,1
+Skagway,SE_W-under5-Unburned-none,1
+Giant Forest,NW_E-under5-Low-many,2
+Muir,NW_E-under5-Low-many,2
+Redwood Mountain,NW_E-under5-Low-many,2
+Garfield,NW_E-under5-Low-many,2
+Garfield,NW_E-under5-Moderate-many,2
+East Fork,SE_W-over5-Low-many,2
+Atwell,SE_W-under5-Low-many,2
+General Grant,SE_W-under5-Low-many,2
+Redwood Creek,SE_W-under5-Low-many,2
+Redwood Meadow,SE_W-under5-Low-many,2
+Eden Creek,SE_W-under5-Low-one,2
+Muir,SE_W-under5-Low-one,2
+Oriole Lake,SE_W-under5-Low-one,2
+Cedar Flat,SE_W-under5-Unburned-none,2
+Little Redwood Meadow,SE_W-under5-Unburned-none,2
+Muir,SE_W-under5-Unburned-none,2
+South Fork,SE_W-under5-Unburned-none,2
+Redwood Mountain,NW_E-under5-Moderate-many,3
+Eden Creek,NW_E-under5-Unburned-none,3
+Giant Forest,NW_E-under5-Unburned-none,3
+Redwood Mountain,SE_W-under5-Low-many,3
+Garfield,SE_W-under5-Low-many,3
+Atwell,SE_W-under5-Moderate-many,3
+Redwood Mountain,SE_W-under5-Moderate-many,3
+Garfield,SE_W-under5-Moderate-one,3
+Redwood Mountain,SE_W-under5-Unburned-none,3
+Eden Creek,SE_W-under5-Low-many,4
+Muir,SE_W-under5-Low-many,4
+South Fork,SE_W-under5-Moderate-one,4
+Giant Forest,SE_W-under5-Unburned-none,4
+Oriole Lake,SE_W-under5-Unburned-none,4
+Dillonwood,NW_E-under5-Unburned-none,5
+Giant Forest,SE_W-under5-Low-many,5
+Dillonwood,SE_W-under5-Moderate-one,5
+Garfield,SE_W-under5-Unburned-none,5
+South Fork,NW_E-under5-Low-one,6
+Garfield,NW_E-under5-Unburned-none,7
+Garfield,NW_E-under5-Low-one,8
+South Fork,SE_W-under5-Low-one,8
+Dillonwood,NW_E-under5-Low-one,9
+Garfield,SE_W-under5-Low-one,10
+Dillonwood,SE_W-under5-Unburned-none,10
+Dillonwood,SE_W-under5-Low-one,15
+Castle Creek,NW_E-under5-High-many,0
+Redwood Mountain,NW_E-under5-High-many,0
+Suwanee,NW_E-under5-High-many,0
+Castle Creek,NW_E-under5-High-one,0
+Oriole Lake,NW_E-under5-High-one,0
+South Fork,NW_E-under5-High-one,0
+Dillonwood,NW_E-under5-High-one,0
+Atwell,NW_E-under5-Low-many,0
+Castle Creek,NW_E-under5-Low-many,0
+Sequoia Creek,NW_E-under5-Low-many,0
+Devil's Canyon,NW_E-under5-Low-one,0
+Big Springs,NW_E-under5-Low-one,0
+Castle Creek,NW_E-under5-Low-one,0
+Cedar Flat,NW_E-under5-Low-one,0
+Dennison,NW_E-under5-Low-one,0
+Eden Creek,NW_E-under5-Low-one,0
+Giant Forest,NW_E-under5-Low-one,0
+Oriole Lake,NW_E-under5-Low-one,0
+Pine Ridge,NW_E-under5-Low-one,0
+Redwood Meadow,NW_E-under5-Low-one,0
+Redwood Mountain,NW_E-under5-Low-one,0
+Skagway,NW_E-under5-Low-one,0
+Surprise,NW_E-under5-Low-one,0
+Atwell,NW_E-under5-Moderate-many,0
+Castle Creek,NW_E-under5-Moderate-many,0
+Eden Creek,NW_E-under5-Moderate-many,0
+Dillonwood,NW_E-under5-Moderate-one,0
+Castle Creek,NW_E-under5-Moderate-one,0
+Muir,NW_E-under5-Moderate-one,0
+Oriole Lake,NW_E-under5-Moderate-one,0
+Pine Ridge,NW_E-under5-Moderate-one,0
+Redwood Mountain,NW_E-under5-Moderate-one,0
+South Fork,NW_E-under5-Moderate-one,0
+Squirrel Creek,NW_E-under5-Moderate-one,0
+Surprise,NW_E-under5-Moderate-one,0
+Garfield,NW_E-under5-Moderate-one,0
+Atwell,NW_E-under5-Unburned-none,0
+Castle Creek,NW_E-under5-Unburned-none,0
+Pine Ridge,NW_E-under5-Unburned-none,0
+Redwood Creek,NW_E-under5-Unburned-none,0
+Redwood Meadow,NW_E-under5-Unburned-none,0
+Skagway,NW_E-under5-Unburned-none,0
+South Fork,NW_E-under5-Unburned-none,0
+General Grant,SE_W-over5-Low-many,0
+Giant Forest,SE_W-over5-Low-many,0
+Redwood Creek,SE_W-over5-Low-many,0
+Sequoia Creek,SE_W-over5-Low-many,0
+Garfield,SE_W-over5-Low-many,0
+Dillonwood,SE_W-under5-High-one,0
+Board Camp,SE_W-under5-High-one,0
+Giant Forest,SE_W-under5-High-one,0
+Homers Nose,SE_W-under5-High-one,0
+Muir,SE_W-under5-High-one,0
+New Oriole Lake,SE_W-under5-High-one,0
+South Fork,SE_W-under5-High-one,0
+Surprise,SE_W-under5-High-one,0
+Garfield,SE_W-under5-High-one,0
+Big Stump,SE_W-under5-Low-many,0
+Castle Creek,SE_W-under5-Low-many,0
+Coffeepot Canyon,SE_W-under5-Low-many,0
+East Fork,SE_W-under5-Low-many,0
+Sequoia Creek,SE_W-under5-Low-many,0
+Big Springs,SE_W-under5-Low-one,0
+Board Camp,SE_W-under5-Low-one,0
+Coffeepot Canyon,SE_W-under5-Low-one,0
+Dennison,SE_W-under5-Low-one,0
+Douglass,SE_W-under5-Low-one,0
+Homers Nose,SE_W-under5-Low-one,0
+Little Redwood Meadow,SE_W-under5-Low-one,0
+Lost,SE_W-under5-Low-one,0
+New Oriole Lake,SE_W-under5-Low-one,0
+Redwood Mountain,SE_W-under5-Low-one,0
+Squirrel Creek,SE_W-under5-Low-one,0
+Surprise,SE_W-under5-Low-one,0
+Castle Creek,SE_W-under5-Moderate-many,0
+Eden Creek,SE_W-under5-Moderate-many,0
+Suwanee,SE_W-under5-Moderate-many,0
+Board Camp,SE_W-under5-Moderate-one,0
+Cedar Flat,SE_W-under5-Moderate-one,0
+Coffeepot Canyon,SE_W-under5-Moderate-one,0
+Giant Forest,SE_W-under5-Moderate-one,0
+Homers Nose,SE_W-under5-Moderate-one,0
+Redwood Mountain,SE_W-under5-Moderate-one,0
+Skagway,SE_W-under5-Moderate-one,0
+Surprise,SE_W-under5-Moderate-one,0
+Atwell,SE_W-under5-Unburned-none,0
+East Fork,SE_W-under5-Unburned-none,0
+Lost,SE_W-under5-Unburned-none,0
+Pine Ridge,SE_W-under5-Unburned-none,0
+Redwood Creek,SE_W-under5-Unburned-none,0

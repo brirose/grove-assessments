@@ -1,0 +1,5 @@
+"","siteID","siteuse","lon_WGS84","lat_WGS84","aspect","tim_snc","burnsev","cont_v2","strt_nm","prop_ar","cnt_plt","prp_plt","geometry"
+"1","Site-1","Base",-118.743759269536,36.5763238719333,"NW_E","under5","Low","many","NW_E-under5-Low-many",0.04,17,0.06,c(112263.412152048, -159328.839657714)
+"2","Site-2","Over",-118.92895911622,36.6854802280283,"NW_E","under5","Low","many","NW_E-under5-Low-many",0.04,17,0.06,c(95576.8247529628, -147401.023043683)
+"3","Site-3","Over",-118.742208283975,36.4008523021988,"NW_E","under5","Low","many","NW_E-under5-Low-many",0.04,17,0.06,c(112660.711852026, -178826.232199881)
+"4","Site-4","Over",-118.72419225082,36.4171722763129,"NW_E","under5","Low","many","NW_E-under5-Low-many",0.04,17,0.06,c(114249.910651939, -176991.18349003)
