@@ -1,0 +1,210 @@
+"","strata_nm","grov_nm","plots_per_strata_by_grv"
+"1","NW_E-under5-Low-many","Atwell",3
+"2","NW_E-under5-Unburned-none","Atwell",0
+"3","NW_E-under5-Moderate-many","Atwell",1
+"4","NW_E-over5-Low-many","Atwell",1
+"5","SE_W-under5-Low-many","Atwell",7
+"6","SE_W-under5-Unburned-none","Atwell",6
+"7","SE_W-under5-Moderate-many","Atwell",2
+"8","SE_W-under5-High-many","Atwell",0
+"9","SE_W-over5-Low-many","Atwell",27
+"10","SE_W-over5-Unburned-none","Atwell",0
+"11","NW_E-under5-Low-one","Big Springs",0
+"12","NW_E-under5-Moderate-one","Big Springs",0
+"13","SE_W-under5-Low-one","Big Springs",0
+"14","NW_E-over5-Low-many","Big Stump",0
+"15","NW_E-over5-Unburned-none","Big Stump",3
+"16","SE_W-under5-Low-many","Big Stump",1
+"17","SE_W-over5-Low-many","Big Stump",1
+"18","SE_W-over5-Unburned-none","Big Stump",17
+"19","SE_W-under5-Low-one","Board Camp",0
+"20","SE_W-under5-Moderate-one","Board Camp",0
+"21","SE_W-under5-High-one","Board Camp",2
+"22","NW_E-over5-Unburned-none","Cahoon",0
+"23","SE_W-over5-Unburned-none","Cahoon",0
+"24","NW_E-under5-Low-one","Castle Creek",0
+"25","NW_E-under5-Moderate-one","Castle Creek",0
+"26","NW_E-under5-High-one","Castle Creek",0
+"27","NW_E-under5-Low-many","Castle Creek",1
+"28","NW_E-under5-Unburned-none","Castle Creek",0
+"29","NW_E-under5-Moderate-many","Castle Creek",1
+"30","NW_E-under5-High-many","Castle Creek",0
+"31","SE_W-under5-Low-many","Castle Creek",0
+"32","SE_W-under5-Moderate-many","Castle Creek",0
+"33","SE_W-under5-High-many","Castle Creek",0
+"34","NW_E-under5-Low-one","Cedar Flat",0
+"35","SE_W-under5-Low-one","Cedar Flat",1
+"36","SE_W-under5-Moderate-one","Cedar Flat",0
+"37","SE_W-under5-Unburned-none","Cedar Flat",0
+"38","SE_W-under5-Low-one","Coffeepot Canyon",0
+"39","SE_W-under5-Moderate-one","Coffeepot Canyon",0
+"40","SE_W-under5-Low-many","Coffeepot Canyon",0
+"41","NW_E-under5-Low-one","Dennison",0
+"42","SE_W-under5-Low-one","Dennison",0
+"43","NW_E-under5-Low-one","Devil's Canyon",0
+"44","NW_E-under5-Low-one","Dillonwood",0
+"45","NW_E-under5-Moderate-one","Dillonwood",0
+"46","NW_E-under5-High-one","Dillonwood",0
+"47","NW_E-under5-Unburned-none","Dillonwood",0
+"48","SE_W-under5-Unburned-none","Dillonwood",0
+"49","SE_W-under5-Low-one","Dillonwood",0
+"50","SE_W-under5-Moderate-one","Dillonwood",0
+"51","SE_W-under5-High-one","Dillonwood",0
+"52","SE_W-under5-Low-one","Douglass",0
+"53","NW_E-over5-Low-one","East Fork",3
+"54","NW_E-over5-Low-many","East Fork",4
+"55","NW_E-over5-Unburned-none","East Fork",5
+"56","SE_W-under5-Low-many","East Fork",0
+"57","SE_W-under5-Unburned-none","East Fork",0
+"58","SE_W-over5-Low-one","East Fork",4
+"59","SE_W-over5-Moderate-one","East Fork",1
+"60","SE_W-over5-Low-many","East Fork",3
+"61","SE_W-over5-Unburned-none","East Fork",4
+"62","NW_E-under5-Unburned-none","Eden Creek",2
+"63","NW_E-under5-Low-one","Eden Creek",1
+"64","NW_E-under5-Moderate-one","Eden Creek",0
+"65","NW_E-under5-Low-many","Eden Creek",2
+"66","NW_E-under5-Moderate-many","Eden Creek",0
+"67","SE_W-under5-Unburned-none","Eden Creek",0
+"68","SE_W-under5-Low-one","Eden Creek",0
+"69","SE_W-under5-Low-many","Eden Creek",0
+"70","SE_W-under5-Moderate-many","Eden Creek",0
+"71","NW_E-under5-Low-one","Garfield",0
+"72","NW_E-under5-Moderate-one","Garfield",0
+"73","NW_E-under5-Low-many","Garfield",1
+"74","NW_E-under5-Unburned-none","Garfield",2
+"75","NW_E-under5-Moderate-many","Garfield",0
+"76","SE_W-under5-Unburned-none","Garfield",0
+"77","SE_W-under5-Low-one","Garfield",0
+"78","SE_W-under5-Moderate-one","Garfield",0
+"79","SE_W-under5-High-one","Garfield",0
+"80","SE_W-under5-Low-many","Garfield",2
+"81","SE_W-under5-Moderate-many","Garfield",0
+"82","SE_W-under5-High-many","Garfield",0
+"83","SE_W-over5-Low-many","Garfield",0
+"84","SE_W-over5-Unburned-none","Garfield",0
+"85","NW_E-over5-Moderate-one","General Grant",2
+"86","NW_E-over5-Low-many","General Grant",6
+"87","NW_E-over5-Unburned-none","General Grant",4
+"88","NW_E-over5-Moderate-many","General Grant",2
+"89","SE_W-under5-Low-many","General Grant",3
+"90","SE_W-over5-Moderate-one","General Grant",4
+"91","SE_W-over5-High-one","General Grant",0
+"92","SE_W-over5-Low-many","General Grant",13
+"93","SE_W-over5-Unburned-none","General Grant",0
+"94","SE_W-over5-Moderate-many","General Grant",1
+"95","NW_E-under5-Low-one","Giant Forest",2
+"96","NW_E-under5-Moderate-one","Giant Forest",0
+"97","NW_E-under5-High-one","Giant Forest",0
+"98","NW_E-under5-Low-many","Giant Forest",1
+"99","NW_E-under5-Unburned-none","Giant Forest",2
+"100","NW_E-over5-Low-many","Giant Forest",5
+"101","NW_E-over5-Unburned-none","Giant Forest",1
+"102","SE_W-under5-Low-one","Giant Forest",2
+"103","SE_W-under5-Moderate-one","Giant Forest",0
+"104","SE_W-under5-High-one","Giant Forest",1
+"105","SE_W-under5-Low-many","Giant Forest",4
+"106","SE_W-under5-Unburned-none","Giant Forest",0
+"107","SE_W-under5-Moderate-many","Giant Forest",0
+"108","SE_W-over5-Low-many","Giant Forest",13
+"109","SE_W-over5-Unburned-none","Giant Forest",3
+"110","NW_E-under5-Low-one","Granite Creek",0
+"111","SE_W-under5-Low-one","Homers Nose",0
+"112","SE_W-under5-Moderate-one","Homers Nose",0
+"113","SE_W-under5-High-one","Homers Nose",2
+"114","NW_E-over5-Unburned-none","Horse Creek",1
+"115","SE_W-over5-Unburned-none","Horse Creek",0
+"116","SE_W-under5-Unburned-none","Little Redwood Meadow",0
+"117","SE_W-under5-Low-one","Little Redwood Meadow",0
+"118","SE_W-under5-Low-one","Lost",1
+"119","SE_W-under5-Unburned-none","Lost",9
+"120","SE_W-over5-Unburned-none","Lost",2
+"121","NW_E-under5-Low-one","Muir",1
+"122","NW_E-under5-Moderate-one","Muir",0
+"123","NW_E-under5-Low-many","Muir",0
+"124","NW_E-under5-Unburned-none","Muir",0
+"125","SE_W-under5-Low-one","Muir",0
+"126","SE_W-under5-Moderate-one","Muir",1
+"127","SE_W-under5-High-one","Muir",0
+"128","SE_W-under5-Low-many","Muir",1
+"129","SE_W-under5-Unburned-none","Muir",2
+"130","NW_E-under5-Moderate-one","New Oriole Lake",0
+"131","SE_W-under5-Low-one","New Oriole Lake",1
+"132","SE_W-under5-Moderate-one","New Oriole Lake",0
+"133","SE_W-under5-High-one","New Oriole Lake",0
+"134","NW_E-under5-Low-one","Oriole Lake",0
+"135","NW_E-under5-Moderate-one","Oriole Lake",0
+"136","NW_E-under5-High-one","Oriole Lake",0
+"137","NW_E-under5-Unburned-none","Oriole Lake",0
+"138","SE_W-under5-Low-one","Oriole Lake",3
+"139","SE_W-under5-Moderate-one","Oriole Lake",0
+"140","SE_W-under5-Unburned-none","Oriole Lake",0
+"141","NW_E-under5-Low-one","Pine Ridge",1
+"142","NW_E-under5-Moderate-one","Pine Ridge",0
+"143","NW_E-under5-Unburned-none","Pine Ridge",0
+"144","SE_W-under5-Low-one","Pine Ridge",0
+"145","SE_W-under5-Moderate-one","Pine Ridge",0
+"146","SE_W-under5-Unburned-none","Pine Ridge",0
+"147","NW_E-under5-Low-many","Redwood Creek",0
+"148","NW_E-under5-Unburned-none","Redwood Creek",0
+"149","NW_E-over5-Unburned-none","Redwood Creek",0
+"150","SE_W-under5-Low-many","Redwood Creek",0
+"151","SE_W-under5-Unburned-none","Redwood Creek",0
+"152","SE_W-under5-Moderate-many","Redwood Creek",0
+"153","SE_W-under5-High-many","Redwood Creek",1
+"154","SE_W-over5-Low-many","Redwood Creek",0
+"155","NW_E-under5-Low-one","Redwood Meadow",2
+"156","NW_E-under5-Unburned-none","Redwood Meadow",1
+"157","NW_E-over5-Low-one","Redwood Meadow",0
+"158","NW_E-over5-Moderate-one","Redwood Meadow",0
+"159","SE_W-under5-Low-one","Redwood Meadow",10
+"160","SE_W-under5-Moderate-one","Redwood Meadow",2
+"161","SE_W-under5-Low-many","Redwood Meadow",0
+"162","SE_W-under5-Unburned-none","Redwood Meadow",7
+"163","NW_E-under5-Low-one","Redwood Mountain",0
+"164","NW_E-under5-Moderate-one","Redwood Mountain",0
+"165","NW_E-under5-High-one","Redwood Mountain",3
+"166","NW_E-under5-Low-many","Redwood Mountain",4
+"167","NW_E-under5-Unburned-none","Redwood Mountain",1
+"168","NW_E-under5-Moderate-many","Redwood Mountain",2
+"169","NW_E-under5-High-many","Redwood Mountain",4
+"170","SE_W-under5-Low-one","Redwood Mountain",0
+"171","SE_W-under5-Moderate-one","Redwood Mountain",0
+"172","SE_W-under5-High-one","Redwood Mountain",17
+"173","SE_W-under5-Low-many","Redwood Mountain",2
+"174","SE_W-under5-Unburned-none","Redwood Mountain",2
+"175","SE_W-under5-Moderate-many","Redwood Mountain",3
+"176","SE_W-under5-High-many","Redwood Mountain",14
+"177","NW_E-under5-Low-many","Sequoia Creek",2
+"178","NW_E-over5-Low-many","Sequoia Creek",5
+"179","SE_W-under5-Low-many","Sequoia Creek",2
+"180","SE_W-over5-Low-many","Sequoia Creek",0
+"181","NW_E-under5-Low-one","Skagway",1
+"182","NW_E-under5-Unburned-none","Skagway",0
+"183","SE_W-under5-Low-one","Skagway",0
+"184","SE_W-under5-Moderate-one","Skagway",0
+"185","SE_W-under5-Low-many","Skagway",1
+"186","SE_W-under5-Unburned-none","Skagway",0
+"187","SE_W-under5-High-many","Skagway",0
+"188","NW_E-under5-Unburned-none","South Fork",0
+"189","NW_E-under5-Low-one","South Fork",2
+"190","NW_E-under5-Moderate-one","South Fork",1
+"191","NW_E-under5-High-one","South Fork",0
+"192","SE_W-under5-Low-one","South Fork",0
+"193","SE_W-under5-Moderate-one","South Fork",0
+"194","SE_W-under5-High-one","South Fork",0
+"195","SE_W-under5-Unburned-none","South Fork",0
+"196","NW_E-under5-Moderate-one","Squirrel Creek",0
+"197","SE_W-under5-Low-one","Squirrel Creek",0
+"198","SE_W-under5-Moderate-one","Squirrel Creek",0
+"199","NW_E-under5-Low-one","Surprise",0
+"200","NW_E-under5-Moderate-one","Surprise",0
+"201","SE_W-under5-Low-one","Surprise",0
+"202","SE_W-under5-Moderate-one","Surprise",0
+"203","SE_W-under5-High-one","Surprise",0
+"204","NW_E-under5-Low-many","Suwanee",3
+"205","NW_E-under5-Moderate-many","Suwanee",0
+"206","NW_E-under5-High-many","Suwanee",1
+"207","SE_W-under5-Low-many","Suwanee",0
+"208","SE_W-under5-Moderate-many","Suwanee",0
+"209","SE_W-under5-High-many","Suwanee",1
