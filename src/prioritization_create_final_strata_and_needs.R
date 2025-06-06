@@ -1,167 +1,355 @@
-############################################################################
-################# Grove Fuels Assessment - SEKI ############################
-
-#This code takes the full strata spatial set and refines it to exclude
-#slivers and very difficult to access groves
-
+# ---
+#   title: "Plot Prioritization"
+# author: "Shive Lab (B. Baker)"
+# date: "`r Sys.Date()`"
+# output: html_document
+# ---
 library(tidyverse)
 library(here)
 library(sf)
 library(terra)
 library(janitor)
-library(gdalUtilities)
-library(scales)
-
-options(scipen = 999)
 
 groves <- vect(here("data/spatial_data/SEKI_groves/SEKI_groves_list.shp")) %>%
   st_as_sf()
 
 existing_plots <-read_csv(here("data/spatial_data/all_plots_groves_env.csv"))
 
-# aspect <- vect(here("data/spatial_data/aspect_polys.shp")) %>%
-#   st_as_sf() %>%
-#   st_transform(crs(groves))
-# 
-# trt <- vect(here("data/spatial_data/trt/SEGI_Trtdata_05feb25.shp")) %>%
-#   project(crs(groves))
-# 
-# fire <- vect(here("data/spatial_data/cbi_all/cbi_all.shp")) %>%
-#   project(crs(groves))
-# 
-# no_fire <- read_sf(here("data/spatial_data/no_fire/no_fire.shp")) %>%
-#   st_transform(crs(groves))
+aspect <- vect(here("data/spatial_data/aspect_polys.shp")) %>%
+  st_as_sf() %>%
+  st_transform(crs(groves))
+
+trt <- vect(here("data/spatial_data/trt/SEGI_Trtdata_05feb25.shp")) %>%
+  project(crs(groves))
+
+fire <- vect(here("data/spatial_data/cbi_all/cbi_all.shp")) %>%
+  project(crs(groves))
+
+no_fire <- read_sf(here("data/spatial_data/no_fire/no_fire.shp")) %>%
+  st_transform(crs(groves))
 
 plots_sf <- st_read(here("data/spatial_data/all_plots_groves.shp"))
 
 access <- read.csv(here("data/grove_access.csv"))
-# access = access_prep %>%
-#   mutate(Ease.Of.Access.revised = case_when(
-#     grove %in% c("Cahoon","Horse Creek") ~ "Difficult",
-#     .default = Ease.of.Access))
 
-#this has to be repaired in arcpro first - ogr2ogr is supposed to do it but I cannot make it work
-groves_set1a = st_read(here("data/spatial_data/groves_set_full_28strata.shp"))
+#get all spatial files of same type
+fire <- fire %>%
+  st_as_sf()
 
-#################################################
-#################################################
-# Refining strata to exclude tiny strata 
-##and then i am excluding any that are represented by <5 acres TOTAL, leaving 25 strata
-groves_set1 <- groves_set1a %>%
-  mutate(area_ha = round(as.numeric(st_area(.))*0.0001,3)) %>%
-  filter(area_ha > 2.02343)
+trt <- trt %>%
+  st_as_sf()
+
+#pull fire related treatments to count as low sev fire
+rx_seki <- trt %>%
+  # st_as_sf() %>%
+  filter(treatment == "Fire-related treatment") %>%
+  # vect() %>%
+  st_intersection(groves) %>%
+  # st_as_sf() %>%
+  st_collection_extract(type = c("POLYGON"), warn = FALSE) %>%
+  mutate(burnsev = 2,
+         id = paste(grov_nm, year, rowid, sep = "_"))%>%
+  rename(fire_yr = year)%>%
+  select(id, fire_yr, burnsev)
+
+no_burn <- no_fire %>%
+  mutate(
+    burnsev = 0,
+    fire_yr = 0000,
+    id = "unburned"
+  )%>%
+  select(id, fire_yr, burnsev)
+
+
+# aspect_groves <- intersect(aspect_vect, groves_vect) %>%
+#   st_as_sf()%>%
+aspect_groves <- aspect %>%
+  st_intersection(groves) %>%
+  #ks: changed names for aspect to make briefer strata names later
+  mutate(aspect = case_when(
+    Id == 1 ~ "NW_E",
+    Id == 2 ~ "SE_W"
+  ))
+
+
+# burn <- intersect(fire, groves_vect) %>%
+#   st_as_sf()%>%
+burn <- fire %>%
+  st_intersection(groves) %>%
+  mutate(fire_yr = as.numeric(fire_yr)) %>%
+  select(id, fire_yr, burnsev) %>%
+  bind_rows(rx_seki) %>%
+  bind_rows(no_burn)
+
+
+grove_area <- sum(groves$grovr_h)
+
+##get plot totals
+plots_rx <- st_intersection(rx_seki, plots_sf)
+
+plots_rx_count <- plots_rx %>%
+  st_drop_geometry() %>%
+  summarise(.by = plot_id, trt_ct = n())
+
+plots_rx_yr <- plots_rx %>%
+  group_by(plot_id) %>%
+  slice_max(fire_yr) %>%
+  rename(trt_yr = fire_yr) %>%
+  left_join(plots_rx_count) %>%
+  mutate(sev = "Low") %>%
+  select(plot_id, trt_yr, trt_ct, sev) %>%
+  st_drop_geometry()
+
+
+totals_summary <- existing_plots %>%
+  summarise(.by = c(grove_name), total = n())
+
+plot_total <-  sum(totals_summary$total)
+
+plots_all <- existing_plots %>%
+  left_join(plots_rx_yr) %>%
+  replace_na(list(trt_yr = 0000, trt_ct = 0, sev = "Unburned")) %>%
+  mutate(
+    fire_yr = as.numeric(fire_yr),
+    burnsev = case_when(fire_yr<trt_yr ~ sev, T ~ burnsev),
+    fire_yr = case_when(fire_yr<trt_yr ~ trt_yr, T ~ fire_yr),
+    fire_count = fire_count+trt_ct
+  )
+
+plots_classified <- plots_all %>%
+  mutate(
+    burnsev = case_when(burnsev == "Undetected change" ~ "Unburned",
+                        T ~ burnsev),
+    #ks: changed names for aspect and time_since to make briefer strata names later
+    aspect = case_when(
+      aspect <= 90 | aspect > 315~ "NW_E",
+      T ~ "SE_W"),
+    time_since = case_when(
+      fire_yr == 0000 ~ "over5",
+      fire_yr  >= 2020 ~ "under5",
+      T ~ "over5"
+    ),
+    count = case_when(fire_count >= 2 ~ "many",
+                      T ~ "one"),
+    count_v2 = case_when(burnsev == "Unburned" ~ "none", T ~ count))
+#
+# pc = plots_classified %>%
+#   filter(aspect == "SE_W" & time_since == "under5" & burnsev == "Low" &
+#            count_v2 == "many")
+# nrow(pc)
+
+plot_sets <- plots_classified %>%
+  mutate(count_v2 = case_when(burnsev == "Unburned" ~ "none", T ~ count)) %>%
+  summarize(.by = c(aspect, burnsev, time_since, count_v2), count_plot = n()) %>%
+  #ks: changed names for count_v2 to make briefer strata names later
+  mutate(strata_nm = paste(aspect,"-",time_since,"-",burnsev,"-",count_v2, sep = "")) %>%
+  group_by(aspect,burnsev,time_since,count_v2,strata_nm) %>%
+  summarise(existing_plots = sum(count_plot))
 # %>%
-#   mutate(prop_area_grove = round(area_ha/grovr_h, 2))
-groves_set1
+#   mutate(prop_plot = round(count_plot/plot_total, 2))
 
-#get a table of strata proportions (excluding groves)
-groves_set_seki_prop = groves_set1 %>%
-  # st_drop_geometry() %>%
+
+#get burn counts and sev
+burn_count <- burn %>%
+  summarize(.by = c(id, fire_yr, burnsev), geometry = st_combine(geometry)) %>%
+  st_make_valid() %>%
+  arrange(-fire_yr)
+
+burn_id <- burn_count %>%
+  st_drop_geometry() %>%
+  rowid_to_column("rid")
+
+fire_count <- st_intersection(burn_count) %>%
+  st_collection_extract(type = c("POLYGON"), warn = FALSE)
+
+burn_classed <- fire_count %>%
+  mutate(time_since = case_when(
+    fire_yr == 0000 ~ "over5",
+    fire_yr  >= 2020 ~ "under5",
+    T ~ "over5"
+  ),
+  burnsev = case_when(
+    burnsev == 0 ~ "Unburned",
+    burnsev == 1 ~ "Unburned",
+    burnsev == 2 ~ "Low",
+    burnsev == 3 ~ "Moderate",
+    burnsev == 4 ~ "High",
+    T ~ "Unburned"
+  ),
+  #ks: changed names for count to make briefer strata names later
+  count = case_when(n.overlaps >= 2 ~ "many",
+                    T ~ "one")) %>%
+  summarize(.by = c(time_since, burnsev, count), geometry = st_combine(geometry)) %>%
+  st_make_valid()
+
+##there are 28 possible combos in our actual grove data when all unburned are lumped,
+groves_set1a <- burn_classed %>%
+  st_intersection(aspect_groves) %>%
+  st_collection_extract(type = c("POLYGON"), warn = FALSE) %>%
+  mutate(count_v2 = case_when(
+    burnsev == "Unburned" ~ "none", T ~ count)) %>%
+  summarize(.by = c(aspect, time_since, burnsev, count_v2,grov_nm,grovr_h), geometry = st_combine(geometry)) %>%
+  st_make_valid() %>%
+  mutate(area_ha = round(as.numeric(st_area(.))*0.0001,3)) %>%
+  mutate(strata_nm = paste(aspect,"-", time_since, "-",burnsev, "-",count_v2, sep = ""))
+nrow(groves_set1a)
+# # write_sf(groves_set1a, here("data/spatial_data/groves_set_full_28strata.shp"))
+
+###########################################################################################
+###########################################################################################
+##get stats on strata percentages across groves and total hectares
+
+#get a table of strata proportions (excluding groves) with total ha per strata
+groves_set_seki_prop = groves_set1a %>%
   group_by(strata_nm) %>%
   summarise(total.strata.area.ha = sum(area_ha),
             strata.prop.area.seki = round(total.strata.area.ha/grove_area, 4))
-# groves_set_seki_prop$area_ha_check = round(as.numeric(st_area(groves_set_seki_prop)*0.0001),2)
 groves_set_seki_prop
 
-#join the strata proportions to the shapefile with all strata >5 acres
-groves_set = groves_set1 %>%
-  left_join(groves_set_seki_prop) %>%
-  mutate(strata_grv_area_ha = area_ha, 
-         perc.of.grv.in.strata = strata_grv_area_ha/grovr_h,
-         perc.of.strata.in.grv = strata_grv_area_ha/total.strata.area.ha)
-# View(groves_set)
-
-write.csv(groves_set, here("outputs/strata_by_grove.csv"))
+groves_set_seki_prop_lookup = st_drop_geometry(groves_set_seki_prop)
 
 
-#######################################################################
-#######################################################################
-## EXISTING PLOTS
-#get number of existing plots per strata - not by grove
-existing.plots.area.per.strata1 = st_intersection(plots_sf,groves_set) %>%
-  group_by(aspect,time_since,burnsev,
-           count_v2,strata_nm) %>%
-  summarise(existing_plots_by_strata = length(plot_id)) %>%
+#make list of strata that are less than 2 ha
+small = groves_set_seki_prop %>%
+  filter(total.strata.area.ha<2) %>%
+  mutate(poss_exclude = "park total < 2 ha") %>%
   st_drop_geometry()
+small
+nrow(small)
 
-existing.plots.area.per.strata = groves_set %>%
-  left_join(existing.plots.area.per.strata1) %>%
-  mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>%
+#get groves with their proportion of strata 
+strata_prop_of_grvs = groves_set1a %>%
+  group_by(strata_nm,grov_nm) %>%
+  summarise(prop_within_grvs = area_ha/grovr_h)
+strata_prop_of_grvs
+
+strata_prop_of_grvs_lookup = st_drop_geometry(strata_prop_of_grvs)
+
+#make sure that the "small" ones to cut aren't a big part of any small grove
+strata_prop_of_grvs_small = strata_prop_of_grvs %>%
+  left_join(small) %>%
+  filter(poss_exclude == "park total < 2 ha")
+strata_prop_of_grvs_small
+
+#ok to exclude totals less that 2 ha
+
+#
+# ###################################################################################################################
+# ###################################################################################################################
+# ########## Spatial strata are done, now querying down to actual target areas and plots needed #####################
+# ###################################################################################################################
+# 
+
+##read in the polys of strata so you don't have to re-run the above each time
+# groves_set1a = st_read(here("data/spatial_data/groves_set_full_28strata.shp"))
+
+##and then i am excluding any that are represented by <2 ha TOTAL, leaving 25 strata
+groves_set1 <- groves_set1a %>%
+  left_join(small) %>%
+  filter(is.na(poss_exclude)) %>%
+  select(strata_nm, grov_nm, grov_nm,area_ha)
+groves_set1 
+
+##this seems to be where shit hits the fan?
+groves_classified_poly_explode = st_cast(groves_set1, "MULTIPOLYGON") %>% st_cast("POLYGON")
+groves_classified_poly_explode$area_ha = round(as.numeric(st_area(groves_classified_poly_explode)*0.0001))
+
+#see which strata might be removed entirely
+sliver_removal = groves_classified_poly_explode %>%
+  #filter out individual silvers <0.5 ha
+  # mutate(over2 = case_when(area_ha >= 0.5 ~ "keep", 
+  #                          area_ha < 0.5 ~ "remove", .default = "oopsy")) %>%
+  # filter(over2 == "keep") %>%
+  filter(area_ha > 0.5) %>%
+  select(strata_nm, grov_nm, area_ha)
+sliver_removal
+
+avail_poly = sliver_removal %>%
+  # st_cast("MULTIPOLYGON") %>%
   group_by(strata_nm) %>%
-  summarise(existing_plots_by_strata = mean(existing_plots_by_strata))
-head(existing.plots.area.per.strata)
+  summarise(geometry = st_union(geometry)) %>%
+  left_join(groves_set_seki_prop_lookup)
+avail_poly$area_ha = round(as.numeric(st_area(avail_poly)*0.0001),2)
+avail_poly
+# View(sliver_removal)
+grove_area-sum(avail_poly$area_ha)
 
-existing.plots.area.per.strata_lookup = existing.plots.area.per.strata %>%
-  st_drop_geometry() %>%
-  select(strata_nm, existing_plots_by_strata)
-existing.plots.area.per.strata_lookup
+write_sf(avail_poly, here("outputs/avail_polys_no2haTotal_no05haSlivers_06June2025.shp"))
+#excluded by sliver size:
+#for 2 ha, exclude 1893
+#for 1 ha exclude 1394
+#for 0.5 ha exclude 652 ha
+
+#if use the 0.5 threshold, this shows no removal of full strata
+diffs = setdiff(groves_set1$strata_nm,sliver_removal$strata_nm)
+diffs
+unique(groves_set1$strata_nm)
+unique(groves_classified_poly$strata_nm)
+
+# check_area = groves_set1 %>%
+#   left_join(strata_prop_of_grvs_lookup) %>%
+# #these are ones that would be excluded if i used the 2 ha sliver threashold
+#     filter(strata_nm %in% c("NW_E-over5-Moderate-one","SE_W-over5-High-one","NW_E-over5-Moderate-many"))
+# View(check_area)
+# ##this shows that with the 2 ha removal:
+# #NW_E-over5-Moderate-one is present mostly in Grant and Redwood meadow, both cases is on the edge and fragmented
+
+#get area of strata per grove
+options(scipen = 999)
+
+#get number of plots per strata per grove
+existing.plots.area.per.strata.grove = st_intersection(plots_sf,avail_poly) %>%
+  group_by(strata_nm,grov_nm) %>%
+  summarise(plots_per_strata_by_grv = length(plot_id)) %>%
+  st_drop_geometry()
+existing.plots.area.per.strata.grove
+
+#get number of plots per strata ONLY
+existing.plots.area.per.strata = st_intersection(plots_sf,avail_poly) %>%
+  group_by(strata_nm) %>%
+  summarise(existing_plots_per_strata = length(plot_id)) %>%
+  st_drop_geometry()
+existing.plots.area.per.strata
+
+# existing.plots.area.per.strata = avail_poly %>%
+#   left_join(existing.plots.area.per.strata1) %>%
+#   mutate_if(is.numeric, ~replace(., is.na(.), 0))
+# View(existing.plots.area.per.strata)
+
+# write_sf(existing.plots.area.per.strata, here("data/spatial_data/outputs/groveset_strata_all_w_existing_plots.shp"))
 
 write.csv(existing.plots.area.per.strata_lookup, here("outputs/existing_plots_and_area_per_strata.csv"))
-
-#get existing plots by grove, plot density and access difficulty
-existing.plots.grove = st_intersection(plots_sf,groves_set) %>%
-  st_drop_geometry() %>%
-  group_by(grov_nm) %>%
-  summarise(existing_plots_grove = length(plot_id),
-            grove_area = mean(grovr_h), grove_plot_density = round(existing_plots_grove/grove_area,2)) %>%
-  mutate(grove = grov_nm) %>%
-  left_join(access) %>%
-  st_drop_geometry() %>%
-  select(grove, existing_plots_grove, grove_area, grove_plot_density, grove_area)
-existing.plots.grove
-
-write.csv(existing.plots.grove, here("outputs/existing_plots_density_per_grove.csv"))
 
 
 ########################################################################
 ########################################################################
 ##excluding slivers and getting final plots needs
+#can read in from here:
 
-###Below convert multipolygons to polygons so i can exclude slivers,
-# this results 22 strata (3 more strata getting excluded), cuz tho they totalled >5 acres, 
-#they were comprised of slivers that individually were smaller
 
-##explode to also remove individual slivers
-groves_classified_poly_explode = st_cast(groves_set, "MULTIPOLYGON") %>% st_cast("POLYGON")
-groves_classified_poly_explode$area_ha = as.numeric(st_area(groves_classified_poly_explode)*0.0001)
 
-#remove slivers and regroup to strata_nm and grove
-groves_classified_poly = groves_classified_poly_explode %>%
-  #filter out individual silvers <5 acres
-  filter(area_ha > 2.02343) %>%
-  #regroup by strata
-  group_by(strata_nm) %>%
-  summarise(strata_grove_area_ha = round(sum(area_ha),1),
-            strata.prop.area.seki = mean(strata.prop.area.seki)) %>%
-  left_join(existing.plots.area.per.strata_lookup)
-head(groves_classified_poly)
-View(groves_classified_poly)
-
-# write_sf(groves_classified_poly, here("data/spatial_data/outputs/groveset_over5acres.shp"))
-
-###########################################################################
-###########################################################################
-#get needed number of plots based on area of strata
-### this is broken!
-
-#total plots needed is the existing number of plots that meet our needs (elsewhere calculated at 261)
-#plus our estimate of new plots this year (200)
-final.strata.that.need.new.plots <- groves_classified_poly %>% 
-  group_by(strata_nm) %>%
-  summarise(
-    # strata_area_ha = round(area_ha, 2),
+library(scales)
+##get needed number of plots based on area of strata
+#total plots needed is the existing number of plots that meet our needs 261 - plus 200
+final.strata.that.need.new.plots <- avail_poly %>% 
+  left_join(existing.plots.area.per.strata) %>%
+  mutate(existing_plots_per_strata = case_when(is.na(existing_plots_per_strata) ~ 0, .default = existing_plots_per_strata),
+    area_ha = round(area_ha, 2),
+    # diff.prop = prop_area - prop_plot,
+    # new.prop = rescale(prop_area_seki, from = c(0,1)),
+    # total.plots.needed = ceiling(501*new.prop),
     total.plots.needed = ceiling(461*strata.prop.area.seki),
-    useful.plots = case_when(existing_plots_by_strata>total.plots.needed ~ total.plots.needed,
-                             T ~ existing_plots_by_strata),
+    useful.plots = case_when(existing_plots_per_strata>total.plots.needed ~ total.plots.needed,
+                             T ~ existing_plots_per_strata),
     NEW.plots.needed = total.plots.needed - useful.plots) %>%
   filter(NEW.plots.needed > 0)
 nrow(final.strata.that.need.new.plots)
+unique(final.strata.that.need.new.plots$strata_nm)
 head(final.strata.that.need.new.plots)
-# View(final.strata.that.need.new.plots)
+View(final.strata.that.need.new.plots)
 sum(final.strata.that.need.new.plots$NEW.plots.needed)+sum(final.strata.that.need.new.plots$existing_plots)
 
-#Since some strata needed none, leaves 14 strata that need sampling
-# write_sf(final.strata.that.need.new.plots, here("data/spatial_data/outputs/final.strata.that.need.new.plots.shp"))
+# write_sf(final.strata.that.need.new.plots, here("data/spatial_data/outputs/final.strataONLY.that.need.new.plots_06June2025.shp"))
 
 ##Create new shapefile that removes "Very Difficult" access groves, and dissolve into one big shapefile
 access.min = access %>% 
@@ -175,10 +363,7 @@ groves_easier = groves %>%
   filter(Ease.of.Access != "Very Difficult") %>%
   # st_buffer(0.5) %>% # make a buffer of half a meter around all parts (to avoid slivers)
   # st_union() %>% # unite to a geometry object
-  # st_sf() 
-  # %>% # make the geometry a data frame object
-  # mutate(keep = T) 
-  # %>%
+  # st_sf() %>%
   st_collection_extract("POLYGON") %>%
   st_cast("MULTIPOLYGON")
 groves_easier
@@ -188,15 +373,14 @@ groves_easier
 final.strata.that.need.new.plots_easier.1 = final.strata.that.need.new.plots %>%
   st_intersection(groves_easier) %>%
   st_collection_extract("POLYGON") %>%
-  mutate(area_ha_strata_grv = round(as.numeric(st_area(.)*0.0001),2)) %>%
-  select(grov_nm, strata_nm, area_ha_strata_grv)
+  mutate(area_ha_strata_grv = round(as.numeric(st_area(.)*0.0001),3))
 final.strata.that.need.new.plots_easier.1
-# View(final.strata.that.need.new.plots_easier.1)
+sum(final.strata.that.need.new.plots_easier.1$area_ha_strata_grv)
+View(final.strata.that.need.new.plots_easier.1)
 
-write_sf(final.strata.that.need.new.plots_easier.1, here("data/spatial_data/outputs/final_strata_for_plot_layout.shp"))
+# write_sf(final.strata.that.need.new.plots_easier.1, here("data/spatial_data/outputs/final_strata_need_plots_6June2025.shp"))
 
 
-# # 
 # # final.strata.that.need.new.plots_easier.1.grp = final.strata.that.need.new.plots_easier.1 %>%
 # #   group_by(strata_nm) %>%
 # #   mutate(area_ha_strata = sum(area_ha_strata))
@@ -208,18 +392,18 @@ write_sf(final.strata.that.need.new.plots_easier.1, here("data/spatial_data/outp
 # #   st_drop_geometry() %>%
 # #   select(strata_nm, existing_plots, total.plots.needed, useful.plots, NEW.plots.needed)
 # # 
-# final.strata.that.need.new.plots_easier_table = final.strata.that.need.new.plots_easier.1 %>%
-#   st_drop_geometry()
-# # View(final.strata.that.need.new.plots_easier_table)
-# 
-# # #join the table to the reduced strata shapefile
-# final.strata.that.need.new.plots_easier = final.strata.that.need.new.plots_easier.1  %>%
-#   # st_collection_extract(type = c("POLYGON")) %>%
-#   left_join(final.strata.that.need.new.plots_easier_table)
-# # %>%
-# #   group_by(strata_nm) %>%
-# #   summarise(across(existing_plots:NEW.plots.needed,mean))
-# final.strata.that.need.new.plots_easier$area_ha = st_area(final.strata.that.need.new.plots_easier)*0.0001
+# # final.strata.that.need.new.plots_easier_table = final.strata.that.need.new.plots_easier.1 %>%
+# #   st_drop_geometry()
+# # # View(final.strata.that.need.new.plots_easier_table)
+# # 
+# # # #join the table to the reduced strata shapefile
+# # final.strata.that.need.new.plots_easier = final.strata.that.need.new.plots_easier.1  %>%
+# #   # st_collection_extract(type = c("POLYGON")) %>%
+# #   left_join(final.strata.that.need.new.plots_easier_table)
+# # # %>%
+# # #   group_by(strata_nm) %>%
+# # #   summarise(across(existing_plots:NEW.plots.needed,mean))
+# # final.strata.that.need.new.plots_easier$area_ha = st_area(final.strata.that.need.new.plots_easier)*0.0001
 # 
 # strat_only_needs = final.strata.that.need.new.plots_easier %>%
 #   group_by(strata_nm) %>%
@@ -283,3 +467,8 @@ write_sf(final.strata.that.need.new.plots_easier.1, here("data/spatial_data/outp
 # 
 # # View(groves_summary_rank)  
 # write.csv(groves_summary_rank,here("outputs/groves_summary_rank.csv"))
+# 
+# 
+# 
+# 
+# 

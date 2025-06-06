@@ -11,7 +11,7 @@ groves <- st_read(here("data/spatial_data/SEKI_groves/SEKI_groves_list.shp"))
 access <- read.csv(here("data/grove_access.csv"))
 plots_sf <- st_read(here("data/spatial_data/all_plots_groves.shp")) %>%
   st_transform(crs(groves))
-final.strata.shape = st_read(here("data/spatial_data/outputs/final_strata_for_plot_layout.shp")) %>%
+final.strata.shape = st_read(here("data/spatial_data/outputs/final_strata_need_plots_6June2025.shp")) %>%
   st_transform(crs(groves))
 
 #import strata set needs
@@ -127,7 +127,7 @@ groves_easier = groves %>%
 #   st_sf() 
 
 xgrid200.a <- groves_easier %>%
-  st_make_grid(cellsize = c(100,100), what = "centers") %>% # grid of points
+  st_make_grid(cellsize = c(200,200), what = "centers") %>% # grid of points
   st_as_sf() %>%
   st_intersection(groves_easier) %>%
   select(grov_nm)
@@ -138,6 +138,23 @@ xgrid200 = xgrid200.a %>%
   select(grov_nm,strt_nm)
 # View(xgrid200)
 nrow(xgrid200)
+
+#check number available by strata and grove
+p.need = plot.grv.strt.needs %>%
+  # filter(to_est>0) %>%
+  mutate(strt_grv = paste(grov_nm, strata_nm,sep="-")) %>%
+  select(strt_grv, to_est)
+
+num.avail = xgrid200 %>%
+  mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
+  group_by(strt_grv) %>%
+  summarise(poss.plots = length(strt_grv)) %>%
+  left_join(p.need) %>%
+  filter(to_est>0) %>%
+  mutate(unavail.plots = to_est-poss.plots) %>%
+  filter(unavail.plots>0)
+num.avail
+sum(num.avail$unavail.plots)
 
 write_sf(xgrid200,(here("data/spatial_data/outputs/grid200m_points_easier_groves_4May2025_wstrata.shp")),
          driver="ESRI Shapefile", overwrite_layer=TRUE)
@@ -178,6 +195,23 @@ good.pts <- st_difference(xgrid200, st_union(plots_sf_buff100)) %>%
   left_join(plot.grv.strt.needs.redu) %>%
   filter(!is.na(to_est))
 nrow(good.pts)
+
+###check again for plots not avail
+#check number available by strata and grove
+p.need = plot.grv.strt.needs %>%
+  # filter(to_est>0) %>%
+  mutate(strt_grv = paste(grov_nm, strata_nm,sep="-")) %>%
+  select(strt_grv, to_est)
+
+num.avail = good.pts %>%
+  group_by(strt_grv) %>%
+  summarise(poss.plots = length(strt_grv)) %>%
+  left_join(p.need) %>%
+  filter(to_est>0) %>%
+  mutate(unavail.plots = to_est-poss.plots) %>%
+  filter(unavail.plots>0)
+num.avail
+sum(num.avail$unavail.plots)
 
 # write_sf(good.pts,(here("data/spatial_data/outputs/good_points.shp")),
 #          driver="ESRI Shapefile", overwrite_layer=TRUE)

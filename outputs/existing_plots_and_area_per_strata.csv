@@ -1,26 +1,253 @@
-"","strata_nm","existing_plots_by_strata"
-"1","NW_E-over5-Low-many",21
-"2","NW_E-over5-Low-one",3
-"3","NW_E-over5-Moderate-many",2
-"4","NW_E-over5-Moderate-one",2
-"5","NW_E-over5-Unburned-none",14
-"6","NW_E-under5-High-many",5
-"7","NW_E-under5-High-one",3
-"8","NW_E-under5-Low-many",17
-"9","NW_E-under5-Low-one",10
-"10","NW_E-under5-Moderate-many",4
-"11","NW_E-under5-Moderate-one",1
-"12","NW_E-under5-Unburned-none",8
-"13","SE_W-over5-High-one",0
-"14","SE_W-over5-Low-many",57
-"15","SE_W-over5-Low-one",4
-"16","SE_W-over5-Moderate-many",1
-"17","SE_W-over5-Moderate-one",5
-"18","SE_W-over5-Unburned-none",26
-"19","SE_W-under5-High-many",16
-"20","SE_W-under5-High-one",22
-"21","SE_W-under5-Low-many",23
-"22","SE_W-under5-Low-one",18
-"23","SE_W-under5-Moderate-many",5
-"24","SE_W-under5-Moderate-one",3
-"25","SE_W-under5-Unburned-none",26
+"","strata_nm","grov_nm","area_ha","plots_per_strata_by_grv"
+"1","NW_E-over5-Low-many","Atwell",10.72,1
+"2","NW_E-over5-Low-many","Big Stump",3.39,0
+"3","NW_E-over5-Low-many","East Fork",104.83,4
+"4","NW_E-over5-Low-many","Garfield",1.26,0
+"5","NW_E-over5-Low-many","General Grant",7.97,3
+"6","NW_E-over5-Low-many","Giant Forest",101.16,5
+"7","NW_E-over5-Low-many","Sequoia Creek",7.77,5
+"8","NW_E-over5-Low-one","East Fork",32.73,3
+"9","NW_E-over5-Low-one","Redwood Meadow",27.23,0
+"10","NW_E-over5-Moderate-many","General Grant",0.82,2
+"11","NW_E-over5-Moderate-one","General Grant",2.37,1
+"12","NW_E-over5-Moderate-one","Redwood Meadow",3.4,0
+"13","NW_E-over5-Unburned-none","Atwell",0.52,0
+"14","NW_E-over5-Unburned-none","Big Stump",7.55,2
+"15","NW_E-over5-Unburned-none","Cahoon",8.81,0
+"16","NW_E-over5-Unburned-none","East Fork",132.11,5
+"17","NW_E-over5-Unburned-none","Garfield",0.72,0
+"18","NW_E-over5-Unburned-none","General Grant",5.27,4
+"19","NW_E-over5-Unburned-none","Giant Forest",18.76,1
+"20","NW_E-over5-Unburned-none","Horse Creek",50.61,1
+"21","NW_E-over5-Unburned-none","Redwood Creek",2.94,0
+"22","NW_E-under5-High-many","Atwell",0.67,0
+"23","NW_E-under5-High-many","Castle Creek",9.8,0
+"24","NW_E-under5-High-many","New Oriole Lake",1.84,0
+"25","NW_E-under5-High-many","Redwood Mountain",49.8,3
+"26","NW_E-under5-High-many","Suwanee",5.37,1
+"27","NW_E-under5-High-one","Board Camp",0.8,0
+"28","NW_E-under5-High-one","Castle Creek",14.29,0
+"29","NW_E-under5-High-one","Dillonwood",8,0
+"30","NW_E-under5-High-one","Giant Forest",4.66,0
+"31","NW_E-under5-High-one","New Oriole Lake",1.26,0
+"32","NW_E-under5-High-one","Oriole Lake",1.59,0
+"33","NW_E-under5-High-one","Pine Ridge",0.57,0
+"34","NW_E-under5-High-one","Redwood Mountain",23.4,3
+"35","NW_E-under5-High-one","South Fork",1.09,0
+"36","NW_E-under5-High-one","Squirrel Creek",0.53,0
+"37","NW_E-under5-High-one","Suwanee",0.73,0
+"38","NW_E-under5-Low-many","Atwell",9.51,2
+"39","NW_E-under5-Low-many","Castle Creek",61.59,1
+"40","NW_E-under5-Low-many","Eden Creek",76.22,2
+"41","NW_E-under5-Low-many","Garfield",68.26,1
+"42","NW_E-under5-Low-many","Giant Forest",48.27,1
+"43","NW_E-under5-Low-many","Muir",3.38,0
+"44","NW_E-under5-Low-many","Redwood Creek",6.88,0
+"45","NW_E-under5-Low-many","Redwood Mountain",81.32,4
+"46","NW_E-under5-Low-many","Sequoia Creek",3.78,2
+"47","NW_E-under5-Low-many","Skagway",1.34,0
+"48","NW_E-under5-Low-many","Suwanee",4.49,3
+"49","NW_E-under5-Low-one","Big Springs",2.94,0
+"50","NW_E-under5-Low-one","Castle Creek",10.86,0
+"51","NW_E-under5-Low-one","Cedar Flat",4.2,0
+"52","NW_E-under5-Low-one","Clough Cave",0.65,0
+"53","NW_E-under5-Low-one","Dennison",5.98,0
+"54","NW_E-under5-Low-one","Devil's Canyon",13.59,0
+"55","NW_E-under5-Low-one","Dillonwood",15.74,0
+"56","NW_E-under5-Low-one","Douglass",0.56,0
+"57","NW_E-under5-Low-one","Eden Creek",28.26,1
+"58","NW_E-under5-Low-one","Forgotten",1.42,0
+"59","NW_E-under5-Low-one","Garfield",132.35,0
+"60","NW_E-under5-Low-one","Giant Forest",55.07,2
+"61","NW_E-under5-Low-one","Granite Creek",2.24,0
+"62","NW_E-under5-Low-one","Muir",26.59,0
+"63","NW_E-under5-Low-one","New Oriole Lake",0.91,0
+"64","NW_E-under5-Low-one","Oriole Lake",16.41,0
+"65","NW_E-under5-Low-one","Pine Ridge",26.46,1
+"66","NW_E-under5-Low-one","Redwood Meadow",7.41,2
+"67","NW_E-under5-Low-one","Redwood Mountain",2.79,0
+"68","NW_E-under5-Low-one","Skagway",9.77,1
+"69","NW_E-under5-Low-one","South Fork",117.8,2
+"70","NW_E-under5-Low-one","Squirrel Creek",1.34,0
+"71","NW_E-under5-Low-one","Surprise",2.27,0
+"72","NW_E-under5-Moderate-many","Atwell",3.26,0
+"73","NW_E-under5-Moderate-many","Castle Creek",43.34,1
+"74","NW_E-under5-Moderate-many","Eden Creek",8.88,0
+"75","NW_E-under5-Moderate-many","Garfield",1.15,0
+"76","NW_E-under5-Moderate-many","Redwood Mountain",44.59,2
+"77","NW_E-under5-Moderate-many","Suwanee",8.2,0
+"78","NW_E-under5-Moderate-one","Big Springs",1.85,0
+"79","NW_E-under5-Moderate-one","Castle Creek",6.98,0
+"80","NW_E-under5-Moderate-one","Dillonwood",3.5,0
+"81","NW_E-under5-Moderate-one","Eden Creek",3.48,0
+"82","NW_E-under5-Moderate-one","Forgotten",1.83,0
+"83","NW_E-under5-Moderate-one","Garfield",8.73,0
+"84","NW_E-under5-Moderate-one","Giant Forest",6.85,0
+"85","NW_E-under5-Moderate-one","Muir",3.54,0
+"86","NW_E-under5-Moderate-one","New Oriole Lake",2.04,0
+"87","NW_E-under5-Moderate-one","Oriole Lake",1.37,0
+"88","NW_E-under5-Moderate-one","Pine Ridge",3.96,0
+"89","NW_E-under5-Moderate-one","Redwood Mountain",0.96,0
+"90","NW_E-under5-Moderate-one","South Fork",11.96,0
+"91","NW_E-under5-Moderate-one","Squirrel Creek",2.11,0
+"92","NW_E-under5-Moderate-one","Surprise",0.52,0
+"93","NW_E-under5-Unburned-none","Atwell",6.12,0
+"94","NW_E-under5-Unburned-none","Castle Creek",2.49,0
+"95","NW_E-under5-Unburned-none","Cedar Flat",0.95,0
+"96","NW_E-under5-Unburned-none","Clough Cave",0.7,0
+"97","NW_E-under5-Unburned-none","Devil's Canyon",0.94,0
+"98","NW_E-under5-Unburned-none","Dillonwood",10.3,0
+"99","NW_E-under5-Unburned-none","Eden Creek",88.64,2
+"100","NW_E-under5-Unburned-none","Garfield",111.87,2
+"101","NW_E-under5-Unburned-none","Giant Forest",44.4,2
+"102","NW_E-under5-Unburned-none","Granite Creek",1.14,0
+"103","NW_E-under5-Unburned-none","Muir",8.04,0
+"104","NW_E-under5-Unburned-none","Oriole Lake",3.67,0
+"105","NW_E-under5-Unburned-none","Pine Ridge",1.12,0
+"106","NW_E-under5-Unburned-none","Redwood Creek",4.32,0
+"107","NW_E-under5-Unburned-none","Redwood Meadow",5.09,1
+"108","NW_E-under5-Unburned-none","Redwood Mountain",58.04,0
+"109","NW_E-under5-Unburned-none","Skagway",3.84,0
+"110","NW_E-under5-Unburned-none","South Fork",4.19,0
+"111","SE_W-over5-High-one","General Grant",1.57,0
+"112","SE_W-over5-Low-many","Atwell",348.11,27
+"113","SE_W-over5-Low-many","Big Stump",11.8,1
+"114","SE_W-over5-Low-many","East Fork",62.81,3
+"115","SE_W-over5-Low-many","Garfield",2.14,0
+"116","SE_W-over5-Low-many","General Grant",40.39,12
+"117","SE_W-over5-Low-many","Giant Forest",267.87,13
+"118","SE_W-over5-Low-many","Granite Creek",0.99,0
+"119","SE_W-over5-Low-many","Redwood Creek",2.23,0
+"120","SE_W-over5-Low-many","Sequoia Creek",5.02,0
+"121","SE_W-over5-Low-one","East Fork",45.51,3
+"122","SE_W-over5-Low-one","Redwood Meadow",0.61,0
+"123","SE_W-over5-Moderate-many","General Grant",8.61,1
+"124","SE_W-over5-Moderate-many","Giant Forest",1.48,0
+"125","SE_W-over5-Moderate-one","East Fork",6.14,1
+"126","SE_W-over5-Moderate-one","General Grant",3.89,3
+"127","SE_W-over5-Unburned-none","Atwell",18.95,0
+"128","SE_W-over5-Unburned-none","Big Stump",63.44,17
+"129","SE_W-over5-Unburned-none","Cahoon",15,0
+"130","SE_W-over5-Unburned-none","Clough Cave",0.9,0
+"131","SE_W-over5-Unburned-none","East Fork",62.01,3
+"132","SE_W-over5-Unburned-none","Garfield",1.6,0
+"133","SE_W-over5-Unburned-none","General Grant",7.82,0
+"134","SE_W-over5-Unburned-none","Giant Forest",170.58,3
+"135","SE_W-over5-Unburned-none","Horse Creek",9.11,0
+"136","SE_W-over5-Unburned-none","Lost",4.44,2
+"137","SE_W-over5-Unburned-none","Redwood Creek",0.6,0
+"138","SE_W-under5-High-many","Atwell",11.61,0
+"139","SE_W-under5-High-many","Castle Creek",10.33,0
+"140","SE_W-under5-High-many","East Fork",0.53,0
+"141","SE_W-under5-High-many","Garfield",3.8,0
+"142","SE_W-under5-High-many","Redwood Creek",6.56,1
+"143","SE_W-under5-High-many","Redwood Mountain",139.87,14
+"144","SE_W-under5-High-many","Skagway",3.09,0
+"145","SE_W-under5-High-many","Suwanee",16.56,1
+"146","SE_W-under5-High-one","Board Camp",35.54,2
+"147","SE_W-under5-High-one","Cedar Flat",1.32,0
+"148","SE_W-under5-High-one","Dillonwood",49.03,0
+"149","SE_W-under5-High-one","Garfield",33.69,0
+"150","SE_W-under5-High-one","Giant Forest",10.06,1
+"151","SE_W-under5-High-one","Homers Nose",55.32,2
+"152","SE_W-under5-High-one","Muir",10.04,0
+"153","SE_W-under5-High-one","New Oriole Lake",4.81,0
+"154","SE_W-under5-High-one","Pine Ridge",0.65,0
+"155","SE_W-under5-High-one","Redwood Mountain",145.84,17
+"156","SE_W-under5-High-one","South Fork",4.57,0
+"157","SE_W-under5-High-one","Squirrel Creek",1.7,0
+"158","SE_W-under5-High-one","Surprise",1.77,0
+"159","SE_W-under5-High-one","Suwanee",0.82,0
+"160","SE_W-under5-Low-many","Atwell",100.8,6
+"161","SE_W-under5-Low-many","Big Springs",0.64,0
+"162","SE_W-under5-Low-many","Big Stump",2.46,1
+"163","SE_W-under5-Low-many","Castle Creek",12.18,0
+"164","SE_W-under5-Low-many","Coffeepot Canyon",3.33,0
+"165","SE_W-under5-Low-many","East Fork",4.01,0
+"166","SE_W-under5-Low-many","Eden Creek",33.19,0
+"167","SE_W-under5-Low-many","Garfield",48.09,2
+"168","SE_W-under5-Low-many","General Grant",4.26,3
+"169","SE_W-under5-Low-many","Giant Forest",259.41,4
+"170","SE_W-under5-Low-many","Lost",0.5,0
+"171","SE_W-under5-Low-many","Muir",11.33,1
+"172","SE_W-under5-Low-many","Redwood Creek",22.19,0
+"173","SE_W-under5-Low-many","Redwood Meadow",4.22,0
+"174","SE_W-under5-Low-many","Redwood Mountain",251.82,2
+"175","SE_W-under5-Low-many","Sequoia Creek",2.63,2
+"176","SE_W-under5-Low-many","Skagway",6.02,1
+"177","SE_W-under5-Low-many","Suwanee",2.57,0
+"178","SE_W-under5-Low-one","Big Springs",1.89,0
+"179","SE_W-under5-Low-one","Board Camp",3.54,0
+"180","SE_W-under5-Low-one","Cedar Flat",12.35,1
+"181","SE_W-under5-Low-one","Coffeepot Canyon",3.49,0
+"182","SE_W-under5-Low-one","Dennison",5.05,0
+"183","SE_W-under5-Low-one","Devil's Canyon",1.18,0
+"184","SE_W-under5-Low-one","Dillonwood",229.97,0
+"185","SE_W-under5-Low-one","Douglass",2.27,0
+"186","SE_W-under5-Low-one","Eden Creek",10.21,0
+"187","SE_W-under5-Low-one","Forgotten",0.67,0
+"188","SE_W-under5-Low-one","Garfield",109.39,0
+"189","SE_W-under5-Low-one","Giant Forest",53.68,2
+"190","SE_W-under5-Low-one","Homers Nose",26.09,0
+"191","SE_W-under5-Low-one","Little Redwood Meadow",5.78,0
+"192","SE_W-under5-Low-one","Lost",11.71,1
+"193","SE_W-under5-Low-one","Muir",41.92,0
+"194","SE_W-under5-Low-one","New Oriole Lake",3.11,1
+"195","SE_W-under5-Low-one","Oriole Lake",75.58,3
+"196","SE_W-under5-Low-one","Pine Ridge",16.23,0
+"197","SE_W-under5-Low-one","Redwood Meadow",72.57,9
+"198","SE_W-under5-Low-one","Redwood Mountain",27.05,0
+"199","SE_W-under5-Low-one","Skagway",16.32,0
+"200","SE_W-under5-Low-one","South Fork",27.35,0
+"201","SE_W-under5-Low-one","Squirrel Creek",8.45,0
+"202","SE_W-under5-Low-one","Surprise",10.79,0
+"203","SE_W-under5-Moderate-many","Atwell",17.89,1
+"204","SE_W-under5-Moderate-many","Castle Creek",15.8,0
+"205","SE_W-under5-Moderate-many","East Fork",0.89,0
+"206","SE_W-under5-Moderate-many","Eden Creek",8.1,0
+"207","SE_W-under5-Moderate-many","Garfield",2.49,0
+"208","SE_W-under5-Moderate-many","Giant Forest",3.67,0
+"209","SE_W-under5-Moderate-many","Redwood Creek",2.26,0
+"210","SE_W-under5-Moderate-many","Redwood Mountain",110,3
+"211","SE_W-under5-Moderate-many","Suwanee",12.67,0
+"212","SE_W-under5-Moderate-one","Big Springs",0.52,0
+"213","SE_W-under5-Moderate-one","Board Camp",3.86,0
+"214","SE_W-under5-Moderate-one","Cedar Flat",1.3,0
+"215","SE_W-under5-Moderate-one","Coffeepot Canyon",2.34,0
+"216","SE_W-under5-Moderate-one","Dillonwood",50.27,0
+"217","SE_W-under5-Moderate-one","Forgotten",0.69,0
+"218","SE_W-under5-Moderate-one","Garfield",25.23,0
+"219","SE_W-under5-Moderate-one","Giant Forest",7.86,0
+"220","SE_W-under5-Moderate-one","Homers Nose",19.17,0
+"221","SE_W-under5-Moderate-one","Muir",12.55,1
+"222","SE_W-under5-Moderate-one","New Oriole Lake",4.48,0
+"223","SE_W-under5-Moderate-one","Oriole Lake",3.79,0
+"224","SE_W-under5-Moderate-one","Pine Ridge",2.03,0
+"225","SE_W-under5-Moderate-one","Redwood Meadow",13.72,1
+"226","SE_W-under5-Moderate-one","Redwood Mountain",5.47,0
+"227","SE_W-under5-Moderate-one","Skagway",1.87,0
+"228","SE_W-under5-Moderate-one","South Fork",9.81,0
+"229","SE_W-under5-Moderate-one","Squirrel Creek",3.62,0
+"230","SE_W-under5-Moderate-one","Surprise",17.43,0
+"231","SE_W-under5-Moderate-one","Suwanee",1.04,0
+"232","SE_W-under5-Unburned-none","Atwell",66.1,6
+"233","SE_W-under5-Unburned-none","Big Springs",0.98,0
+"234","SE_W-under5-Unburned-none","Castle Creek",1.34,0
+"235","SE_W-under5-Unburned-none","Cedar Flat",4.82,0
+"236","SE_W-under5-Unburned-none","Dillonwood",186.5,0
+"237","SE_W-under5-Unburned-none","East Fork",2.94,0
+"238","SE_W-under5-Unburned-none","Eden Creek",18.89,0
+"239","SE_W-under5-Unburned-none","Garfield",118.01,0
+"240","SE_W-under5-Unburned-none","Giant Forest",70.84,0
+"241","SE_W-under5-Unburned-none","Homers Nose",1.42,0
+"242","SE_W-under5-Unburned-none","Little Redwood Meadow",15.73,0
+"243","SE_W-under5-Unburned-none","Lost",11.26,9
+"244","SE_W-under5-Unburned-none","Muir",20.93,2
+"245","SE_W-under5-Unburned-none","Oriole Lake",14.4,0
+"246","SE_W-under5-Unburned-none","Pine Ridge",2.55,0
+"247","SE_W-under5-Unburned-none","Redwood Creek",4.66,0
+"248","SE_W-under5-Unburned-none","Redwood Meadow",30.57,6
+"249","SE_W-under5-Unburned-none","Redwood Mountain",222.23,2
+"250","SE_W-under5-Unburned-none","Skagway",8.11,0
+"251","SE_W-under5-Unburned-none","South Fork",5.39,0
+"252","SE_W-under5-Unburned-none","Squirrel Creek",1.42,0
