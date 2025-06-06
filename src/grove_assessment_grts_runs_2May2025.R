@@ -220,6 +220,44 @@ good.pts_table = st_drop_geometry(good.pts)
 
 # View(good.pts)
 nrow(good.pts)
+#remove from here
+plots.avail <- good.pts_table %>% 
+  summarise(.by = strt_grv, avail = n()) 
+
+final.strata.list <- final.strata.shape %>% 
+  st_drop_geometry() %>% 
+  mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>% 
+  select(strt_grv) %>% 
+  summarise(.by = strt_grv)
+
+nrow(plot.grv.strt.needs.redu)
+nrow(plots.wanted.have)
+
+xgridStrata <- xgrid200 %>% 
+  st_drop_geometry() %>% 
+  mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
+  summarize(.by = strt_grv, possible=n())
+
+#show where buffer or grid eliminates all plots
+plots.byStrata <- final.strata.list %>% 
+  left_join(xgridStrata) %>% 
+  left_join(plots.avail) %>% 
+  left_join(plot.grv.strt.needs.redu) %>% 
+  mutate_all(~replace(., is.na(.), 0)) %>% 
+  mutate(unavail_buf = avail-to_est,
+         unavail_grid = possible - to_est,
+         plots_elim = case_when(possible>avail&unavail_buf< 0 ~T, T ~F), #currently catches unavail grid too
+         smaller_grid = case_when(unavail_grid>= 0 ~F, T ~T)
+  )
+
+  
+
+#check where assigned plots are in silvers
+setdiff(plot.grv.strt.needs.redu$strt_grv, final.strata.list$strt_grv)
+sum(xgridStrata$to_est)
+sum(plot.grv.strt.needs.redu$to_est)
+  
+#tohere
 
 strt_grv_list = unique(good.pts$strt_grv)
 datalist = list()

@@ -148,7 +148,8 @@ groves_seki_buffered <- groves %>%
   select(-unit_name)
 
 
-#st_write(groves_seki_buffered, here("data/spatial_data/SEKI_groves_list.shp"))
+#st_write(groves_seki_buffered, here("data/spatial_data/SEKI_g
+roves_list.shp"))
 #Note i do think there are a few groves that overlap when buffered
 #some area might be duplicated
 #minimal but likely worth fixing long term
