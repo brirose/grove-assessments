@@ -21,7 +21,7 @@ head(strata.needs1)
 strata.needs = strata.needs1 %>%
   select(strata_nm,NEW.plots.needed)
 
-plot.grv.strt.needs = read.csv(here("outputs/final_num_plots_needed_by_strata_grv_from_Bri.csv"))
+plot.grv.strt.needs = read.csv(here("outputs/final_num_plots_needed_by_strata_grv_from_Bri_06Jun.csv"))
 
 ##this is the grts run which we are not using
 #setwd to load in the individual strata
@@ -252,7 +252,7 @@ plots.byStrata <- final.strata.list %>%
 
   
 
-#check where assigned plots are in silvers
+#check where assigned plots are in silvers or removed
 setdiff(plot.grv.strt.needs.redu$strt_grv, final.strata.list$strt_grv)
 sum(xgridStrata$to_est)
 sum(plot.grv.strt.needs.redu$to_est)

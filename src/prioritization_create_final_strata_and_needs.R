@@ -84,13 +84,15 @@ burn <- fire %>%
 
 grove_area <- sum(groves$grovr_h)
 
-##get plot totals
-plots_rx <- st_intersection(rx_seki, plots_sf)
+##get plot treatment totals
+plots_rx <- st_intersection(rx_seki, plots_sf) #trt per plot
 
+#summarize trt in each plot
 plots_rx_count <- plots_rx %>%
   st_drop_geometry() %>%
   summarise(.by = plot_id, trt_ct = n())
 
+#years of treatments
 plots_rx_yr <- plots_rx %>%
   group_by(plot_id) %>%
   slice_max(fire_yr) %>%
@@ -100,12 +102,14 @@ plots_rx_yr <- plots_rx %>%
   select(plot_id, trt_yr, trt_ct, sev) %>%
   st_drop_geometry()
 
-
+#totals by grove
 totals_summary <- existing_plots %>%
   summarise(.by = c(grove_name), total = n())
 
+#count total
 plot_total <-  sum(totals_summary$total)
 
+#rejoin info
 plots_all <- existing_plots %>%
   left_join(plots_rx_yr) %>%
   replace_na(list(trt_yr = 0000, trt_ct = 0, sev = "Unburned")) %>%
@@ -116,6 +120,7 @@ plots_all <- existing_plots %>%
     fire_count = fire_count+trt_ct
   )
 
+#give strata classes
 plots_classified <- plots_all %>%
   mutate(
     burnsev = case_when(burnsev == "Undetected change" ~ "Unburned",
