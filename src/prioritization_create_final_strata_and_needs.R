@@ -331,30 +331,28 @@ write.csv(existing.plots.area.per.strata_lookup, here("outputs/existing_plots_an
 ##excluding slivers and getting final plots needs
 #can read in from here:
 
-
-
 library(scales)
-##get needed number of plots based on area of strata
-#total plots needed is the existing number of plots that meet our needs 261 - plus 200
+##get number of useful plots
 final.strata.that.need.new.plots <- avail_poly %>% 
   left_join(existing.plots.area.per.strata) %>%
   mutate(existing_plots_per_strata = case_when(is.na(existing_plots_per_strata) ~ 0, .default = existing_plots_per_strata),
-    area_ha = round(area_ha, 2),
-    # diff.prop = prop_area - prop_plot,
-    # new.prop = rescale(prop_area_seki, from = c(0,1)),
-    # total.plots.needed = ceiling(501*new.prop),
-    total.plots.needed = ceiling(461*strata.prop.area.seki),
-    useful.plots = case_when(existing_plots_per_strata>total.plots.needed ~ total.plots.needed,
-                             T ~ existing_plots_per_strata),
-    NEW.plots.needed = total.plots.needed - useful.plots) %>%
+         area_ha = round(area_ha, 2),
+         # diff.prop = prop_area - prop_plot,
+         # new.prop = rescale(prop_area_seki, from = c(0,1)),
+         # total.plots.needed = ceiling(501*new.prop),
+         total.plots.needed = ceiling(445*strata.prop.area.seki),
+         useful.plots = case_when(existing_plots_per_strata>total.plots.needed ~ total.plots.needed,
+                                  T ~ existing_plots_per_strata),
+         NEW.plots.needed = total.plots.needed - useful.plots) %>%
   filter(NEW.plots.needed > 0)
-nrow(final.strata.that.need.new.plots)
-unique(final.strata.that.need.new.plots$strata_nm)
-head(final.strata.that.need.new.plots)
-View(final.strata.that.need.new.plots)
-sum(final.strata.that.need.new.plots$NEW.plots.needed)+sum(final.strata.that.need.new.plots$existing_plots)
+sum(final.strata.that.need.new.plots$NEW.plots.needed)
 
-# write_sf(final.strata.that.need.new.plots, here("data/spatial_data/outputs/final.strataONLY.that.need.new.plots_06June2025.shp"))
+sum(final.strata.that.need.new.plots$NEW.plots.needed)+sum(final.strata.that.need.new.plots$useful.plots)
+
+final.strata.that.need.new.plots_lookup = st_drop_geometry(final.strata.that.need.new.plots)
+write.csv(final.strata.that.need.new.plots_lookup, here("outputs/final.strat.that.need.new.plots_06June2025.csv"))
+
+# write_sf(final.strata.that.need.new.plots, here("data/spatial_data/outputs/final.strata.that.need.new.plots_06June2025.shp"))
 
 ##Create new shapefile that removes "Very Difficult" access groves, and dissolve into one big shapefile
 access.min = access %>% 
@@ -380,7 +378,7 @@ final.strata.that.need.new.plots_easier.1 = final.strata.that.need.new.plots %>%
   st_collection_extract("POLYGON") %>%
   mutate(area_ha_strata_grv = round(as.numeric(st_area(.)*0.0001),3))
 final.strata.that.need.new.plots_easier.1
-sum(final.strata.that.need.new.plots_easier.1$area_ha_strata_grv)
+sum(final.strata.that.need.new.plots_easier.1$NEW.plots.needed)
 View(final.strata.that.need.new.plots_easier.1)
 
 # write_sf(final.strata.that.need.new.plots_easier.1, here("data/spatial_data/outputs/final_strata_need_plots_6June2025.shp"))
