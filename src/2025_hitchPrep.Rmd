@@ -1,0 +1,77 @@
+---
+title: "2025 Hitch Preparation"
+author: "Shive Lab (B. Baker)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(sf)
+```
+
+## All Plots
+
+```{r}
+#import plots that kristen made
+all_plots_sf <- st_read(here("data/spatial_data/selected_grid_plots_2025sampling_10June2025/selected_grid_plots_2025sampling_10June2025.shp"))
+
+#example file for right crs
+ex_field <- st_read(here("data/spatial_data/example_field/backcountry_plotsSpring2025.shp"))
+
+use_crs <- st_crs(ex_field)
+
+#set up naming convention
+
+all_plots_named <- all_plots_sf %>% 
+  rowid_to_column() %>% 
+  mutate(strt_grv = str_replace_all(strt_grv, " ", "")) %>%   
+  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>% 
+  mutate(rowid = sprintf("%03d", rowid),
+    grove_full = str_remove(grove_full, "-"),
+         #definitely a better wya to do this programiatically 
+         grove = case_when(
+          grove_full == "Atwell" ~ "ATWE",
+          grove_full == "BigSprings" ~ "BISP",
+           grove_full == "CedarFlat" ~ "CEFL",
+           grove_full == "Dillonwood" ~ "DILL",
+           grove_full == "EastFork" ~ "EAFO",
+           grove_full == "EdenCreek" ~ "EDCR",
+           grove_full == "Garfield" ~ "GARF",
+           grove_full == "GiantForest" ~ "GIFO",
+           grove_full == "LittleRedwoodMeadow" ~ "LIRE",
+           grove_full == "Muir" ~ "MUIR",
+           grove_full == "OrioleLake" ~ "ORLA",
+           grove_full == "PineRidge" ~ "PIRI",
+           grove_full == "RedwoodCreek" ~ "RECR",
+           grove_full == "RedwoodMeadow" ~ "REME",
+           grove_full == "RedwoodMountain" ~ "REMO",
+           grove_full == "Skagway" ~ "SKAG",
+           grove_full == "SouthFork" ~ "SOFO",
+           grove_full == "Suwanee" ~ "SUWA",
+           grove_full == "GeneralGrant" ~ "GRGR",
+           grove_full == "GraniteCreek" ~ "GRCR",
+           grove_full == "NewOrioleLake" ~ "NEOR",
+           grove_full == "SquirrelCreek" ~ "SQCR"
+         ),
+         plot_id = paste(grove, "FUELS", rowid, sep = "-")) %>% 
+  select(plot_id, strata, geometry) %>% 
+  st_as_sf() %>% 
+  st_transform(use_crs) %>% 
+  mutate(xproj = sf::st_coordinates(.)[,1],
+         yproj = sf::st_coordinates(.)[,2])
+
+st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_2025.shp"))
+
+# make kml
+all_plots_kml <- all_plots_named %>% 
+  rename(ident = plot_id) %>% 
+  select(ident, xproj, yproj, geometry)
+
+st_write(all_plots_kml, here("data/spatial_data/GAFieldPlots_2025.kml"))
+
+```
+
