@@ -57,14 +57,26 @@ all_plots_named <- all_plots_sf %>%
            grove_full == "NewOrioleLake" ~ "NEOR",
            grove_full == "SquirrelCreek" ~ "SQCR"
          ),
-         plot_id = paste(grove, "FUELS", rowid, sep = "-")) %>% 
-  select(plot_id, strata, geometry) %>% 
+         plot_id = paste(grove, "FUELS", paste(rowid, "P", sep = ""), sep = "-"),
+    group = case_when(grove %in% c("ATWE", "EAFO", "RECR") ~ "Atwell",
+                      grove %in% c("MUIR", "SKAG", "PIRI") ~ "Muir",
+                      grove %in% c("DILL", "GARF") ~ "Dennison",
+                      grove %in% c("SOFO", "CEFL") ~ "South Fork",
+                      grove %in% c("ORLA", "SQCR", "NEOR") ~ "Oreole",
+                      grove %in% c("REME", "LIRE", "GRCR") ~ "Redwood Meadow",
+                      grove %in% c("GIFO", "SUWA") ~ "Giant Forest",
+                      grove %in% c("REMO", "BISP") ~ "Redwood Mountain",
+                      grove %in% c("GRGR", "BIST") ~ "Grant Grove",
+                      grove %in% c("EDCR") ~ "Eden",
+                      T ~ "Help"
+                      )) %>% 
+  select(plot_id, strata, group, geometry) %>% 
   st_as_sf() %>% 
   st_transform(use_crs) %>% 
   mutate(xproj = sf::st_coordinates(.)[,1],
          yproj = sf::st_coordinates(.)[,2])
 
-st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_2025.shp"))
+st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_2025.shp"), append = F)
 
 # make kml
 all_plots_kml <- all_plots_named %>% 
@@ -72,6 +84,12 @@ all_plots_kml <- all_plots_named %>%
   select(ident, xproj, yproj, geometry)
 
 st_write(all_plots_kml, here("data/spatial_data/GAFieldPlots_2025.kml"))
+
+all_plots_st <- all_plots_sf %>% st_drop_geometry()
+
+
+
+write_csv(all_plots_named, here("data/GAPlots.csv") )
 
 ```
 
