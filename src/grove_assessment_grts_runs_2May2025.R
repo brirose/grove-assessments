@@ -16,6 +16,40 @@ final.strata.shape = st_read(here("data/spatial_data/outputs/final_strata_need_p
   mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
   filter(ar_h_s_>0)
 
+# slope = rast(here("data/spatial_data/So_Sierra_10mDEM_slopePercent.tif"))
+# 
+# #classify slope
+# reclass_matrix <- tibble(
+#     from = c(0, 50),
+#     to = c(60, 1295),
+#     becomes = c(0, 50)
+#   )
+# 
+# ##first make classified rasters
+# slp = slope %>%
+#   classify(reclass_matrix,
+#            right = T) # include "from" value in category
+# # writeRaster(slp, here(paste("data/spatial_data/So_Sierra_10mDEM_slopePercent_50class.tif")), overwrite = T)
+# 
+# slp.cls.p <- slp %>%
+#   as.polygons() %>%
+#   st_as_sf() %>%
+#   mutate(slp.perc = So_Sierra_10mDEM_slopePercent,
+#          slp.perc.cls = case_when(slp.perc == 0 ~ "Under 50% slope",
+#                                   slp.perc == 50 ~ "Over 50% slope",
+#                                   .default = "oopsy")
+#   ) %>%
+#   st_transform(crs(groves))
+# 
+# slp.cls.p2 = st_intersection(slp.cls.p,groves)
+# plot(slp.cls.p2)
+# 
+# write_sf(slp.cls.p2, here(paste("data/spatial_data/slope_perc_polys_clp.shp")))
+# slp = slp.cls.p2
+slp = read_sf(here(paste("data/spatial_data/slope_perc_polys_clp.shp")))
+slp = slp %>%
+  filter(slp.perc == 0)
+
 # #import strata set needs
 # strata.needs1 = read.csv(here("outputs/.csv"))
 # head(strata.needs1)
@@ -141,6 +175,12 @@ xgrid200 = xgrid200.a %>%
   mutate(strt_grv = paste(grov_nm,strt_nm,sep="-"))
 # View(xgrid200)
 head(xgrid200)
+nrow(xgrid200)
+
+xgrid200.s = xgrid200 %>%
+  st_intersection(slp)
+head(xgrid200.s)
+nrow(xgrid200.s)
 
 #check number available by strata and grove
 p.need = plot.grv.strt.needs %>%
@@ -200,7 +240,6 @@ good.pts <-
   left_join(plot.grv.strt.needs.redu) %>%
   filter(!is.na(to_est))
 nrow(good.pts)
-sum(good.pts$to_est)
 
 # write_sf(good.pts,(here("data/spatial_data/outputs/good_points_09June2025.shp")),
 #          driver="ESRI Shapefile", overwrite_layer=TRUE)
@@ -260,7 +299,7 @@ for(i in 1:length(strt_grv_list)) {
 selected.plots = do.call(rbind, datalist)
 nrow(selected.plots)
 
-# write_sf(selected.plots, here("data/spatial_data/outputs/selected_plots_176_"))
+write_sf(selected.plots, here("data/spatial_data/outputs/selected_plots_176_3July2025_slp50.shp"))
 
 #################################################################
 #################################################################
@@ -279,7 +318,7 @@ sum(sp$new.plts.selected)
 unique(plot.grv.strt.needs.redu$strt_grv)
 setdiff(plot.grv.strt.needs.redu$strt_grv,selected.plots$strt_grv)
 # View(selected.plots)
-setdiff(selected.plots$strt_grv, final.strata.list$strt_grv)
+# setdiff(selected.plots$strt_grv, final.strata.list$strt_grv)
 
 #bind back needed plots from Bri's list to those not in grid
 missed.plts = strata.not.in.good.pts %>%
@@ -298,7 +337,8 @@ xgrid50 <- groves_easier %>%
   select(grov_nm) %>%
   st_intersection(final.strata.shape) %>%
   select(grov_nm,strt_nm) %>%
-  mutate(strt_grv = paste(grov_nm,strt_nm,sep="-"))
+  mutate(strt_grv = paste(grov_nm,strt_nm,sep="-")) %>%
+  st_intersection(slp)
 # View(xgrid200)
 head(xgrid50)
 
@@ -364,11 +404,11 @@ all2025.plots = selected.plots %>%
 all2025.plots
 nrow(all2025.plots)
 
-write_sf(all2025.plots, here("outputs/selected_grid_plots_2025sampling_10June2025.shp"), overwrite = T)
+write_sf(all2025.plots, here("outputs/selected_grid_plots_2025sampling_3July2025_slope50.shp"), overwrite = T)
 
 all2025.plots_table = st_drop_geometry(all2025.plots)
 
-write.csv(all2025.plots_table,(here("outputs/selected_grid_plots_2025sampling_10June2025.csv")))
+write.csv(all2025.plots_table,(here("outputs/selected_grid_plots_2025sampling_3July2025_slope50.csv")))
 
 
 
