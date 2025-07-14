@@ -16,12 +16,13 @@ final.strata.shape = st_read(here("data/spatial_data/outputs/final_strata_need_p
   mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
   filter(ar_h_s_>0)
 
-# slope = rast(here("data/spatial_data/So_Sierra_10mDEM_slopePercent.tif"))
+slope = rast(here("data/spatial_data/So_Sierra_10mDEM_slopePercent.tif")) %>%
+  project(crs(groves))
 # 
 # #classify slope
 # reclass_matrix <- tibble(
 #     from = c(0, 50),
-#     to = c(60, 1295),
+#     to = c(50, 1295),
 #     becomes = c(0, 50)
 #   )
 # 
@@ -42,13 +43,13 @@ final.strata.shape = st_read(here("data/spatial_data/outputs/final_strata_need_p
 #   st_transform(crs(groves))
 # 
 # slp.cls.p2 = st_intersection(slp.cls.p,groves)
-# plot(slp.cls.p2)
+# # plot(slp.cls.p2)
 # 
 # write_sf(slp.cls.p2, here(paste("data/spatial_data/slope_perc_polys_clp.shp")))
 # slp = slp.cls.p2
 slp = read_sf(here(paste("data/spatial_data/slope_perc_polys_clp.shp")))
-slp = slp %>%
-  filter(slp.perc == 0)
+slp.0 = slp %>%
+  filter(slp_prc == 0)
 
 # #import strata set needs
 # strata.needs1 = read.csv(here("outputs/.csv"))
@@ -62,91 +63,6 @@ plot.grv.strt.needs = read.csv(here("outputs/final_num_plots_needed_by_strata_gr
     mutate(to_est = replace_na(to_est, 0)) %>%
     select(strata_nm,grov_nm, to_est)
 sum(plot.grv.strt.needs$to_est)
-
-##this is the grts run which we are not using
-#setwd to load in the individual strata
-# setwd(here("data/spatial_data/ind_strata"))
-# 
-# #read in all files
-# shapes.dir <- (here("data/spatial_data/ind_strata"))
-# shapes.list <- list.files(shapes.dir, pattern="\\.shp$", full.names=FALSE)
-# 
-# for(i in 1:length(shapes.list)) {
-#  
-#   shape.is = paste(as.character(shapes.list[i]))
-#   plots.needed = strata.needs %>%
-#        filter(strata_nm == gsub('.{4}$', '', as.character(shape.is)))
-#   strat.shp = st_read(shapes.list[i]) 
-#   
-#     {
-#        set.seed(66625) # another draw
-#   
-#        draw_grts <- grts(strat.shp,
-#                   n_base = plots.needed$NEW.plots.needed, # number of 'base' sites 
-#                   n_over = (plots.needed$NEW.plots.needed)*3,          # nuber of 'oversample' sites
-#                   mindis = 100, # minimum distance between sites. Look at package details to see how it calculates distance unit
-#                   maxtry = 100 # sometimes, grts can't fit the draw on it's first attempt. 
-#             )
-#   
-#   #make separate object for base and oversample draws
-#   draw_grts_base <- draw_grts$sites_base
-#   draw_grts_over <- draw_grts$sites_over
-#   
-#   #add numeric field for site
-#     #Note: this was in David's original code, in the individual (ie not looped) grove runs,
-#     #not sure why we need it. if we do, can extract from siteID column
-# 
-#     # draw_grts_base$site_num <- as.numeric(paste("1:",plots.needed$NEW.plots.needed,sep = ''))
-#     # draw_grts_over$site_num <- paste(plots.needed$NEW.plots.needed+plots.needed$NEW.plots.needed,":",
-#     #                                  (plots.needed$NEW.plots.needed*10)+1, sep = '')
-#   draw_grts_base_and_over <- rbind(draw_grts_base, draw_grts_over)
-# 
-#   #write grts draw shapefile
-#   write_sf(draw_grts_base, here(paste("data/spatial_data/outputs/grts/grts_",gsub('.{4}$', '', as.character(shape.is)),"_BASE.shp",sep = '')))
-#   write_sf(draw_grts_over, here(paste("data/spatial_data/outputs/grts/grts_",gsub('.{4}$', '', as.character(shape.is)),"_OVER.shp",sep = '')))
-#   
-#   
-#   #write .csv of grts draw details, eg. lat/long, site number
-#   # setwd("C:/Users/dsoderberg/OneDrive - DOI/Desktop/Shive_SEGIpretreatment_grts/csv")
-#   write.csv(draw_grts_base_and_over, here(paste("data/spatial_data/outputs/grts/grts_base_and_over_",gsub('.{4}$', '', as.character(shape.is)),".csv",sep="")))
-#   
-#     }
-# }
-# 
-# 
-# ##merge all bo and all over to one shapefile each
-# bo.dir <- (here("data/spatial_data/outputs/grts"))
-# bo.list <- list.files(bo.dir, pattern="\\.shp$", full.names=TRUE)
-# bo.shape_list <- lapply(bo.list, st_read)
-# bo <- mapedit:::combine_list_of_sf(bo.shape_list)
-# 
-# #reduce access file
-# access.min = access %>% select(grove,Ease.of.Access)
-# 
-# ##add grove location information
-# grts.groves = bo %>%
-#   st_intersection(groves) %>%
-#   mutate(grove = grove_name) %>%
-#   left_join(access.min)
-# 
-# # write_sf(grts.groves,(here("data/spatial_data/outputs")),"grts_points_easier_groves_4May2025.shp",
-# #          driver="ESRI Shapefile", overwrite_layer=TRUE)
-# 
-# grts.groves.table = grts.groves %>%
-#   st_drop_geometry() %>%
-#   select(-c(replsite,stratum,wgt,ip,caty,grove,unit_name)) %>% 
-#   # left_join(strata.needs) %>%
-#   group_by(strata_nm,grove_name,siteuse) %>%
-#   summarise(num.grts.plots = length(strata_nm)) %>%
-#   st_drop_geometry() %>%
-#   mutate(grov_nm = grove_name, study_design = "grts") %>%
-#   # left_join(plots_sf_summary) %>%
-#   select(-grov_nm)
-# View(grts.groves.table)
-# # #write out csv
-# # write.csv(grts.groves,(here("outputs/grts_points_easier_groves_table_summary.csv")))
-# 
-# grts.groves = read.csv(here("outputs/grts_points_easier_groves_table_summary.csv"))
 
 
 ###########################################################
@@ -178,7 +94,7 @@ head(xgrid200)
 nrow(xgrid200)
 
 xgrid200.s = xgrid200 %>%
-  st_intersection(slp)
+  st_intersection(slp.0)
 head(xgrid200.s)
 nrow(xgrid200.s)
 
@@ -241,6 +157,11 @@ good.pts <-
   filter(!is.na(to_est))
 nrow(good.pts)
 
+good.pts.slp = good.pts %>%
+  st_intersection(slp.0) %>%
+  select(-S_S_10D, -slp_prc,-slp_pr_,-grov_nm,-grovr_h)
+nrow(good.pts.slp)
+
 # write_sf(good.pts,(here("data/spatial_data/outputs/good_points_09June2025.shp")),
 #          driver="ESRI Shapefile", overwrite_layer=TRUE)
 
@@ -268,16 +189,14 @@ sum(num.avail$unavail.plots)
 # # View(good.pts)
 # nrow(good.pts)
 
-  
-#tohere
 
 # #in the needs list form Bri but not in the 200 grid with buffer exclusion - 17
-strata.not.in.good.pts = as.data.frame(setdiff(plot.grv.strt.needs.redu$strt_grv,good.pts$strt_grv))
-strata.not.in.good.pts = strata.not.in.good.pts %>% mutate(strt_grv = setdiff(plot.grv.strt.needs.redu$strt_grv, good.pts$strt_grv)) %>%
+strata.not.in.good.pts = as.data.frame(setdiff(plot.grv.strt.needs.redu$strt_grv,good.pts.slp$strt_grv))
+strata.not.in.good.pts = strata.not.in.good.pts %>% mutate(strt_grv = setdiff(plot.grv.strt.needs.redu$strt_grv, good.pts.slp$strt_grv)) %>%
   select(strt_grv)
 
 #create list to select plots
-strt_grv_list = unique(good.pts$strt_grv)
+strt_grv_list = unique(good.pts.slp$strt_grv)
 datalist = list()
 
 #set up for loop to get needed plot number for each strata from 200m grid
@@ -287,7 +206,7 @@ for(i in 1:length(strt_grv_list)) {
     filter(strt_grv == as.character(paste(strt_grv_list[i])))
   plts.est = plt.need$to_est
   #pull the subset (may be fewer than called for if tehre weren't enough in the subset)
-  each.strt.grv = good.pts %>%
+  each.strt.grv = good.pts.slp %>%
     # st_drop_geometry() %>%
     filter(strt_grv == as.character(paste(strt_grv_list[i]))) %>%
     slice_sample(n = plts.est)
@@ -299,35 +218,40 @@ for(i in 1:length(strt_grv_list)) {
 selected.plots = do.call(rbind, datalist)
 nrow(selected.plots)
 
-write_sf(selected.plots, here("data/spatial_data/outputs/selected_plots_176_3July2025_slp50.shp"))
+sp.slp =  slope %>%
+  extract(vect(selected.plots))
+# View(sp.slp)
+max(sp.slp$So_Sierra_10mDEM_slopePercent)
+
+# write_sf(selected.plots, here("data/spatial_data/outputs/selected_plots_164_11July2025_slp50.shp"))
 
 #################################################################
 #################################################################
 #get plots using smaller grid for missed 
 
-#plots per strata missing 
-sp = selected.plots %>%
+#first get strata and number of plots in current selection
+summary.new = selected.plots %>%
+  st_drop_geometry() %>%
+  # right_join(plot.grv.strt.needs.redu) %>%
   group_by(strt_grv) %>%
-  summarise(new.plts.selected = length(strt_grv)) %>%
-  right_join(plot.grv.strt.needs.redu) %>%
+  summarise(new.plts.selected = length(strt_grv))
+
+#Then see what strata are totally left out - 23
+strata.not.in.200 = as.data.frame(setdiff(plot.grv.strt.needs.redu$strt_grv,summary.new$strt_grv))
+new.plots.all.strata = strata.not.in.200a %>% mutate(strt_grv = setdiff(plot.grv.strt.needs.redu$strt_grv,summary.new$strt_grv)) %>%
+  select(strt_grv) %>%
+  mutate(new.plts.selected = 0) %>%
+  rbind(summary.new)
+new.plots.all.strata 
+
+#then see how many you need
+missed.plots = new.plots.all.strata %>%
+  inner_join(plot.grv.strt.needs.redu, by = "strt_grv") %>%
   mutate(still.needed = abs(new.plts.selected-to_est)) %>%
-  filter(still.needed > 0)
-sp
-sum(sp$new.plts.selected)
+  filter(still.needed>0)
+missed.plots
+sum(missed.plots$still.needed)
 
-unique(plot.grv.strt.needs.redu$strt_grv)
-setdiff(plot.grv.strt.needs.redu$strt_grv,selected.plots$strt_grv)
-# View(selected.plots)
-# setdiff(selected.plots$strt_grv, final.strata.list$strt_grv)
-
-#bind back needed plots from Bri's list to those not in grid
-missed.plts = strata.not.in.good.pts %>%
-  left_join(plot.grv.strt.needs.redu) %>%
-  mutate(still.needed = to_est) %>%
-  bind_rows(sp) %>%
-  select(strt_grv, still.needed)
-missed.plts
-sum(missed.plts$still.needed)
 
 #create 50m grid
 xgrid50 <- groves_easier %>%
@@ -355,37 +279,27 @@ good.pts50 <-
 # View(good.pts50)
 nrow(good.pts50)
 
-#also remove plots within 20m of the edge of the strata they are in
-redu.strata.shape50 = final.strata.shape %>%
-  left_join(missed.plts) %>%
-  filter(!is.na(still.needed)) %>%
-  mutate(area_ha = round(as.numeric(st_area(.)*0.0001),2)) %>%
-  select(strt_grv,still.needed) %>%
-  st_buffer(-13)
-# View(redu.strata.shape50)
+good.pts50_slp = good.pts50 %>%
+  st_intersection(slp.0) %>%
+  select(-S_S_10D, -slp_prc,-slp_pr_,-grov_nm,-grovr_h)
+nrow(good.pts50_slp)
 
-
-good.pts50_buff = good.pts50 %>%
-  st_intersection(redu.strata.shape50) %>%
-  mutate(to_est = still.needed) %>%
-  select(strt_grv, point_id, to_est)
-nrow(good.pts50_buff)
-# View(good.pts50_buff)
+sp50.slp =  slope %>%
+  extract(vect(good.pts50_slp)) 
+max(sp50.slp$So_Sierra_10mDEM_slopePercent)
 # 
-# write_sf(good.pts50_buff,(here("data/spatial_data/outputs/good_points50_10June2025_w13m_buff.shp")),
-#          driver="ESRI Shapefile", overwrite_layer=TRUE)
 
-strt_grv_list50 = unique(good.pts50_buff$strt_grv)
+strt_grv_list50 = unique(good.pts50_slp$strt_grv)
 datalist50 = list()
 
 #set up for loop to get needed plot number for each strata
 for(i in 1:length(strt_grv_list50)) {
   #set up to get number of plots needed
-  plt.need50 = missed.plts %>%
+  plt.need50 = missed.plots %>%
     filter(strt_grv == as.character(paste(strt_grv_list50[i])))
   plts.est50 = plt.need50$still.needed
   #pull the subset (may be fewer than called for if tehre weren't enough in the subset)
-  each.strt.grv50 = good.pts50_buff %>%
+  each.strt.grv50 = good.pts50_slp %>%
     # st_drop_geometry() %>%
     filter(strt_grv == as.character(paste(strt_grv_list50[i]))) %>%
     slice_sample(n = plts.est50)
@@ -398,87 +312,130 @@ selected.plots50 = do.call(rbind, datalist50)
 nrow(selected.plots50)
 # View(selected.plots50)
 
+sp50.slp =  slope %>%
+  extract(vect(selected.plots50))
+max(sp50.slp$So_Sierra_10mDEM_slopePercent)
+
 #merge the main with the 50
-all2025.plots = selected.plots %>%
+most2025.plots = selected.plots %>%
   bind_rows(selected.plots50)
+most2025.plots
+nrow(most2025.plots)
+
+most2025.plots.slp =  slope %>%
+  extract(vect(most2025.plots))
+max(most2025.plots.slp$So_Sierra_10mDEM_slopePercent)
+
+##strata plots STILL missing
+#check that there are any plots missing for strata that were included 
+#first get strata and number of plots in current selection
+summary.new50 = most2025.plots %>%
+  st_drop_geometry() %>%
+  # right_join(plot.grv.strt.needs.redu) %>%
+  group_by(strt_grv) %>%
+  summarise(new.plts.selected = length(strt_grv))
+summary.new50
+#get 184 plots selected (now need 13)
+sum(summary.new50$new.plts.selected)
+
+#Then see what strata are totally left out - 7
+strata.not.in.200.50a = as.data.frame(setdiff(plot.grv.strt.needs.redu$strt_grv,summary.new50$strt_grv))
+new.plots.all.strata50 = strata.not.in.200.50a %>% mutate(strt_grv = setdiff(plot.grv.strt.needs.redu$strt_grv,summary.new50$strt_grv)) %>%
+  select(strt_grv) %>%
+  mutate(new.plts.selected = 0) %>%
+  rbind(summary.new50)
+new.plots.all.strata50
+sum(new.plots.all.strata50$new.plts.selected)
+
+#then see how many you need
+missed.plots50 = new.plots.all.strata50 %>%
+  inner_join(plot.grv.strt.needs.redu, by = "strt_grv") %>%
+  mutate(still.needed = abs(new.plts.selected-to_est)) %>%
+  filter(still.needed>0)
+missed.plots50
+sum(missed.plots50$still.needed)
+
+##now get a grid of 20m for picking the last 3
+#create 50m grid
+xgrid20 <- groves_easier %>%
+  st_make_grid(cellsize = c(20,20), what = "centers") %>% # grid of points
+  st_as_sf() %>%
+  st_intersection(groves_easier) %>%
+  select(grov_nm) %>%
+  st_intersection(final.strata.shape) %>%
+  select(grov_nm,strt_nm) %>%
+  mutate(strt_grv = paste(grov_nm,strt_nm,sep="-")) %>%
+  st_intersection(slp)
+# View(xgrid200)
+head(xgrid20)
+nrow(xgrid20)
+
+#remove points within 100m of pre-existing plots
+good.pts20 <- 
+  # xgrid200 %>%
+  st_difference(xgrid20, st_union(plots_sf_buff100)) %>%
+  mutate(point_id = ave(grov_nm, strt_nm, FUN = seq_along)) %>%
+  mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
+  select(strt_grv, point_id) %>%
+  left_join(missed.plots50) %>%
+  filter(!is.na(still.needed))
+# View(good.pts20)
+nrow(good.pts20)
+
+#also remove those within 100m of this years new plots assigned so far
+new.plots_sf_buff100 = st_buffer(most2025.plots,100)
+
+good.pts20.b <- 
+  # xgrid200 %>%
+  st_difference(good.pts20, st_union(new.plots_sf_buff100)) %>%
+  mutate(point_id = ave(strt_grv, FUN = seq_along)) %>%
+  # mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
+  select(strt_grv, point_id) %>%
+  left_join(missed.plots50) %>%
+  filter(!is.na(still.needed))
+# View(good.pts20)
+nrow(good.pts20.b)
+
+good.pts20_slp = good.pts20.b %>%
+  st_intersection(slp.0)
+nrow(good.pts20_slp)
+
+strt_grv_list20 = unique(good.pts20_slp$strt_grv)
+datalist20 = list()
+
+#set up for loop to get needed plot number for each strata
+for(i in 1:length(strt_grv_list20)) {
+  #set up to get number of plots needed
+  plt.need20 = missed.plots50 %>%
+    filter(strt_grv == as.character(paste(strt_grv_list20[i])))
+  plts.est20 = plt.need20$still.needed
+  #pull the subset (may be fewer than called for if tehre weren't enough in the subset)
+  each.strt.grv20 = good.pts20_slp %>%
+    # st_drop_geometry() %>%
+    filter(strt_grv == as.character(paste(strt_grv_list20[i]))) %>%
+    slice_sample(n = plts.est20)
+  
+  datalist20[[i]] <- each.strt.grv20 # add it to your list
+  
+}
+
+selected.plots20 = do.call(rbind, datalist20)
+nrow(selected.plots20)
+# View(selected.plots20)
+
+all2025.plots = most2025.plots %>%
+  bind_rows(selected.plots20) %>%
+  select(strt_grv, point_id)
 all2025.plots
 nrow(all2025.plots)
 
-write_sf(all2025.plots, here("outputs/selected_grid_plots_2025sampling_3July2025_slope50.shp"), overwrite = T)
+all2025.plots.slp =  slope %>%
+  extract(vect(all2025.plots))
+View(all2025.plots.slp)
+
+write_sf(all2025.plots, here("outputs/selected_grid_plots_2025sampling_14July2025_slope50.shp"), overwrite = T)
 
 all2025.plots_table = st_drop_geometry(all2025.plots)
 
-write.csv(all2025.plots_table,(here("outputs/selected_grid_plots_2025sampling_3July2025_slope50.csv")))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##find the strata and groves that were not placed
-#remove from here
-good.pts_table = st_drop_geometry(good.pts)
-
-plots.avail <- good.pts_table %>%
-  summarise(.by = strt_grv, avail = n())
-
-final.strata.list <- good.pts %>%
-  st_drop_geometry() %>%
-  # mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
-  select(strt_grv) %>%
-  summarise(.by = strt_grv)
-
-xgridStrata <- xgrid200 %>%
-  st_drop_geometry() %>%
-  mutate(strt_grv = paste(grov_nm, strt_nm,sep="-")) %>%
-  summarize(.by = strt_grv, possible=n())
-
-#show where buffer or grid eliminates all plots
-plots.byStrata <- 
-  # strt_grv_list %>%
-  # xgridStrata %>%
-  final.strata.list %>%
-  # left_join(xgridStrata) %>%
-  left_join(plots.avail) %>%
-  left_join(plot.grv.strt.needs.redu) %>%
-  mutate_all(~replace(., is.na(.), 0)) %>%
-  mutate(diff = possible-avail)
-plots.byStrata
-
-%>%
-  mutate(unavail_buf = avail-to_est,
-         unavail_grid = possible - to_est,
-         plots_elim = case_when(possible>avail&unavail_buf< 0 ~T, T ~F), #currently catches unavail grid too
-         smaller_grid = case_when(unavail_grid>= 0 ~F, T ~T)
-  ) 
-# View(plots.byStrata)
-
-plots.manual.assign = plots.byStrata %>%
-  filter(smaller_grid==TRUE)
-nrow(plots.manual.assign)
-
-#check where assigned plots are in silvers
-setdiff(plot.grv.strt.needs.redu$strt_grv, final.strata.list$strt_grv)
-sum(xgridStrata$to_est)
-sum(plot.grv.strt.needs.redu$to_est)
+write.csv(all2025.plots_table,(here("outputs/selected_grid_plots_2025sampling_14July2025_slope50.csv")))
 
