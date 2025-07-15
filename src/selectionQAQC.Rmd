@@ -1,0 +1,166 @@
+---
+title: "Plot Selection QAQC"
+author: "Shive Lab (B. Baker)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(janitor)
+library(sf)
+library(terra)
+
+```
+can you look at how much that is true of the prior version? and also sleuth how much the creekbeds are the only place that have certain strata? also if you look through the code, you can see which strata were left out of the 200m grid nd then the 50. together those might give you an idea of how much of this is being driven by the strata themselves
+
+```{r}
+old_points <- st_read(here("data/spatial_data/selected_grid_plots_2025sampling_3July2025_slope50/selected_grid_plots_2025sampling_3July2025_slope50.shp"))
+
+new_points <- st_read(here("data/spatial_data/selected_grid_plots_2025sampling_14July2025_slope50/selected_grid_plots_2025sampling_14July2025_slope50.shp"))%>% 
+  st_transform(st_crs(old_points))
+
+groves <- st_read(here("data/spatial_data/groves/FINAL_SEGI_AnalysisArea_wOwnerships_GroveNames.shp")) 
+
+existing_plots <- st_read(here("data/spatial_data/all_plots_groves.shp"))%>% 
+  st_transform(st_crs(old_points))
+
+```
+
+```{r}
+#soderberg-generated 10,000 sq. meters (1.0 ha) watershed area stream network > polygon
+#note a few places where the polygon conversion was a little wonky
+stream_poly <- st_read(here("data/spatial_data/SEGI_GROVES_STREAMNETWORK_soderberg/SEGI_streamnetwork_poly/SEGI_streamnetwork_100_poly.shp")) %>% 
+  filter(gridcode==1) %>% 
+  st_transform(st_crs(old_points))
+
+#remove(stream_poly)
+
+
+groves_seki <- groves %>% 
+  filter(UNIT_NAME == "Sequoia and Kings Canyon National Parks")
+
+groves_seki_vect <- vect(groves_seki)
+
+```
+
+old and new have correct number of plots per strata
+
+
+
+#Stream Check
+Lots of plots seem to be in streams. checking distance to stream of plots, distribution of such, and how this changes "random" sample with and without slope filter
+
+```{r}
+new_stream <- st_distance(new_points, stream_poly) 
+
+dist <- apply(new_stream, 1, min, na.rm = TRUE)
+
+new_points_dist <- new_points %>% 
+  mutate(dist_m = round(dist))
+
+
+
+old_stream <- st_distance(old_points, stream_poly) 
+
+dist <- apply(old_stream, 1, min, na.rm = TRUE)
+
+old_points_dist <- old_points %>% 
+  mutate(dist_m = round(dist))
+
+```
+
+```{r}
+new_points_use <- new_points_dist %>% 
+  rowid_to_column() %>% 
+  mutate(
+        strt_grv = str_replace_all(strt_grv, " ", ""),
+         grid_used = case_when(rowid <= 164 ~ "200m",
+                               rowid <= 184 ~ "50m",
+                               T ~ "20m")) %>%   
+  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>% 
+  mutate(grove_full = str_remove(grove_full, "-"))
+
+old_points_use <- old_points_dist %>% 
+  rowid_to_column() %>% 
+  mutate(
+        strt_grv = str_replace_all(strt_grv, " ", ""),
+         grid_used = "200m") %>%   
+  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>% 
+  mutate(grove_full = str_remove(grove_full, "-"))
+
+```
+
+```{r}
+
+check_old <- old_points %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = strata, count = n()) %>% 
+  arrange(strata)
+
+check_new <- new_points %>% 
+  st_drop_geometry() %>% 
+  summarise(.by = strata, count = n()) %>% 
+  arrange(strata)
+
+```
+
+```{r}
+ggplot(new_points_use, aes(dist_m))+
+  geom_histogram()+
+  ggtitle("new plot stream dist overall")
+
+ggplot(old_points_use, aes(dist_m))+
+  geom_histogram()+
+  ggtitle("old plot stream dist overall")
+
+```
+
+
+```{r}
+elev <- rast(here("data/spatial_data/So_Sierra_10mDEM/So_Sierra_DEM_10m.tif")) %>% 
+  project(crs(old_points))
+
+plots_vect <- new_points %>% 
+  rowid_to_column() %>% 
+  vect()
+
+new_plots_allinfo <- terra::extract(elev, plots_vect) %>% 
+  left_join(new_points_use, by = join_by(ID == rowid)) %>%
+  rename(elevation_m = So_Sierra_DEM_10m) 
+
+grove_stats <- extract(elev, groves_seki_vect) %>%  
+  rename(elevation_m = So_Sierra_DEM_10m) 
+
+
+#existing plots ele
+existing_vect <- existing_plots %>% 
+  vect()
+
+existing_plots_allinfo <- terra::extract(elev, existing_vect) %>% 
+  left_join(existing_plots, by = join_by(ID == rowid)) %>%
+  rename(elevation_m = So_Sierra_DEM_10m) 
+
+#set up to combine
+existing_ele <- existing_plots_allinfo %>% select(elevation_m)
+all_ele <- new_plots_allinfo %>% select(elevation_m) %>% 
+  bind_rows(existing_ele)
+
+ggplot(new_plots_allinfo, aes(elevation_m))+
+  geom_histogram(bins = 20)+
+  ggtitle("new plot elev distribution")
+
+ggplot(all_ele, aes(elevation_m))+
+  geom_histogram(bins = 20)+
+  ggtitle("all plot elev distribution")
+
+ggplot(grove_stats, aes(elevation_m))+
+    geom_histogram(bins = 20)+
+  ggtitle("grove elev distribution")
+```
+
+
+

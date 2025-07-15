@@ -81,15 +81,129 @@ st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_2025.shp"), appen
 # make kml
 all_plots_kml <- all_plots_named %>% 
   rename(ident = plot_id) %>% 
-  select(ident, xproj, yproj, geometry)
+  select(ident, geometry) %>% 
+  rename(name = ident)
 
-st_write(all_plots_kml, here("data/spatial_data/GAFieldPlots_2025.kml"))
+st_write(all_plots_kml, here("data/spatial_data/GAFieldPlots_2025_25june_v2.gpx"))
 
 all_plots_st <- all_plots_sf %>% st_drop_geometry()
 
-
-
 write_csv(all_plots_named, here("data/GAPlots.csv") )
+
+```
+#make new file with read points
+```{r}
+#select only read points
+read_points <- st_read(here("data/spatial_data/GAFieldPlots_Placed_07July2025.shp")) %>% 
+  filter(!str_detect(plot_id, "P$")) %>% 
+  select(plot_id, geometry) %>% 
+  st_transform(use_crs)
+
+#reattach intended strata
+intended_strata <- all_plots_named %>% 
+  mutate(plot_id2 = str_remove(plot_id, "P$")) %>% 
+  st_drop_geometry() %>% 
+  select(!plot_id)
+
+read_points_info <- read_points %>% 
+  left_join(intended_strata, join_by(plot_id == plot_id2)) %>% 
+  filter(!str_detect(plot_id, "GiI"))
+
+```
+
+since both crews points are not actually properly synced I will need to take the "read" points from the tracking
+
+```{r}
+tracked_read <- read_csv(here("data/read_07July.csv")) %>% 
+  left_join(all_plots_named)
+
+
+```
+
+
+# Plot reset to account for <50 slopes
+```{r}
+
+new_points <- st_read(here("data/spatial_data/selected_grid_plots_2025sampling_3July2025_slope50/selected_grid_plots_2025sampling_3July2025_slope50.shp"))
+
+
+
+
+new_plots_named <- new_points %>% 
+  rowid_to_column() %>% 
+  mutate(strt_grv = str_replace_all(strt_grv, " ", "")) %>%   
+  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>% 
+  mutate(rowid = sprintf("%03d", rowid),
+    grove_full = str_remove(grove_full, "-"),
+         #definitely a better way to do this programiatically 
+         grove = case_when(
+          grove_full == "Atwell" ~ "ATWE",
+          grove_full == "BigSprings" ~ "BISP",
+           grove_full == "CedarFlat" ~ "CEFL",
+           grove_full == "Dillonwood" ~ "DILL",
+           grove_full == "EastFork" ~ "EAFO",
+           grove_full == "EdenCreek" ~ "EDCR",
+           grove_full == "Garfield" ~ "GARF",
+           grove_full == "GiantForest" ~ "GIFO",
+           grove_full == "LittleRedwoodMeadow" ~ "LIRE",
+           grove_full == "Muir" ~ "MUIR",
+           grove_full == "OrioleLake" ~ "ORLA",
+           grove_full == "PineRidge" ~ "PIRI",
+           grove_full == "RedwoodCreek" ~ "RECR",
+           grove_full == "RedwoodMeadow" ~ "REME",
+           grove_full == "RedwoodMountain" ~ "REMO",
+           grove_full == "Skagway" ~ "SKAG",
+           grove_full == "SouthFork" ~ "SOFO",
+           grove_full == "Suwanee" ~ "SUWA",
+           grove_full == "GeneralGrant" ~ "GRGR",
+           grove_full == "GraniteCreek" ~ "GRCR",
+           grove_full == "NewOrioleLake" ~ "NEOR",
+           grove_full == "SquirrelCreek" ~ "SQCR"
+         ),
+         plot_id = paste(grove, "FUELS", paste(rowid, "Pr", sep = ""), sep = "-"),
+    group = case_when(grove %in% c("ATWE", "EAFO", "RECR") ~ "Atwell",
+                      grove %in% c("MUIR", "SKAG", "PIRI") ~ "Muir",
+                      grove %in% c("DILL", "GARF") ~ "Dennison",
+                      grove %in% c("SOFO", "CEFL") ~ "South Fork",
+                      grove %in% c("ORLA", "SQCR", "NEOR") ~ "Oreole",
+                      grove %in% c("REME", "LIRE", "GRCR") ~ "Redwood Meadow",
+                      grove %in% c("GIFO", "SUWA") ~ "Giant Forest",
+                      grove %in% c("REMO", "BISP") ~ "Redwood Mountain",
+                      grove %in% c("GRGR", "BIST") ~ "Grant Grove",
+                      grove %in% c("EDCR") ~ "Eden",
+                      T ~ "Help"
+                      )) %>% 
+  select(plot_id, strata, group, geometry) %>%
+  st_as_sf() %>%
+  st_transform(use_crs) %>%
+  mutate(xproj = sf::st_coordinates(.)[,1],
+         yproj = sf::st_coordinates(.)[,2])
+
+```
+
+swapping back in the original points that were already used (even if moved in the field, good to have for notes)
+```{r}
+
+read <- unique(tracked_read$plot_id)
+
+new_wo_read <- new_plots_named %>% 
+  filter(!plot_id %in% read) %>% 
+  bind_rows(tracked_read)
+#st_write(new_wo_read, here("data/spatial_data/GAFieldPlots_slope50_2025.shp"), append = F)
+
+# make kml
+new_plots_kml <- new_wo_read %>% 
+  rename(ident = plot_id) %>% 
+  select(ident) %>% 
+  rename(name = ident)
+
+st_write(new_plots_kml, here("data/spatial_data/GAFieldPlots_slope50_2025a.kml"))
+
+# st_write(new_plots_kml, here("data/spatial_data/GAFieldPlots_slope50_2025a.gpx"))
+
+
+write_csv(new_plots_named, here("data/GAPlots_slope50.csv") )
+
 
 ```
 
