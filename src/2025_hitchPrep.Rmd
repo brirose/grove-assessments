@@ -17,22 +17,31 @@ library(sf)
 
 ```{r}
 #import plots that kristen made
-all_plots_sf <- st_read(here("data/spatial_data/selected_grid_plots_2025sampling_10June2025/selected_grid_plots_2025sampling_10June2025.shp"))
+all_plots_sf <- st_read(here("data/spatial_data/selected_grid_plots_2025sampling_14July2025_slope50/selected_grid_plots_2025sampling_14July2025_slope50.shp"))
+
+#old plots
+second_set <- read_csv(here("data/GAPlots_slope50.csv"))
 
 #example file for right crs
 ex_field <- st_read(here("data/spatial_data/example_field/backcountry_plotsSpring2025.shp"))
 
 use_crs <- st_crs(ex_field)
 
+old_names <- second_set %>% 
+  select(-geometry, -xproj, -yproj) %>% 
+  arrange(group, strata) %>% 
+  rowid_to_column()
+
+
 #set up naming convention
 
-all_plots_named <- all_plots_sf %>% 
-  rowid_to_column() %>% 
-  mutate(strt_grv = str_replace_all(strt_grv, " ", "")) %>%   
-  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>% 
+all_plots_named <- all_plots_sf %>%
+  rowid_to_column() %>%
+  mutate(strt_grv = str_replace_all(strt_grv, " ", "")) %>%
+  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>%
   mutate(rowid = sprintf("%03d", rowid),
     grove_full = str_remove(grove_full, "-"),
-         #definitely a better wya to do this programiatically 
+         #definitely a better wya to do this programiatically
          grove = case_when(
           grove_full == "Atwell" ~ "ATWE",
           grove_full == "BigSprings" ~ "BISP",
@@ -69,14 +78,14 @@ all_plots_named <- all_plots_sf %>%
                       grove %in% c("GRGR", "BIST") ~ "Grant Grove",
                       grove %in% c("EDCR") ~ "Eden",
                       T ~ "Help"
-                      )) %>% 
-  select(plot_id, strata, group, geometry) %>% 
-  st_as_sf() %>% 
-  st_transform(use_crs) %>% 
+                      )) %>%
+  select(plot_id, strata, group, geometry) %>%
+  st_as_sf() %>%
+  st_transform(use_crs) %>%
   mutate(xproj = sf::st_coordinates(.)[,1],
          yproj = sf::st_coordinates(.)[,2])
 
-st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_2025.shp"), append = F)
+#st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_2025.shp"), append = F)
 
 # make kml
 all_plots_kml <- all_plots_named %>% 
@@ -91,6 +100,83 @@ all_plots_st <- all_plots_sf %>% st_drop_geometry()
 write_csv(all_plots_named, here("data/GAPlots.csv") )
 
 ```
+
+
+```{r}
+# messing with names
+
+all_plots_named <- all_plots_sf %>%
+  rowid_to_column() %>%
+  mutate(strt_grv = str_replace_all(strt_grv, " ", "")) %>%
+  separate_wider_regex(strt_grv, c(grove_full = "^\\w+-", strata = ".+"), too_few = "align_start") %>%
+  mutate(
+    rowid = sprintf("%03d", rowid),
+    grove_full = str_remove(grove_full, "-"),
+         #definitely a better wya to do this programiatically
+         grove = case_when(
+          grove_full == "Atwell" ~ "ATWE",
+          grove_full == "BigSprings" ~ "BISP",
+           grove_full == "CedarFlat" ~ "CEFL",
+           grove_full == "Dillonwood" ~ "DILL",
+           grove_full == "EastFork" ~ "EAFO",
+           grove_full == "EdenCreek" ~ "EDCR",
+           grove_full == "Garfield" ~ "GARF",
+           grove_full == "GiantForest" ~ "GIFO",
+           grove_full == "LittleRedwoodMeadow" ~ "LIRE",
+           grove_full == "Muir" ~ "MUIR",
+           grove_full == "OrioleLake" ~ "ORLA",
+           grove_full == "PineRidge" ~ "PIRI",
+           grove_full == "RedwoodCreek" ~ "RECR",
+           grove_full == "RedwoodMeadow" ~ "REME",
+           grove_full == "RedwoodMountain" ~ "REMO",
+           grove_full == "Skagway" ~ "SKAG",
+           grove_full == "SouthFork" ~ "SOFO",
+           grove_full == "Suwanee" ~ "SUWA",
+           grove_full == "GeneralGrant" ~ "GRGR",
+           grove_full == "GraniteCreek" ~ "GRCR",
+           grove_full == "NewOrioleLake" ~ "NEOR",
+           grove_full == "SquirrelCreek" ~ "SQCR"
+         ),
+         #plot_id = paste(grove, "FUELS", paste(rowid, "P", sep = ""), sep = "-"),
+    group = case_when(grove %in% c("ATWE", "EAFO", "RECR") ~ "Atwell",
+                      grove %in% c("MUIR", "SKAG", "PIRI") ~ "Muir",
+                      grove %in% c("DILL", "GARF") ~ "Dennison",
+                      grove %in% c("SOFO", "CEFL") ~ "South Fork",
+                      grove %in% c("ORLA", "SQCR", "NEOR") ~ "Oreole",
+                      grove %in% c("REME", "LIRE", "GRCR") ~ "Redwood Meadow",
+                      grove %in% c("GIFO", "SUWA") ~ "Giant Forest",
+                      grove %in% c("REMO", "BISP") ~ "Redwood Mountain",
+                      grove %in% c("GRGR", "BIST") ~ "Grant Grove",
+                      grove %in% c("EDCR") ~ "Eden",
+                      T ~ "Help"
+                      )) %>%
+  select(strata, grove, group, geometry) %>%
+  st_as_sf() %>%
+  st_transform(use_crs) %>%
+  mutate(xproj = sf::st_coordinates(.)[,1],
+         yproj = sf::st_coordinates(.)[,2]) %>% 
+  arrange(group, strata) %>% 
+  rowid_to_column()
+
+
+all_plots_named <- old_names %>% left_join(all_plots_named)
+
+st_write(all_plots_named, here("data/spatial_data/GAFieldPlots_slope50_2025_15Jul.shp"), append = F)
+
+# make kml
+new_plots_kml <- all_plots_named %>% 
+  rename(ident = plot_id) %>% 
+  st_as_sf() %>% 
+  select(ident) %>% 
+  rename(name = ident)
+
+st_write(new_plots_kml, here("data/spatial_data/GAFieldPlots25_slope50_15Jul.gpx"))
+
+```
+
+
+
+
 #make new file with read points
 ```{r}
 #select only read points
@@ -203,6 +289,7 @@ st_write(new_plots_kml, here("data/spatial_data/GAFieldPlots_slope50_2025a.kml")
 
 
 write_csv(new_plots_named, here("data/GAPlots_slope50.csv") )
+
 
 
 ```
