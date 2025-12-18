@@ -1,0 +1,76 @@
+---
+title: "master_list"
+author: "Shive Lab (B. Baker)"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(here)
+library(janitor)
+library(terra)
+
+```
+
+
+```{r}
+
+fuelsplots_all <- st_read(here("data/spatial_data/fuels_plots/fuelsplots_all_18Dec2024.shp")) |>
+  filter(!str_detect(plot_id, "P$"))|>
+   select(-read24)
+
+
+ga_25 <- st_read(here("data/spatial_data/GAFieldPlots2025_DecExport/GAFieldPlots2025_FINAL_21July.shp")) |> 
+  clean_names() |>
+  filter(!str_detect(plot_id, "P$")) |>
+  mutate(yr_nstl = 2025, 
+         plt_typ = "Grove Assessment",
+         grov_nm = str_remove(plot_id, "-.+"),
+         src = "arrow") %>% 
+  select(plot_id, grov_nm, plt_typ, yr_nstl, src) |> 
+  st_transform(crs(fuelsplots_all))
+
+all_ga <- fuelsplots_all|> 
+  bind_rows(ga_25)|>
+  rename(
+    yr_installed = yr_nstl,
+    plot_type = plt_typ,
+    grove_name = grov_nm
+  ) |>
+  arrange(plot_id, desc(yr_installed), src) |>
+  group_by(plot_id) |>
+  slice_head()
+
+st_write(all_ga, here("data/spatial/fuelsplots_most_needsdupsandEndof2025_17Dec25.shp"), append = F)
+
+# NEED TO MANAGE DUPLICATES
+
+reme_all <- all_ga |>
+  filter(str_detect(plot_id, "REME")) |> 
+  replace_na(list("read24" = "No")) |>
+  mutate(
+    yr_installed = case_when(
+      str_detect(plot_id, "USGS") ~ 2022,
+      T ~ yr_installed),
+    read25 = case_when(
+      str_detect(plot_id, "FUELS") ~ "Yes",
+      T ~ "No"),
+    read23 = case_when(
+      str_detect(plot_id, "THIN") ~ "Yes",
+      T ~ "No"),
+    read22 = case_when(
+      str_detect(plot_id, "USGS") ~ "Yes",
+      T ~ "No")
+  )|>
+  select(plot_id, yr_installed, read22, read23, read24, read25, plot_type, src)
+
+st_write(reme_all, here("data/spatial/remefuelsplots_15Dec25.shp"), append = F)
+
+```
+
+
+
